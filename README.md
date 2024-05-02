@@ -58,3 +58,13 @@ Download the theme and place it in your [Pegasus theme directory](http://pegasus
 
 # Download
 Download struceOS-Pegasus-Theme-1.0.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+
+<details>
+    <summary>Changelogs</summary>
+
+## 1.0.0
+
+```
+1. Initial release.
+```
+</details>
