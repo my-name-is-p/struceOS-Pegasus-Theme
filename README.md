@@ -14,18 +14,18 @@ A simple theme for for easy navigation.
 
 # Controls
 - Keyboard/Mouse
-    - Select Game: WASD/Arrow Keys/Mouse click
-    - Select Collection: Q/E
-    - Open Info Panel: I/click "i" icon
-    - Close Info Panel: I/click outside of the info panel
-    - Toggle Video Mute: M/click mute icon (appears when hovering over the video)
-    - Pause/Play Video: Spacebar/click on the video
+    - Select Game: WASD / Arrow Keys / Mouse click
+    - Select Collection: Q / E
+    - Open Info Panel: I / click "i" icon
+    - Close Info Panel: I / click outside of the info panel
+    - Toggle Video Mute: M / click mute icon (appears when hovering over the video)
+    - Pause/Play Video: Spacebar / click on the video
 
 - Gamepad
     - Select Game: Left joystick
-    - Select Collection: RB/LB
-    - Toggle Info Panel: X/▢
-    - Toggle Video Mute: Y/△
+    - Select Collection: RB / LB
+    - Toggle Info Panel: X / ▢
+    - Toggle Video Mute: Y / △
 
 # Customizable Settings
 Near the top of the theme.qml file is a block of settings for easy customization. The default settings are below for reference:
