@@ -28,11 +28,13 @@ FocusScope {
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
 
+    property bool loadTimeout: false
+
     property int currentCollectionIndex: 0
     property var currentCollection: api.collections.get(currentCollectionIndex)
     property var currentGame: gameView.model.get(gameView.currentIndex)
 
-//--Settings--Customize these to your liking. I would suggest backing up  this file before editing in case of issues.--//
+//--Settings--Customize these to your liking. Backup this file before editing in case of issues. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
     Item {
 
         id: settings
@@ -40,9 +42,11 @@ FocusScope {
         //gameView Settings
         property int columns: 4                                             //Number of columns to display in gameView
         property var croppedThumbnails: ["windows"]                         //Array of game.shortName--banner images will be scaled to fill
+        property bool lastPlayed: true                                      //Open to last game played--otherwise opens to last selected
         
         //Background Settings
         property bool bgOverlayOn: true                                     //Apply an overlay to the background
+        property real bgOverlayOpacity: 0.65                                //Overlay opacity 
         property string bgOverlaySource: "assets/img/bg-gradient.png"       //Image source for the background overlay
         
         //Info Panel Settings
@@ -59,10 +63,11 @@ FocusScope {
 //--Run on loaded--//
     Component.onCompleted: {
         currentCollectionIndex = api.memory.get('collectionIndex')
-        currentCollection = api.collections.get(currentCollectionIndex) || 0;
-        gameView.currentIndex = api.memory.get('gameIndex') || 0;
-        updateGame();
-        home.play();
+        currentCollection = api.collections.get(currentCollectionIndex) || 0
+        gameView.currentIndex = api.memory.get('gameIndex') || 0
+        updateGame()
+        loadTimeout = true
+        home.play()
     }
 //
 
@@ -280,7 +285,7 @@ FocusScope {
 
             id: backgroundOverlay
             source: settings.bgOverlaySource
-            opacity: 0.75
+            opacity: settings.bgOverlayOn ? settings.bgOverlayOpacity : 0
 
             smooth: true
             antialiasing: true
@@ -457,6 +462,10 @@ FocusScope {
                 bgFadeOut.start()
                 select.play()
                 gameView.forceActiveFocus()
+                if(loadTimeout && !settings.lastPlayed){
+                    api.memory.set('collectionIndex', currentCollectionIndex)
+                    api.memory.set('gameIndex', gameView.currentIndex)
+                }
             }
 
         }
@@ -961,7 +970,5 @@ FocusScope {
         id: consoleLog
     }
 //
-
     focus: true
 }
-
