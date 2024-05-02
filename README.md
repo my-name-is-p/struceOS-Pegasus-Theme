@@ -56,4 +56,4 @@ Near the top of the theme.qml file is a block of settings for easy customization
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS.zip from [last releases]().
+Download struceOS.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
