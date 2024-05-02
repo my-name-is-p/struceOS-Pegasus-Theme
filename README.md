@@ -38,9 +38,11 @@ Near the top of the theme.qml file is a block of settings for easy customization
         //gameView Settings
         property int columns: 4                                             //Number of columns to display in gameView
         property var croppedThumbnails: ["windows"]                         //Array of game.shortName--banner images will be scaled to fill
+        property bool lastPlayed: true                                      //Open to last game played--otherwise opens to last selected
         
         //Background Settings
         property bool bgOverlayOn: true                                     //Apply an overlay to the background
+        property real bgOverlayOpacity: 0.65                                //Overlay opacity 
         property string bgOverlaySource: "assets/img/bg-gradient.png"       //Image source for the background overlay
         
         //Info Panel Settings
