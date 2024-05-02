@@ -22,7 +22,7 @@ A simple theme for for easy navigation.
     - Pause/Play Video: Spacebar / click on the video
 
 - Gamepad
-    - Select Game: Left joystick
+    - Select Game: Joystick / D-Pad
     - Select Collection: RB / LB
     - Toggle Info Panel: X / ▢
     - Toggle Video Mute: Y / △
@@ -56,4 +56,4 @@ Near the top of the theme.qml file is a block of settings for easy customization
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.0.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
