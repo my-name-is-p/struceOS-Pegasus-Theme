@@ -7,7 +7,7 @@
 ![screenshot_5](.meta/screenshot_5.png)
 
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
-A simple theme for for easy navigation.
+A simple theme for easy navigation.
 
 - Supports navigation using gamepad and keyboard/mouse.
 - Collapsible info panel with video player
