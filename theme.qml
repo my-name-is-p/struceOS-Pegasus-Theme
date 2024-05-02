@@ -724,7 +724,7 @@ FocusScope {
 
                 onClicked: {
                     videoPreview.playbackState === MediaPlayer.PlayingState ? videoPreview.pause() : videoPreview.play()
-                    select.play()
+                    toggle.play()
                 }
 
                 onEntered: {
@@ -767,7 +767,7 @@ FocusScope {
                 onClicked: {
                     videoPreview.muted ? videoPreview.muted = false : videoPreview.muted = true
                     mouse.accepted = true
-                    toggle.play()
+                    select.play()
                 }
 
                 Image {
