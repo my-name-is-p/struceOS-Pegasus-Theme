@@ -81,16 +81,16 @@ function settingsUpdate(setting, currentValue){
     select.play()
 }
 
-function toggleInfo(){
+function toggleInfo(focus = "info"){
     if(info.state != "opened"){
         info.state = "opened" 
         info.video.play()
-        info.focus = true
     }else{
         info.state = ""
         info.video.stop()
-        games.gameView.focus = true
+        focus = "gameView"
     }
+    updateFocus(focus)
     toggle.play()
 }
 
@@ -128,6 +128,9 @@ function updateFocus(focus) {
             header.focus = true
             header.utilitiesSettings.selected = true
             header.lastFocus = header.utilitiesSettings
+            break
+        case "info":
+            info.focus = true
             break
         default:
             root.focus = true
