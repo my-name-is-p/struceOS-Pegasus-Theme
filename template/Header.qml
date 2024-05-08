@@ -369,7 +369,7 @@ Rectangle { //header
                         onClicked: {
                             header.lastFocus = utilitiesInfo
                             U.removeButtonFocusOnClick()
-                            U.toggleInfo()
+                            U.toggleInfo("info")
                         }
 
                         onEntered: {
