@@ -191,6 +191,13 @@ Component.onCompleted: {
             U.toggleInfo()
         }
 
+        if(info.focus){
+                if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                    U.toggleInfo()
+                    event.accepted = true
+                }
+        }
+
         //Video controls
         if(api.keys.isFilters(event) && info.state === "opened"){
             if(event.key != Qt.Key_F){
