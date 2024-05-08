@@ -30,12 +30,12 @@ function changeGame(){
 function toggleSettings(focus = "utilitiesSettings"){
     if(settingsPanel.state != "opened"){
         settingsPanel.state = "opened"
-        updateFocus("settings")
     } else {
         settingsPanel.state = ""
         if(focus != "gameView")
-            updateFocus("utilitiesSettings")
+            focus ="utilitiesSettings"
     }
+    updateFocus(focus)
     toggle.play()
 }
 
@@ -118,7 +118,7 @@ function updateFocus(focus) {
         case "searchBar":
             header.searchTerm.focus = true
             break
-        case "settingsPanel":
+        case "settings":
             settingsPanel.focus = true
             break
         case "utilitiesSearch":

@@ -186,16 +186,25 @@ Component.onCompleted: {
             }
         //--END searchbox controls
 
+        //--START settings panel controls--//
+        if(settingsPanel.focus){
+            if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                U.toggleSettings()
+                event.accepted = true
+            }
+        }
+        //--END settings panel controls--//
+
         //Open/close info panel with button press
         if(api.keys.isDetails(event)){
-            U.toggleInfo()
+            U.toggleInfo("gameView")
         }
 
         if(info.focus){
-                if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.toggleInfo()
-                    event.accepted = true
-                }
+            if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                U.toggleInfo("gameView")
+                event.accepted = true
+            }
         }
 
         //Video controls
