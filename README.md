@@ -9,9 +9,26 @@
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
 
-- Supports navigation using gamepad and keyboard/mouse.
-- Collapsible info panel with video player
-- Customizable settings in theme.qml
+- Supports navigation using gamepad and keyboard/mouse. (Gamepad settings controls TK)
+- Collapsible info panel with video player. (Info panel refresh TK)
+- Customizable settings.
+
+# Version 1.1.0 Updates
+1. Split theme.qml into separate files for easier editing
+2. Moved common functions to js
+2. Updated header logic
+3. Added Search functionality
+4. Added an in app Settings panel
+5. Added an All Games collection 
+6. Fixed GoG and Steam collections
+
+# Thank yous
+Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
+
+# To come in future updates
+1. Beautified info panel
+2. Gamepad controls for the settings panel
+3. Collection list dropdown from the collection logo
 
 # Controls
 - Keyboard/Mouse
@@ -29,31 +46,71 @@ A simple theme for easy navigation.
     - Toggle Video Mute: Y / △
 
 # Customizable Settings
-Near the top of the theme.qml file is a block of settings for easy customization. The default settings are below for reference:
+The most useful settings are now in an settings panel within the theme. The rest can be found in template/settings. The default settings are below for reference:
 
-    Item {
+    //Fonts
+    property string fontFamilyRegular: 
+        "assets/fonts/Open Sans/OpenSans-Regular.ttf"
+    property string fontFamilyBold: 
+        "assets/fonts/Open Sans/OpenSans-Bold.ttf"
 
-        id: settings
+    //gameView Settings
+    property int columns:                                               //Number of columns to display in gameView
+        api.memory.get("struceOS_gameView_columns") != undefined ?
+        api.memory.get("struceOS_gameView_columns") :
+        4
+    property int columnsMax: 10                                         //Maximum columns in gameView
+    property int columnsMin: 3                                          //Minimum columns in gameView
+    property var croppedThumbnails:                                     //Array of game.shortName--banner images will be scaled to fill
+        api.memory.get("struceOS_gameView_croppedThumbnails") != undefined ? 
+        api.memory.get("struceOS_gameView_croppedThumbnails") :
+        []                                                     
+    property bool lastPlayed:                                           //Open to last game played--otherwise opens to last selected
+        api.memory.get("struceOS_gameView_lastPlayed") != undefined ? 
+        api.memory.get("struceOS_gameView_lastPlayed") :
+        true
+    property bool allGames: 
+    api.memory.get("struceOS_gameView_allGames") != undefined ?
+    api.memory.get("struceOS_gameView_allGames") :
+    true                                        //Turns on the All Games Category (Unde Development)
+                                                                        //currently doubles up if games are contained in two collections (windows/pc)
+    property string defaultGameImage: "img/none.jpg"                    //Image source for default game image (will only look in assets)
 
-        //gameView Settings
-        property int columns: 4                                             //Number of columns to display in gameView
-        property var croppedThumbnails: ["windows"]                         //Array of game.shortName--banner images will be scaled to fill
-        property bool lastPlayed: true                                      //Open to last game played--otherwise opens to last selected
-        
-        //Background Settings
-        property bool bgOverlayOn: true                                     //Apply an overlay to the background
-        property real bgOverlayOpacity: 0.65                                //Overlay opacity 
-        property string bgOverlaySource: "assets/img/bg-gradient.png"       //Image source for the background overlay
-        
-        //Info Panel Settings
-        property string fontFamilyRegular: 
-            "assets/fonts/M_PLUS_Rounded_1c/MPLUSRounded1c-Regular.ttf"     //Font to use in the info panel
-        property string fontFamilyBold: 
-            "assets/fonts/M_PLUS_Rounded_1c/MPLUSRounded1c-Bold.ttf"        //Font to use in the info panel
-        property bool videoMute: true                                       //Mute video by default
-        property real videoVolume: 0.40                                     //Video volume 
+    //Background Settings
+    property bool bgOverlayOn:                                          //Apply an overlay to the background
+        api.memory.get("struceOS_background_overlayOn") != undefined ?
+        api.memory.get("struceOS_background_overlayOn") :
+        true
+    property real bgOverlayOpacity:                                     //Overlay opacity 
+        api.memory.get("struceOS_background_overlayOpacity") != undefined ?
+        api.memory.get("struceOS_background_overlayOpacity") :
+        0.75
+    property string bgOverlaySource: "img/bg-gradient.png"              //Image source for the background overlay (will only look in assets)
+    
+    //Video Settings
+    property bool videoMute:                                            //Mute video by default
+        api.memory.get("struceOS_video_videoMute") != undefined ?
+        api.memory.get("struceOS_video_videoMute") : 
+        true
+    property real videoVolume:                                          //Video volume
+        api.memory.get("struceOS_video_volume") != undefined ?
+        api.memory.get("struceOS_video_volume") :
+        0.40
 
-    }
+    //Search Settings
+    property var firstWordIgnore: ["the","legend","of","lego"]          //Words to ignore in search as the first word
+
+    //DevTools
+    property bool enableDevTools:                                       //Dispalys "console" and a button for testing purposes 
+        api.memory.get("struceOS_dev_enableDevTools") != undefined ?
+        api.memory.get("struceOS_dev_enableDevTools") :
+        true
+    property real consoleLogBackground:                                 //clog background opacity
+        api.memory.get("struceOS_dev_log_opacity") != undefined ?
+        api.memory.get("struceOS_dev_log_opacity") :
+        0.5
+    property string version: "1.1.0"                                    //struceOS version
+    property bool working: false
 
 # Installation
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
@@ -63,6 +120,18 @@ Download struceOS-Pegasus-Theme-1.0.1.zip from [last releases](https://github.co
 
 <details>
     <summary>Changelogs</summary>
+
+## 1.1.0
+
+```
+1. Split theme.qml into separate files for easier editing
+2. Moved common functions to js
+2. Updated header logic
+3. Added Search functionality
+4. Added an in app Settings panel
+5. Added an All Games collection 
+6. Fixed GoG and Steam collections
+```
 
 ## 1.0.1
 
