@@ -284,7 +284,7 @@ Rectangle { //header
                         onClicked: {
                             header.lastFocus = utilitiesSettings
                             U.removeButtonFocusOnClick()
-                            U.toggleSettings("gameView")
+                            U.toggleSettings("settings")
                         }
 
                         onEntered: {
