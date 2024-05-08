@@ -116,7 +116,7 @@ The most useful settings are now in an settings panel within the theme. The rest
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.0.1.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.1.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
 
 <details>
     <summary>Changelogs</summary>
