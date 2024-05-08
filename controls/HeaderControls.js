@@ -19,15 +19,20 @@ function left() {
 }
 
 function accept(){
+    U.clog(header.lastFocus.curr)
+    U.removeButtonFocusOnClick()
+
     switch(header.lastFocus.curr){
         case "utilitiesSearch":
             U.toggleSearch("searchBar")
             break
         case "utilitiesSettings":
-            U.toggleSettings()
+            U.toggleSettings("settings")
+            break
+        case "utilitiesInfo":
+            U.toggleInfo('info')
             break
         default:
             break
     }
-    event.accepted = true
 }
