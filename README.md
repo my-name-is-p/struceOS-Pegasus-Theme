@@ -13,6 +13,7 @@ A simple theme for easy navigation.
 - Collapsible info panel with video player. (Info panel refresh TK)
 - Customizable settings.
 
+If you have any issues, please open a ticket or  let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 # Version 1.1.0 Updates
 1. Split theme.qml into separate files for easier editing
 2. Moved common functions to js
