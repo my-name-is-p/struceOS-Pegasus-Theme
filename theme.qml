@@ -197,7 +197,11 @@ Component.onCompleted: {
 
         //Open/close info panel with button press
         if(api.keys.isDetails(event)){
-            U.toggleInfo("gameView")
+            if(info.state != "opened"){
+                U.toggleInfo("info")
+            } else {
+                U.toggleInfo("gameView")
+            }
         }
 
         if(info.focus){
@@ -225,36 +229,6 @@ Component.onCompleted: {
         if(event.key === Qt.Key_Space && info.state === "opened"){
             info.video.playbackState === MediaPlayer.PlayingState ? info.video.pause() : info.video.play()
             toggle.play()
-        }
-    }
-//
-
-//--Custom Functions--//
-
-    //Main update function for when a game is selected. Triggered from bgFadeOut and Component.onCompleted
-    function updateGame(){
-        if (currentGame.assets.video === ""){
-            videoWrapper.height = vpx(0)
-            videoWrapper.anchors.topMargin = vpx(0)
-        } else {
-            videoWrapper.height = videoWrapper.width / 1.778
-            videoWrapper.anchors.topMargin = vpx(12)
-        }
-
-        videoPreview.stop()
-        if(info.state == "opened")
-            videoPreview.play();
-
-        if (currentGame.assets.logo === ""){
-            gameLogoWrapper.height = vpx(60)
-        } else {
-            gameLogoWrapper.height = vpx(100)
-        }
-
-        if (currentGame.developer === "" && currentGame.publisher === ""){
-            gameDeveloper.height = vpx(0)
-        } else {
-            gameDeveloper.height = vpx(36)
         }
     }
 //
