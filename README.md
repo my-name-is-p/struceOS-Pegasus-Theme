@@ -46,7 +46,7 @@ Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) an
     - Toggle Video Mute: Y / △
 
 # Customizable Settings
-The most useful settings are now in an settings panel within the theme. The rest can be found in template/settings. The default settings are below for reference:
+The most useful settings are now in a settings panel within the theme. The rest can be found in template/settings. The default settings are below for reference:
 
     //Fonts
     property string fontFamilyRegular: 
