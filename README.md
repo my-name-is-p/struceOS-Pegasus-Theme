@@ -25,7 +25,6 @@ Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) an
 # To come in future updates
 1. Beautified info panel
 2. Gamepad controls for the settings panel
-3. Collection list dropdown from the collection logo
 
 # Controls
 - Keyboard/Mouse
