@@ -72,10 +72,42 @@ Rectangle { //header
                 verticalAlignment: Image.AlignVCenter
             }
 
-            Text {
+            Rectangle { //gameCount_wrapper
+                id: gameCount_wrapper
+
+                color: Qt.hsla(0.79, 0.2, 0.26, 0.85)
+                width: gameCount_text.width + vpx(12) < vpx(24) ? vpx(24) : gameCount_text.width + vpx(12)
+                height: vpx(24)
+
+                anchors.top: collectionImage.top
+                anchors.left: collectionTitle_border.right
+                anchors.leftMargin: vpx(6)
+
+                radius: vpx(6)
+
+                Text { //gameCount_text
+                    id: gameCount_text
+
+                    text: currentCollection.games.count
+                    color: "#ffffff"
+
+                    //anchors.fill: parent
+
+                    anchors.centerIn: parent
+
+                    font.family: bold.name
+                    font.bold: true
+                    font.pixelSize: vpx(12)
+
+                }
+
+            }
+
+            Text { //collectionTitle_text
                 id: collectionTitle_text
                 anchors{
-                    fill: parent
+                    left: parent.left
+                    top: parent.top
                     margins: vpx(24)
                 }
                 text: currentCollection.name
@@ -87,14 +119,30 @@ Rectangle { //header
                 visible: collectionImage.status === Image.Error
             }
 
-            Rectangle {
-                anchors.fill: collectionImage
+            Rectangle { //collectionTitle_border
+                id: collectionTitle_border
+
+                width: collectionImage.status != 3 ? collectionImage.paintedWidth + vpx(12) : collectionTitle_text.width + 12
+                height: collectionImage.status != 3 ? collectionImage.paintedHeight + vpx(12) : collectionTitle_text.height + 12
+
+                anchors.top: collectionImage.top
+                anchors.left: collectionImage.left
                 anchors.margins: vpx(-6)
                 color: "transparent"
 
                 border.color: Qt.hsla(1,1,1,0.6)
                 border.width: parent.selected ? vpx(3) : vpx(0)
                 radius: vpx(6)
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+
+                    onClicked: {
+                        U.toggleCollections()
+                    }
+
+                }
             }
         }
 
@@ -134,11 +182,13 @@ Rectangle { //header
                         easing.type: Easing.EaseInOut
                     }
                 }
+
                 MouseArea {
                     id: searchSelect
                     anchors.fill: parent
                     cursorShape: Qt.IBeamCursor
                 }
+
                 Item {
                     anchors.fill: parent
                     anchors.leftMargin: vpx(24)
@@ -191,8 +241,6 @@ Rectangle { //header
                         anchors.centerIn: parent
                         width: vpx(48)
                         height: vpx(48)
-
-
 
                         cursorShape: Qt.PointingHandCursor
 

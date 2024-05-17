@@ -72,12 +72,11 @@ Rectangle { //games
             property var gameData: search.currentGame(gameView.currentIndex)
 
             //Game Banner Image
+
             Image {
 
                 id: banner
                 source: U.getAsset(gameData, assets, "banner")
-                //U.getAsset(gameData, assets, "banner")
-                //assets.banner != "" ? assets.banner : assets.logo != "" ? assets.logo : "../assets/img/none.jpg"
                 opacity: 0
 
                 smooth: true
@@ -143,6 +142,7 @@ Rectangle { //games
                     }
                 }
             }
+
 
             //Loading Image
             Image {
@@ -215,10 +215,10 @@ Rectangle { //games
 
             }
         }
+
     }
     property GridView gameView: gameView
 }
-
 
 
 

@@ -32,6 +32,9 @@ function accept(){
         case "utilitiesInfo":
             U.toggleInfo('info')
             break
+        case "collectionTitle":
+            U.toggleCollections("collections")
+            break
         default:
             break
     }

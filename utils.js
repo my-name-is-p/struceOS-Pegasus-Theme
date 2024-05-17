@@ -107,6 +107,19 @@ function toggleSearch(focus){
     toggle.play()
 }
 
+function toggleCollections(focus = "collections"){
+    if(collectionsView.collectionView_outer_wrapper.state != "opened"){
+        collectionsView.collectionView_outer_wrapper.state = "opened"
+        collectionsView.collectionView_list.currentItem.currentIndex = 0
+    } else {
+        collectionsView.collectionView_outer_wrapper.state = ""
+        focus = "gameView"
+    }
+    updateFocus(focus)
+    toggle.play()
+}
+
+
 function updateFocus(focus) {
     switch (focus) {
         case "header":
@@ -131,6 +144,9 @@ function updateFocus(focus) {
             break
         case "info":
             info.focus = true
+            break
+        case "collections":
+            collectionsView.collectionView_list.focus = true
             break
         default:
             root.focus = true

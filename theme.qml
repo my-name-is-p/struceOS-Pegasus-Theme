@@ -23,6 +23,10 @@
 
 // Changelogs
 
+// #1.2.0
+//      1. Added game count to collection title
+//      2. Added collection dropdown menu
+
 // #1.1.0
 //      1. Split theme.qml into separate files for easier editing
 //      2. Moved common functions to js
@@ -42,8 +46,7 @@
 
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add Gamepad controls to Settings and Info panels
-// 2. Add collection selection list from collection logo
-// 3. Rework info panel
+// 2. Rework info panel
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.0
@@ -54,6 +57,7 @@ import "template/extras"
 import "utils.js" as U
 import "controls/GameViewControls.js" as GV_controls
 import "controls/HeaderControls.js" as HEADER_controls
+import "controls/CollectionControls.js" as COLLECTION_controls
 
 FocusScope {
     id: root
@@ -167,6 +171,7 @@ Component.onCompleted: {
                 //Accept
                 if ((api.keys.isAccept(event) && !event.isAutoRepeat) || event.key == Qt.Key_Space) {
                     HEADER_controls.accept()
+                    event.accepted = true
                 }
             }
         //--END header controls
@@ -187,13 +192,46 @@ Component.onCompleted: {
         //--END searchbox controls
 
         //--START settings panel controls--//
-        if(settingsPanel.focus){
-            if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                U.toggleSettings()
-                event.accepted = true
+            if(settingsPanel.focus){
+                if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                    U.toggleSettings()
+                    event.accepted = true
+                }
             }
-        }
         //--END settings panel controls--//
+
+        //--START collections panel controls--//
+            if(collectionsView.collectionView_list.focus){
+                //down
+                if(
+                    event.key == Qt.Key_S || 
+                    event.key == Qt.Key_Down
+                ){
+                    COLLECTION_controls.down()
+                }
+                //up
+                if(
+                    event.key == Qt.Key_W || 
+                    event.key == Qt.Key_Up
+                ){
+                    COLLECTION_controls.up()
+                }
+                //accept
+                if (
+                    ((api.keys.isAccept(event) && 
+                    !event.isAutoRepeat) || 
+                    event.key == Qt.Key_Space) && 
+                    event.accepted != true
+                ){
+                    COLLECTION_controls.accept()
+                    event.accepted = true
+                }
+                if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                    U.toggleCollections()
+                    event.accepted = true
+                }
+            }
+        //--END collections panel controls--//
 
         //Open/close info panel with button press
         if(api.keys.isDetails(event)){
@@ -275,40 +313,18 @@ Component.onCompleted: {
     }
 //
 
-//--Info Close Button--//
-    Rectangle {
-
-        id: closeInfo
-
-        anchors{
-            fill: parent
-            topMargin: parent.parent.height
-        }
-
-        color: "transparent"
-
-        states: State {
-            name: "opened"
-            PropertyChanges { target: closeInfo; anchors.topMargin: 0 }
-        }
-
-        MouseArea{
-
-            anchors.fill: parent
-
-            onClicked: {
-                U.toggleInfo()
-            }
-
-        }
-    }
-//
-
 //--Info Panel--//
     InfoPanel {
         id: info
     }
 //
+
+//--CollectionsView--//
+    CollectionsView{
+        id: collectionsView
+    }
+//
+
 //-- Settings Panel--//
     SettingsPanel{
         id: settingsPanel
@@ -382,8 +398,6 @@ Component.onCompleted: {
             }
 
             onClicked: {
-
-                api.memory.unset("struceOS_background_overlayOpacity")
                 select.play()
                 U.clog("--dev button clicked--")
                 mouse.event = accepted
