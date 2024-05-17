@@ -5,6 +5,7 @@
 ![screenshot_3](.meta/screenshot_3.png)
 ![screenshot_4](.meta/screenshot_4.png)
 ![screenshot_5](.meta/screenshot_5.png)
+![screenshot_5](.meta/screenshot_6.png)
 
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
