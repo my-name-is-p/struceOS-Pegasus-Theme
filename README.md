@@ -15,14 +15,9 @@ A simple theme for easy navigation.
 - Customizable settings.
 
 If you have any issues, please open a ticket or  let me know on [discord](https://discord.gg/Pa92b2Q2pa)
-# Version 1.1.0 Updates
-1. Split theme.qml into separate files for easier editing
-2. Moved common functions to js
-2. Updated header logic
-3. Added Search functionality
-4. Added an in app Settings panel
-5. Added an All Games collection 
-6. Fixed GoG and Steam collections
+# Version 1.2.0 Updates
+1. Added game count to collection title
+2. Added collection dropdown menu
 
 # Thank yous
 Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
@@ -118,10 +113,17 @@ The most useful settings are now in a settings panel within the theme. The rest 
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.1.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.2.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
 
 <details>
     <summary>Changelogs</summary>
+
+## 1.2.0
+
+```
+1. Added game count to collection title
+2. Added collection dropdown menu
+```
 
 ## 1.1.0
 
