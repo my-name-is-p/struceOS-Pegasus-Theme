@@ -64,8 +64,16 @@ Rectangle {
             anchors.topMargin: vpx(-6)
             anchors.left: parent.left
             anchors.leftMargin: vpx(24)
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: vpx(24)
+
+            height: {
+                let x = settings.allGames ? api.collections.count + 1 : api.collections.count
+                let h = ((36 + 24) * x)
+                if(h < parent.height - vpx(12)){
+                    return h
+                } else {
+                    return parent.height - vpx(12)
+                }
+            }
 
             width: vpx(400)
 
