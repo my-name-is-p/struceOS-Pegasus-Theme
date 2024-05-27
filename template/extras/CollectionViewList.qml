@@ -27,14 +27,33 @@ Item {
     anchors.fill: parent
     anchors.margins: vpx(12)
 
+    ListModel {
+        id: collectionsModel
+
+        ListElement { name: "All Games"; shortName: "allgames" }
+        Component.onCompleted: {
+            for(var i=0; i<api.collections.count; i++) {
+                append(createListElement(i));
+            }
+        }
+        
+        function createListElement(i) {
+            return {
+                name:       api.collections.get(i).name,
+                shortName:  api.collections.get(i).shortName,
+            }
+        }
+    }
+
+
+
     ListView {
         id: collectionView_list
         anchors.fill: parent
         spacing: vpx(24)
 
-
         delegate: collectionView_list_item
-        model: api.collections
+        model:collectionsModel
         highlightFollowsCurrentItem: true
         highlightMoveDuration : 1
         highlightMoveVelocity : 1000
@@ -46,7 +65,6 @@ Item {
         Item {
             height: vpx(36)
             width: parent.width
-
             Image {
                 id: collectionView_list_logo
                 source: "../../assets/logos/" + shortName + ".svg"
