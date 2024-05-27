@@ -196,6 +196,7 @@ function generalClose(closee= "", focus = "gameView"){
 
     } else {
         info.state = ""
+        collectionsView.collectionView_outer_wrapper.state = ""
     }
     updateFocus(focus)
 }

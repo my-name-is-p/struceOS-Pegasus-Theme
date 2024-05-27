@@ -19,9 +19,7 @@ function left() {
 }
 
 function accept(){
-    U.clog(header.lastFocus.curr)
     U.removeButtonFocusOnClick()
-
     switch(header.lastFocus.curr){
         case "utilitiesSearch":
             U.toggleSearch("searchBar")

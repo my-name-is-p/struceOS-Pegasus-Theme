@@ -81,6 +81,6 @@ Item {
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.2.0"                                    //struceOS version
+    property string version: "1.2.1"                                    //struceOS version
     property bool working: false
 }

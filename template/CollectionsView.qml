@@ -110,4 +110,5 @@ Rectangle {
     property Rectangle collectionView_outer_wrapper: collectionView_outer_wrapper
     property CollectionViewList collectionView_list: collectionView_list
     property ListView currentItem: collectionView_list.currentItem
+    property ListModel collectionsModel: collectionView_list.collectionsModel
 }

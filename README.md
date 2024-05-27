@@ -18,7 +18,8 @@ If you have any issues, please open a ticket or  let me know on [discord](https:
 
 # Version 1.2.1 Updates
 1. Added All Games to the collection dropdown menu
-2. Set collection dropdown height to size of list rather than parent height
+2. Collection dropdown resizes to list length if shorter than the full window
+3. Removed clog statements from testing
 
 # Thank yous
 Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
@@ -101,12 +102,12 @@ The most useful settings are now in a settings panel within the theme. The rest 
     property bool enableDevTools:                                       //Dispalys "console" and a button for testing purposes 
         api.memory.get("struceOS_dev_enableDevTools") != undefined ?
         api.memory.get("struceOS_dev_enableDevTools") :
-        true
+        false
     property real consoleLogBackground:                                 //clog background opacity
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.1.0"                                    //struceOS version
+    property string version: "1.2.1"                                    //struceOS version
     property bool working: false
 
 # Installation

@@ -30,10 +30,19 @@ Item {
     ListModel {
         id: collectionsModel
 
-        ListElement { name: "All Games"; shortName: "allgames" }
+        property bool showAllGames: settings.allGames // Bind to settings.allGames
+
         Component.onCompleted: {
+            populateModel()
+        }
+
+        function populateModel() {
+            collectionsModel.clear() // Clear existing entries
+            if(showAllGames){
+                append({ name: "All Games", shortName: "allgames" })
+            }
             for(var i=0; i<api.collections.count; i++) {
-                append(createListElement(i));
+                append(createListElement(i))
             }
         }
         
@@ -128,6 +137,7 @@ Item {
         }
     }
     property ListView currentItem: collectionView_list
+    property ListModel collectionsModel: collectionsModel
 }
 
 

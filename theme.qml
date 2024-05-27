@@ -109,6 +109,7 @@ Component.onCompleted: {
         if(event.key != Qt.Key_A && event.key != Qt.Key_D){
             if (api.keys.isNextPage(event) || api.keys.isPrevPage(event)) {
                 GV_controls.changeCollection(event, currentCollectionIndex)
+                U.generalClose()
             }
         }
         //--END Collection Quick Change

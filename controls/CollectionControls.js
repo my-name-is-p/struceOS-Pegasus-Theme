@@ -17,10 +17,9 @@ function up(){
 }
 
 function accept(){
-    currentCollectionIndex = collectionsView.collectionView_list.currentItem.currentIndex
+    currentCollectionIndex = settings.allGames ? collectionsView.collectionView_list.currentItem.currentIndex - 1 : collectionsView.collectionView_list.currentItem.currentIndex
     currentCollection = U.getCollection(currentCollectionIndex)
     U.toggleCollections()
     games.gameView.currentIndex = 0
     currentBG = U.getAsset(currentGame, currentGame.assets, "bg")
-    U.clog('collection accept')
 }

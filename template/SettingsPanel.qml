@@ -310,6 +310,7 @@ Rectangle {
                                             parent.state = ""
                                         }
                                         api.memory.set("struceOS_gameView_allGames", settings.allGames)
+                                        collectionsView.collectionsModel.populateModel()
                                     }
                                 }
                             }
