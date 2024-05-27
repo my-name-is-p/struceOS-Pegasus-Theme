@@ -119,6 +119,14 @@ Download struceOS-Pegasus-Theme-1.2.0.zip from [last releases](https://github.co
 <details>
     <summary>Changelogs</summary>
 
+## 1.2.1
+
+```
+1. Added All Games to the collection dropdown menu
+2. Collection dropdown resizes to list length if shorter than the full window
+3. Removed clog statements from testing
+```
+
 ## 1.2.0
 
 ```
