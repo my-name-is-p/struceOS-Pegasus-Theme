@@ -15,9 +15,10 @@ A simple theme for easy navigation.
 - Customizable settings.
 
 If you have any issues, please open a ticket or  let me know on [discord](https://discord.gg/Pa92b2Q2pa)
-# Version 1.2.0 Updates
-1. Added game count to collection title
-2. Added collection dropdown menu
+
+# Version 1.2.1 Updates
+1. Added All Games to the collection dropdown menu
+2. Set collection dropdown height to size of list rather than parent height
 
 # Thank yous
 Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
@@ -112,7 +113,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.2.0.zip from [latest releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.2.0.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
 
 <details>
     <summary>Changelogs</summary>
