@@ -67,6 +67,16 @@ Item {
         highlightMoveDuration : 1
         highlightMoveVelocity : 1000
 
+        property bool mouseClick: false
+
+        onCurrentIndexChanged: { // new game selected
+            if(collectionsView.collectionView_outer_wrapper.state === "opened"){
+                if(!mouseClick)
+                    select.play()
+            }
+            mouseClick = false
+        }
+
     }
 
     Component {
@@ -89,7 +99,7 @@ Item {
                 text: name
                 anchors.centerIn: parent
 
-                color: "#ffffff"
+                color: settings.colors.white
                 opacity: collectionView_list_logo.status != 3 ? 0 : 1
 
                 verticalAlignment: Text.AlignVCenter
@@ -111,7 +121,7 @@ Item {
                 anchors.margins: vpx(-6)
                 color: "transparent"
 
-                border.color: Qt.hsla(1,1,1,0.6)
+                border.color: settings.colors.border
                 border.width: parent.focus ? vpx(3) : vpx(0)
                 radius: vpx(6)
 
@@ -122,7 +132,6 @@ Item {
 
                     onEntered: {
                         parent.parent.focus = true
-                        collectionView_list.currentIndex = index
                     }
 
                     onExited: {
@@ -130,7 +139,10 @@ Item {
                     }
 
                     onClicked: {
+                        collectionView_list.mouseClick = true
+                        collectionView_list.currentIndex = index
                         COLLECTION_controls.accept()
+                        collectionView_list.currentIndex = 0
                     }
                 }
             }

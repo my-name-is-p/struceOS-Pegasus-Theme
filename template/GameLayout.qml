@@ -49,9 +49,8 @@ Rectangle { //games
 
         
         onCurrentIndexChanged: { // new game selected
-            if(!mouseSelect)
-                select.play()
             if(loadTimeout){
+                select.play()
                 U.changeGame()
                 if(!settings.lastPlayed){
                     api.memory.set("collectionIndex", currentCollectionIndex)
@@ -72,7 +71,6 @@ Rectangle { //games
             property var gameData: search.currentGame(gameView.currentIndex)
 
             //Game Banner Image
-
             Image {
 
                 id: banner
@@ -141,6 +139,31 @@ Rectangle { //games
                         radius: vpx(3)
                     }
                 }
+
+                Rectangle {
+                    id: favorite_icon
+
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: vpx(-6)
+
+                    height: vpx(24)
+                    width: vpx(24)
+
+                    radius: vpx(24)
+                    
+                    visible: favorite
+
+                    color: Qt.hsla(0.79, 0.2, 0.26, 1.0)
+
+                    Image {
+                        source: "../assets/img/heart_filled.svg"
+                        anchors.centerIn: parent
+                        fillMode: Image.PreserveAspectFit
+                        height: vpx(12)
+                    }
+                }
+
             }
 
 
@@ -198,19 +221,18 @@ Rectangle { //games
                     gameView.focus = true
                     gameView.currentIndex = index
                     mouseSelect = true
-                    U.removeButtonFocusOnClick("header")
                     if(header.searchbox.state === "opened") 
                         header.searchTerm.focus = false;
                     select.play()
                 }
 
                 onDoubleClicked: {
-                    parent.gameData.launch()
+                    currentGame.launch()
                     if(settings.lastPlayed){
                         api.memory.set("collectionIndex", currentCollectionIndex)
                         api.memory.set("gameIndex", gameView.currentIndex)
                     }
-                    select.play()
+                    toggle_down.play()
                 }
 
             }

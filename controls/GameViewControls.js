@@ -1,5 +1,4 @@
 //gv = gameView
-
 function changeCollection(event,i){
         if(api.keys.isNextPage(event)){
             if(currentCollectionIndex === -1){
@@ -14,10 +13,9 @@ function changeCollection(event,i){
                 currentCollectionIndex <= 0 ? currentCollectionIndex = (allGames != 0 ? -1 : api.collections.count - 1) : currentCollectionIndex--
             }
         }
-        U.generalClose("", "gameView")
+        U.focusToggle()
         currentCollection = U.getCollection(currentCollectionIndex)
         games.gameView.currentIndex = 0
-        toggle.play()
     U.bgFadeOutIn()
 }
 
@@ -27,23 +25,20 @@ function up(){
         games.gameView.currentIndex = games.gameView.currentIndex - settings.columns
     } else {
         header.focus = true
-        if(header.searchbox.state != "opened"){
+        if(header.searchTerm.text != ""){
+            U.focusToggle("search")
+        } else {
             let a = games.gameView.currentIndex
             let b = settings.columns - 1
             if(a < b / 2 && (b - a) > b / 2){
-                header.collectionTitle.selected = true
-                header.lastFocus = header.collectionTitle
+                header.currentItem = header.gv_up_1
             } else if (a != b) {
-                header.utilitiesSearch.selected = true
-                header.lastFocus = header.utilitiesSearch
+                header.currentItem = header.gv_up_2
             } else {
-                header.utilitiesSettings.selected = true
-                header.lastFocus = header.utilitiesSettings
+                header.currentItem = header.gv_up_3
             }
-        }else{
-            header.searchTerm.focus = true
         }
-        toggle.play()
+        toggle_up.play()
     }
 }
 

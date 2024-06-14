@@ -38,7 +38,7 @@ Rectangle {
         anchors.fill: parent
 
         onClicked: {
-            U.toggleCollections()
+            U.focusToggle()
             mouse.event = accept
         }
 
@@ -47,7 +47,7 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    Item {
         id: collectionView_inner_wrapper
         anchors.top: parent.top
         anchors.topMargin: header.height
@@ -55,7 +55,6 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        color: "transparent"
         Rectangle {
             id: collectionView_panel
             color: Qt.hsla(0.79, 0.2, 0.26, 0.98)
@@ -67,12 +66,13 @@ Rectangle {
 
             height: {
                 let x = settings.allGames ? api.collections.count + 1 : api.collections.count
-                let h = ((36 + 24) * x)
+                let h = vpx(60 * x)
                 if(h < parent.height - vpx(12)){
                     return h
                 } else {
                     return parent.height - vpx(12)
                 }
+
             }
 
             width: vpx(400)

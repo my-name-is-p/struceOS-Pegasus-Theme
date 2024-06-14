@@ -37,6 +37,7 @@ id: root
         }
         return temp
     }
+    
     Component.onCompleted: {
         firstWordIgnoreList = "^(" + firstWordIgnore(settings.firstWordIgnore) + ")?"
     }
@@ -46,9 +47,9 @@ id: root
             sourceModel: currentCollection.games
             filters: RegExpFilter { 
                 roleName: "title"; 
-                pattern: firstWordIgnoreList + header.searchTerm.text; 
+                pattern: firstWordIgnoreList + header.searchTerm.text 
                 caseSensitivity: Qt.CaseInsensitive;
-                enabled: header.searchTerm.text != "" && header.searchbox.state === "opened"
+                enabled: header.searchTerm.text != ""
             }
     }
 }

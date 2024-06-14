@@ -20,6 +20,17 @@ Item {
 
     id: settings
 
+    //Colors
+    property var colors: {
+        "martinique" : "#392e4a",
+        "green" : "#1ba39c",
+        "border": Qt.rgba(1,1,1,0.6),
+        "white": Qt.rgba(1,1,1,1),
+        "black": Qt.rgba(0,0,0,1),
+        "black90": Qt.rgba(0,0,0,0.90),
+        "black75": Qt.rgba(0,0,0,0.75)
+    }
+
     //Fonts
     property string fontFamilyRegular: 
         "assets/fonts/Open Sans/OpenSans-Regular.ttf"
@@ -46,7 +57,7 @@ Item {
     api.memory.get("struceOS_gameView_allGames") :
     true                                        //Turns on the All Games Category (Unde Development)
                                                                         //currently doubles up if games are contained in two collections (windows/pc)
-    property string defaultGameImage: "img/none.jpg"                    //Image source for default game image (will only look in assets)
+    property string defaultGameImage: "img/no_image.png"                    //Image source for default game image (will only look in assets)
 
     //Background Settings
     property bool bgOverlayOn:                                          //Apply an overlay to the background
@@ -70,7 +81,7 @@ Item {
         0.40
 
     //Search Settings
-    property var firstWordIgnore: ["the","legend","of","lego"]          //Words to ignore in search as the first word
+    property var firstWordIgnore: ["the","the legend of", "lego"]          //Words to ignore in search as the first word
 
     //DevTools
     property bool enableDevTools:                                       //Dispalys "console" and a button for testing purposes 
@@ -81,6 +92,6 @@ Item {
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.2.1"                                    //struceOS version
+    property string version: "1.3.0"                                    //struceOS version
     property bool working: false
 }

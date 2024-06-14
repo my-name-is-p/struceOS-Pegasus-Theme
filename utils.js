@@ -1,5 +1,3 @@
-
-
 function clog(str, tag = "", clear = false){
     let temp = consoleLog.text
     let s = "\n"
@@ -27,17 +25,41 @@ function changeGame(){
     bgFadeOutIn()
 }
 
-function toggleSettings(focus = "utilitiesSettings"){
-    if(settingsPanel.state != "opened"){
-        settingsPanel.state = "opened"
-    } else {
-        settingsPanel.state = ""
-        if(focus != "gameView")
-            focus ="utilitiesSettings"
+
+function focusToggle(focus = "gameView"){
+    settingsPanel.state = ""
+    info.video.stop()
+    info.state = ""
+    info.currentItem = info.play_button
+    header.searchbox.state = ""
+    collectionsView.collectionView_outer_wrapper.state = ""
+    switch (focus){
+        case "settings":
+            settingsPanel.state = "opened"
+            settingsPanel.focus = true
+            break
+        case "info":
+            info.state = "opened" 
+            info.focus = true
+            info.detailsModel.populateModel()
+            info.video.play()
+            break
+        case "search":
+            header.searchbox.state = "opened"
+            header.searchTerm.focus = true
+            break
+        case "collections":
+            collectionsView.collectionView_outer_wrapper.state = "opened"
+            collectionsView.collectionView_list.currentItem.currentIndex = 0
+            collectionsView.collectionView_list.focus = true
+            break
+        default:
+            games.gameView.focus = true
+            break
     }
-    updateFocus(focus)
-    toggle.play()
+    toggle_up.play()
 }
+
 
 function settingsUpdate(setting, currentValue){
     let currentValueInt = parseInt(currentValue.text)
@@ -81,104 +103,6 @@ function settingsUpdate(setting, currentValue){
     select.play()
 }
 
-function toggleInfo(focus = "info"){
-    if(info.state != "opened"){
-        info.state = "opened" 
-        info.video.play()
-    }else{
-        info.state = ""
-        info.video.stop()
-        focus = "gameView"
-    }
-    updateFocus(focus)
-    toggle.play()
-}
-
-function toggleSearch(focus){
-    if((header.searchTerm.focus && focus === "utilitiesSearch") && focus !="searchBar"){
-        focus = "gameView" 
-    }
-    if(header.searchbox.state != "opened"){
-        header.searchbox.state = "opened"
-    } else if(header.searchTerm.text === ""){
-        header.searchbox.state = ""
-    }
-    updateFocus(focus)
-    toggle.play()
-}
-
-function toggleCollections(focus = "collections"){
-    if(collectionsView.collectionView_outer_wrapper.state != "opened"){
-        collectionsView.collectionView_outer_wrapper.state = "opened"
-        collectionsView.collectionView_list.currentItem.currentIndex = 0
-    } else {
-        collectionsView.collectionView_outer_wrapper.state = ""
-        focus = "gameView"
-    }
-    updateFocus(focus)
-    toggle.play()
-}
-
-
-function updateFocus(focus) {
-    switch (focus) {
-        case "header":
-            header.focus = true
-            break
-        case "gameView":
-            games.gameView.focus = true
-            break
-        case "searchBar":
-            header.searchTerm.focus = true
-            break
-        case "settings":
-            settingsPanel.focus = true
-            break
-        case "utilitiesSearch":
-            header.utilitiesSearch.focus = true
-            break
-        case "utilitiesSettings":
-            header.focus = true
-            header.utilitiesSettings.selected = true
-            header.lastFocus = header.utilitiesSettings
-            break
-        case "info":
-            info.focus = true
-            break
-        case "collections":
-            collectionsView.collectionView_list.focus = true
-            break
-        default:
-            root.focus = true
-    }
-}
-
-function removeButtonFocusOnClick(buttons="all") {
-    switch(buttons){
-        case "header":
-            header.utilitiesSearch.focus = false
-            header.utilitiesSettings.focus = false
-            header.utilitiesInfo.focus = false
-            header.collectionTitle.focus = false
-            
-            header.utilitiesSearch.selected = false
-            header.utilitiesSettings.selected = false
-            header.utilitiesInfo.selected = false
-            header.collectionTitle.selected = false
-            break
-        default:
-            header.utilitiesSearch.focus = false
-            header.utilitiesSettings.focus = false
-            header.utilitiesInfo.focus = false
-            header.collectionTitle.focus = false
-            
-            header.utilitiesSearch.selected = false
-            header.utilitiesSettings.selected = false
-            header.utilitiesInfo.selected = false
-            header.collectionTitle.selected = false
-    }
-}
-
 function getCollection(i){
     if(i >= 0){
         return api.collections.get(i)
@@ -189,16 +113,6 @@ function getCollection(i){
             games: api.allGames
         }
     }
-}
-
-function generalClose(closee= "", focus = "gameView"){
-    if(closee !=""){
-
-    } else {
-        info.state = ""
-        collectionsView.collectionView_outer_wrapper.state = ""
-    }
-    updateFocus(focus)
 }
 
 function getAsset(data, assets, type = "", log = false) {

@@ -24,7 +24,7 @@ Rectangle {
     height: parent.height
     width: parent.width
     anchors.bottom: parent.top
-    color: Qt.rgba(0,0,0,0.75)
+    color: settings.colors.black75
 
     states: State {
         name: "opened"
@@ -51,88 +51,15 @@ Rectangle {
         id: settings_panel_inner_wrapper
         anchors.fill: parent
         anchors.margins: vpx(24)
-        color: Qt.rgba(0,0,0,0.95)
+        color: settings.colors.black90
 
         radius: vpx(6)
 
-        Rectangle { //settings_panel_close
+        CloseButton {
             id: settings_panel_close
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.margins: vpx(12)
-            width: vpx(48)
-            height: vpx(48)
-
-            color: "transparent"
-
-            Rectangle {
-                id: settings_panel_close_hover
-                anchors.fill: parent
-
-                color: Qt.hsla(0.79, 0.2, 0.26, 0.85)
-                radius: vpx(6)
-                opacity: 0
-
-                states: State {
-                    name: "hover"
-                    PropertyChanges { target: settings_panel_close_hover; opacity: 1 }
-                }
-
-                transitions: Transition {
-                    NumberAnimation {
-                        properties: "opacity"
-                        duration: 150 
-                        easing.type: Easing.EaseInOut
-                    }
-                }
-            }
-
-            Text { //settings_panel_close_icon
-                id: settings_panel_close_icon
-                anchors.fill: parent
-                anchors.bottomMargin: (font.pixelSize / 4)
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-
-                text: "🗙"
-                color: "#ffffff"
-
-                font.pixelSize: vpx(24)
-            }
-
-            Rectangle { //settings_panel_close_border
-                id: settings_panel_close_border
-                anchors.fill: parent
-                color: "transparent"
-
-                visible: false
-
-                border.color: Qt.hsla(1,1,1,0.6)
-                border.width: vpx(3)
-                radius: vpx(6)
-            }
-
-            MouseArea{ //settings_panel_close_click
-                id: settings_panel_close_click
-
-                anchors.fill: parent
-
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-
-                onClicked: {
-                    U.toggleSettings("gameView")
-                }
-
-                onEntered: {
-                    settings_panel_close_hover.state = "hover"
-                }
-
-                onExited: {
-                    settings_panel_close_hover.state = ""
-                }
-            }
         }
 
         Rectangle { //settings_panel_content
@@ -169,7 +96,7 @@ Rectangle {
                         Text { //gameview_settings_title
                             id: gameview_settings_title
                             text: "Game View Settings"
-                            color: "#ffffff"
+                            color: settings.colors.white
 
                             font.family: bold.name
                             font.bold: true
@@ -186,7 +113,7 @@ Rectangle {
                             Text { //gameview_settings_column_count_label
                                 id: gameview_settings_column_count_label
                                 text: "Game View column amount: "
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -221,7 +148,7 @@ Rectangle {
                             Text { //gameview_settings_column_count_amount
                                 id: gameview_settings_column_count_amount
                                 text: settings.columns
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 anchors.right: parent.right
 
@@ -241,7 +168,7 @@ Rectangle {
                             Text { //gameview_settings_column_count_label
                                 id: gameview_settings_last_played_label
                                 text: "Open to last played:"
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -284,7 +211,7 @@ Rectangle {
                             Text { //gameview_settings_all_games_label
                                 id: gameview_settings_all_games_label
                                 text: "Show \"All Games\" collection:"
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -327,7 +254,7 @@ Rectangle {
                             Text {
                                 id: gameview_settings_thumbnails_description
                                 text: "Scale and crop game thumbnails in: "
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx(16)
@@ -368,7 +295,7 @@ Rectangle {
                         Text { //background_settings_title
                             id: background_settings_title
                             text: "Background Settings"
-                            color: "#ffffff"
+                            color: settings.colors.white
 
                             font.family: bold.name
                             font.bold: true
@@ -385,7 +312,7 @@ Rectangle {
                             Text { //background_settings_overlay_on_label
                                 id: background_settings_overlay_on_label
                                 text: "Background overlay on:"
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -429,7 +356,7 @@ Rectangle {
                             Text { //background_settings_overlay_opactiy_label
                                 id: background_settings_overlay_opactiy_label
                                 text: "Background overlay opacity (0-1): "
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -464,7 +391,7 @@ Rectangle {
                             Text { //background_settings_overlay_opactiy_amount
                                 id: background_settings_overlay_opactiy_amount
                                 text: settings.bgOverlayOpacity.toFixed(2)
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 anchors.right: parent.right
 
@@ -486,7 +413,7 @@ Rectangle {
                         Text { //video_settings_title
                             id: video_settings_title
                             text: "Video Settings"
-                            color: "#ffffff"
+                            color: settings.colors.white
 
                             font.family: bold.name
                             font.bold: true
@@ -503,7 +430,7 @@ Rectangle {
                             Text { //background_settings_overlay_on_label
                                 id: video_settings_mute_label
                                 text: "Mute video:"
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -546,7 +473,7 @@ Rectangle {
                             Text { //video_settings_volume_label
                                 id: video_settings_volume_label
                                 text: "Video volume (0-1): "
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -581,7 +508,7 @@ Rectangle {
                             Text { //video_settings_volume_amount
                                 id: video_settings_volume_amount
                                 text: settings.videoVolume.toFixed(2)
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 anchors.right: parent.right
 
@@ -603,7 +530,7 @@ Rectangle {
                         Text { //dev_settings_title
                             id: dev_settings_title
                             text: "Dev Tools Settings"
-                            color: "#ffffff"
+                            color: settings.colors.white
 
                             font.family: bold.name
                             font.bold: true
@@ -620,7 +547,7 @@ Rectangle {
                             Text { //dev_settings_on_label
                                 id: dev_settings_on_label
                                 text: "Enable Dev Tools:"
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -663,7 +590,7 @@ Rectangle {
                             Text { //dev_settings_log_opacity_label
                                 id: dev_settings_log_opacity_label
                                 text: "Log opacity (0-1): "
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 font.family: regular.name
                                 font.pixelSize: vpx (16)
@@ -698,7 +625,7 @@ Rectangle {
                             Text { //dev_settings_log_opacity_amount
                                 id: dev_settings_log_opacity_amount
                                 text: settings.consoleLogBackground.toFixed(2)
-                                color: "#ffffff"
+                                color: settings.colors.white
 
                                 anchors.right: parent.right
 
@@ -710,19 +637,19 @@ Rectangle {
                 }
             }
         }
+
         Item { //settingsFooter
-            
             id: settingsFooter
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.margins: vpx(12)
-
+            
             Text { //donation link
                 id: donationLink
-                text:"If you are enjoying this theme, please consider donating."
-                property string link: "https://www.paypal.com/donate/?business=UVLTE2DMLAR3G&no_recurring=1&item_name=donations+for+struceOS%2C+Pegasus+Frontend+Theme&currency_code=USD"
-                color: "#ffffff"
+                text:"Buy me a ko-fi"
+                property string link: "https://ko-fi.com/strucep"
+                color: settings.colors.white
 
                 anchors.bottom: parent.bottom
                 anchors.right: decoration.left
@@ -762,7 +689,7 @@ Rectangle {
                 anchors.right: version.left
                 anchors.rightMargin: vpx(6)
 
-                border.color: "#ffffff"
+                border.color: settings.colors.white
                 border.width: vpx(2)
                 radius: vpx(6)
             }
@@ -771,7 +698,7 @@ Rectangle {
                 id: version
                 text:"struceOS v" + settings.version + (settings.working ? "-working" : "")
                 property string link: "https://github.com/strucep/struceOS-Pegasus-Theme"
-                color: "#ffffff"
+                color: settings.colors.white
 
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right

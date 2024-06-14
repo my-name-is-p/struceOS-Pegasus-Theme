@@ -22,9 +22,6 @@ Rectangle {
     anchors.fill: parent
     color: "#000000"
 
-
-
-
     Image {
         id: backgroundGame
         source: currentBG

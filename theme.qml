@@ -15,13 +15,23 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 // Thank you to VGmove creator of EasyLaunch <https://github.com/VGmove/EasyLaunch>
-// for the collection logos, images, audio, and various functionality
-
-// Thank you to PlayingKarrde creator of clearOS <https://github.com/PlayingKarrde/clearOS>
-// for the search logic and all games collection
-
+// and PlayingKarrde creator of clearOS <https://github.com/PlayingKarrde/clearOS>
+// for easy to read code
 
 // Changelogs
+
+// #1.2.2
+//      1. Updated some collection logos
+//      2. Simplified toggling panels
+//      3. Fixed background images when searching
+//      4. Changed audio files for UI sounds
+//      5. Updated header layout and functions
+//      6. Updated info panel layout and functions
+
+// #1.2.1
+//      1. Added "All Games" to the collection dropdown menu
+//      2. Collection dropdown resizes to list length if shorter than the full window
+//      3. Removed clog statements from testing
 
 // #1.2.0
 //      1. Added game count to collection title
@@ -58,6 +68,7 @@ import "utils.js" as U
 import "controls/GameViewControls.js" as GV_controls
 import "controls/HeaderControls.js" as HEADER_controls
 import "controls/CollectionControls.js" as COLLECTION_controls
+import "controls/InfoControls.js" as INFO_controls
 
 FocusScope {
     id: root
@@ -69,12 +80,12 @@ FocusScope {
 
     property int currentCollectionIndex: 4
     property var currentCollection: U.getCollection(currentCollectionIndex)
-    property var currentGame: currentCollection.games.get(games.gameView.currentIndex)
+    property var currentGame: games.gameView.currentItem.gameData
     property string currentBG: U.getAsset(currentGame, currentGame.assets, "bg")
     property bool mouseSelect: false
     property int allGames: settings.allGames ? -1 : 0
 
-//--Settings--Customize these to your liking. Now found in template/Settings. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
+//--Settings--Customize these to your liking. Now found in template/Settings.qml. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
 Settings {
     id: settings
 }
@@ -92,16 +103,14 @@ Component.onCompleted: {
         0;
     currentCollection = U.getCollection(currentCollectionIndex) || 0
     games.gameView.currentIndex = api.memory.get("gameIndex") || 0
-    currentBG = U.getAsset(currentGame, currentGame.assets, "bg")
+    games.gameView.focus = true
     loadTimeout = true
     home.play()
-    games.gameView.focus = true
     U.clog("struceOS v" + settings.version + (settings.working ? "-working" : ""))
 }
 
 //--Custom controls--//
     Keys.onPressed: {
-
         //--Dev Keys--//
         //--END Dev Keys--//
 
@@ -109,7 +118,6 @@ Component.onCompleted: {
         if(event.key != Qt.Key_A && event.key != Qt.Key_D){
             if (api.keys.isNextPage(event) || api.keys.isPrevPage(event)) {
                 GV_controls.changeCollection(event, currentCollectionIndex)
-                U.generalClose()
             }
         }
         //--END Collection Quick Change
@@ -181,21 +189,15 @@ Component.onCompleted: {
             if(header.searchTerm.focus){
                 if ((api.keys.isCancel(event) && !event.isAutoRepeat) || event.key == Qt.Key_Down ) {
                     event.accepted = true;
-                    if(header.searchTerm.text != ""){
-                        U.toggleSearch("gameView")
-                    } else {
-                        header.lastFocus = header.utilitiesSearch
-                        header.utilitiesSearch.selected = true
-                        U.toggleSearch("header")
-                    }
+                    U.focusToggle()
                 }
             }
         //--END searchbox controls
-
+        
         //--START settings panel controls--//
             if(settingsPanel.focus){
                 if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.toggleSettings()
+                    U.focusToggle()
                     event.accepted = true
                 }
             }
@@ -225,10 +227,12 @@ Component.onCompleted: {
                     event.accepted != true
                 ){
                     COLLECTION_controls.accept()
+                    collectionsView.currentItem.currentIndex = 0
                     event.accepted = true
                 }
                 if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.toggleCollections()
+                    U.focusToggle()
+                    collectionsView.currentItem.currentIndex = 0
                     event.accepted = true
                 }
             }
@@ -237,60 +241,90 @@ Component.onCompleted: {
         //Open/close info panel with button press
         if(api.keys.isDetails(event)){
             if(info.state != "opened"){
-                U.toggleInfo("info")
+                U.focusToggle("info")
             } else {
-                U.toggleInfo("gameView")
+                U.focusToggle()
             }
         }
+        //--START info panel controls--//
+            if(info.focus){
+                //Up
+                if(
+                    event.key == Qt.Key_W || 
+                    event.key == Qt.Key_Up
+                ){
+                    INFO_controls.up()
+                }
 
-        if(info.focus){
-            if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                U.toggleInfo("gameView")
-                event.accepted = true
-            }
-        }
+                //Down
+                if(
+                    event.key == Qt.Key_S || 
+                    event.key == Qt.Key_Down
+                ){
+                    INFO_controls.down()
+                }
 
-        //Video controls
-        if(api.keys.isFilters(event) && info.state === "opened"){
-            if(event.key != Qt.Key_F){
-                if(info.state === "opened"){
-                    info.video.muted ? info.video.muted = false : info.video.muted = true
-                    select.play()
+                //left
+                if(
+                    event.key == Qt.Key_A || 
+                    event.key == Qt.Key_Left
+                ){
+                    INFO_controls.left()
+                }
+
+                //Right
+                if(
+                    event.key == Qt.Key_D || 
+                    event.key == Qt.Key_Right
+                ){
+                    INFO_controls.right()
+                }
+
+                if (
+                    ((api.keys.isAccept(event) && 
+                    !event.isAutoRepeat) || 
+                    event.key == Qt.Key_Space) && 
+                    event.accepted != true
+                ){
+                    INFO_controls.accept()
+                    event.accepted = true
+                }
+
+                if (api.keys.isCancel(event) && !event.isAutoRepeat){
+                    U.focusToggle()
+                    event.accepted = true
                 }
             }
-        }
-
-        if(event.key === Qt.Key_M && info.state === "opened"){
-            info.video.muted ? info.video.muted = false : info.video.muted = true
-            select.play()
-        }
-
-        if(event.key === Qt.Key_Space && info.state === "opened"){
-            info.video.playbackState === MediaPlayer.PlayingState ? info.video.pause() : info.video.play()
-            toggle.play()
-        }
+        //--END info panel controls--//
     }
 //
 
 //--Audio--//
     MediaPlayer {
 		id: select
-		source: "assets/sounds/select.wav"
-		volume: 1
+		source: "assets/sounds/lc.wav"
+		volume: 0.50
 		loops : 1
 	}
 
     MediaPlayer {
-		id: toggle
-		source: "assets/sounds/toggle.wav"
-		volume: 1
+		id: toggle_up
+		source: "assets/sounds/hc_down.wav"
+		volume: 0.50
+		loops : 1
+	}
+
+    MediaPlayer {
+		id: toggle_down
+		source: "assets/sounds/hc_up.wav"
+		volume: 0.50
 		loops : 1
 	}
 
     MediaPlayer {
 		id: home
-		source: "assets/sounds/home.wav"
-		volume: 1
+		source: "assets/sounds/home.mp3"
+		volume: 0.80
 		loops : 1
 	}
 //
@@ -353,7 +387,7 @@ Component.onCompleted: {
                 clip: true
             TextEdit{
                 id: consoleLog
-                color: "white"
+                color: settings.colors.white
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -368,7 +402,7 @@ Component.onCompleted: {
         height: vpx(48)
         width: vpx(48)
         radius: vpx(48)
-        color: "lightblue"
+        color: settings.colors.white
         visible: testButtonMouse.enabled
 
         anchors {
@@ -380,7 +414,7 @@ Component.onCompleted: {
         states: [
             State{
                 name: "hovered"
-                PropertyChanges{target: testButton; color: "black"}
+                PropertyChanges{target: testButton; color: settings.colors.black}
             }
         ]
 

@@ -17,29 +17,28 @@
 import QtQuick 2.0
 import QtMultimedia 5.9
 import "../utils.js" as U
+import "extras"
 
-Item {
-
-    id: info
-    width: parent.width
+Rectangle {
+    id: info_outer_wrapper
     height: parent.height
-
+    width: parent.width
     anchors.bottom: parent.top
+    color: settings.colors.black75
+
+    property var currentItem: play_button
 
     states: State {
         name: "opened"
         PropertyChanges{target: info; anchors.bottom: parent.bottom}
     }
 
-
     MouseArea {
         id: info_panel_prevent
         anchors.fill: parent
 
-        enabled: parent.state === "opened"
-
         onClicked: {
-            U.toggleInfo("gameView")
+            mouse.event = accept
         }
 
         onWheel: {
@@ -47,352 +46,533 @@ Item {
         }
     }
 
-    Rectangle{
-
-        id: infoWrapper
-
-        color: Qt.hsla(0,0,0,0.45)
-
-        anchors {
-
-            top: parent.top
-            left: parent.left
-            leftMargin: parent.width
-            bottom: parent.bottom
-
-        }
-
-        width: parent.width * 0.5
-
-        state: parent.state
-
-        states: State {
-            name: "opened"
-            PropertyChanges { target: infoWrapper; anchors.leftMargin: parent.width * 0.5 }
-        }
-
-        transitions: Transition{
-            NumberAnimation { 
-                properties: "anchors.leftMargin"
-                duration: 150 
-                easing.type: Easing.EaseInOut
-            }
-        }
-
-        property Video video: videoWrapper.video
-        property Rectangle videoWrapper: videoWrapper
-
-        //Prevents clicking the panel from closing the panel
-        MouseArea{
-
-            anchors.fill: parent
-
-            onClicked: {
-                mouse.accepted = true
-            }
-
-        }
+    Rectangle {
+        id: info_inner_wrapper
+        height: parent.height - vpx(48)
+        width: video.source != "" ? parent.width - vpx(48) : vpx(548)
+        anchors.centerIn: parent
+        color: settings.colors.black90
         
-        //Video Wrapper
-        Rectangle{
+        radius: vpx(6)
 
-            id: videoWrapper
+        CloseButton {
+            id: info_panel_close
+
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: vpx(12)
+
+            borderOn: !(info_outer_wrapper.currentItem != this)
+
+            property var controls: {
+                "name" : "close",
+                "up" : null,
+                "down" : play_button,
+                "left" : null,
+                "right" : favorite_button
+            }
+        }
+
+        Rectangle { //favorite_button
+            id: favorite_button
+
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: vpx(12)
+
+            height: vpx(48)
+            width: vpx(48)
+
+            radius: vpx(48)
 
             color: "transparent"
 
-            anchors{
+            border.width: vpx(4)
+            border.color: currentGame.favorite ? "transparent" : settings.colors.white
 
-                top: parent.top
-                topMargin: vpx(12)
-
-                left: parent.left
-                leftMargin: vpx(48)
-
-                right: parent.right
-                rightMargin: vpx(48)
-
+            property var controls: {
+                "name" : "favorite",
+                "up" : null,
+                "down" : video_wrapper.visible ? video : play_button,
+                "left" : info_panel_close,
+                "right" : null
             }
 
-            property Video video: videoPreview
-            
-            height: videoPreview.source != "" ? videoWrapper.width / 1.778 : 0
-            //Game Video
-            Video{
-
-                id: videoPreview
-                source: currentGame.assets.video
-
-                fillMode: VideoOutput.PreserveAspectCrop
+            Rectangle { 
+                id: favorite_border
                 anchors.fill: parent
+                anchors.margins: vpx(-3)
+                color: "transparent"
 
-                muted: settings.videoMute
-                volume: settings.videoVolume
-                loops: MediaPlayer.Infinite
+                visible: !(info_outer_wrapper.currentItem != parent)
 
+                border.color: Qt.hsla(1,1,1,0.6)
+                border.width: vpx(3)
+                radius: vpx(6)
             }
-            
+
+            Rectangle {
+                id: favorite_button_hover
+                color: settings.colors.martinique
+                anchors.fill: favorite_button
+                radius: vpx(100)
+
+                opacity: currentGame.favorite ? 1 : 0
+
+                transitions: Transition {
+                    NumberAnimation {
+                        properties: "opacity"
+                        duration: 150 
+                        easing.type: Easing.EaseInOut
+                    }
+                }
+            }
+
             Image {
-
-                source: "assets/img/loading.png"
-                visible: videoPreview.status === MediaPlayer.Loading
-
+                source: currentGame.favorite ? "../assets/img/heart_filled.svg" : "../assets/img/heart_empty.svg"
                 anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
+                height: vpx(20)
+            }
 
-                NumberAnimation on rotation {
 
-                    from: 0
-                    to: 360
 
-                    duration: 1000
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    currentGame.favorite = !currentGame.favorite
+                    toggle_up.play()
+                }
+            }
 
-                    loops: Animation.Infinite
+        }
+
+        Item {  //info_safe_area
+            id: info_safe_area
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: play_button.top
+            anchors.margins: vpx(48)
+            anchors.bottomMargin: vpx(24)
+
+
+            Item { //text_info_wrapper
+                id: text_info_wrapper
+
+                height: parent.height
+                width: vpx(452)
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: video.source != "" ? vpx(24) : 0
+
+                Item{
+                    id: logo_rating
+                    width: parent.width
+                    height: vpx(176)
+
+
+                    Image { //logo
+                        id: logo
+                        source: currentGame.assets.logo
+                        fillMode: Image.PreserveAspectFit
+
+                        height: vpx(140)
+                        width: parent.width
+
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+
+                        Text {
+                            text: currentGame.title
+                            color: "#ffffff"
+                            font.family: bold.name
+                            font.bold: true
+                            font.pixelSize: vpx(36)
+                            anchors.centerIn: parent
+                            elide: Text.ElideRight
+                            width: parent.width
+                            horizontalAlignment: Text.AlignHCenter
+
+                            wrapMode: Text.WordWrap
+
+                            visible: currentGame.assets.logo === ""
+                        }
+                    }
+
+                    Image {
+                        id: stars_empty
+                        width: vpx(144)
+                        height: vpx(24)
+                        source: "../assets/img/star_empty.svg"
+                        fillMode: Image.PreserveAspectFit
+                        
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    Image {
+                        id: stars_filled
+                        width: currentGame.rating * vpx(144)
+                        height: vpx(24)
+                        source: "../assets/img/star_filled.svg"
+                        fillMode: Image.PreserveAspectCrop
+                        horizontalAlignment: Image.AlignLeft
+                        
+                        anchors.bottom: parent.bottom
+                        anchors.left: stars_empty.left
+                    }
 
                 }
 
+                Rectangle { //separator
+                    color: Qt.rgba(255, 255, 255, 0.5)
+                    width: parent.width
+                    height: vpx(2)
+                    anchors.top: logo_rating.bottom
+                    anchors.topMargin: vpx(9)
+                }
+            
+                Rectangle {
+                    id: details_wrapper
+                    color: "transparent"
+                    width: parent.width
+                    height: infoDetails_list.items * 26 > 48 ? vpx(infoDetails_list.items * 26) : vpx(48)
+
+                    anchors.top: logo_rating.bottom
+                    anchors.topMargin: vpx(20)
+
+                    Rectangle {
+                        color: "transparent"
+                        width: parent.width
+                        height: parent.height
+
+                        InfoDetailsList {
+                            id: infoDetails_list
+                        }
+                    }
+                }
+
+                Rectangle { //separator
+                    color: Qt.rgba(255, 255, 255, 0.5)
+                    width: parent.width
+                    height: vpx(2)
+                    anchors.top: details_wrapper.bottom
+                    anchors.topMargin: vpx(9)
+                }
+
+                Rectangle { //summary
+                    id: summary_wrapper
+                    color: "transparent"
+                    width: parent.width
+
+                    anchors.top: details_wrapper.bottom
+                    anchors.topMargin: vpx(20)
+                    anchors.bottom: parent.bottom
+
+                    clip: true
+
+                    Text {
+                        id: summary
+                        text: currentGame.summary != "" ? 
+                                currentGame.summary : 
+                                currentGame.description != "" ? 
+                                    currentGame.description : 
+                                    "No description..."
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                        height: parent.height
+
+                        font.family: regular.name
+                        font.pixelSize: vpx(18)
+                        elide: Text.ElideRight
+                        color: "#ffffff"
+                    }
+                }
             }
 
-            //Allow pausing and playing by clicking video
-            MouseArea {
-                id:videoControls
+            Item { //video_wrapper
+                id: video_wrapper
 
+                anchors.top: parent.top
+                anchors.left: text_info_wrapper.right
+                anchors.leftMargin: vpx(24)
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                visible: video.source != "" ? true : false
+
+                Video{ //video
+                    id: video
+                    source: currentGame.assets.video
+                    width: parent.width
+                    height: video.width / 1.778
+                    fillMode: VideoOutput.PreserveAspectCrop
+                    anchors.centerIn: parent
+
+                    muted: settings.videoMute
+                    volume: settings.videoVolume
+                    loops: MediaPlayer.Infinite
+
+                    property var controls: {
+                        "name" : "video",
+                        "up" : favorite_button,
+                        "down" : mute_button,
+                        "left" : info_panel_close,
+                        "right" : mute_button
+                    }
+
+                    Rectangle { 
+                        id: video_border
+                        anchors.fill: parent
+                        anchors.margins: vpx(-6)
+                        color: "transparent"
+
+                        visible: !(info_outer_wrapper.currentItem != parent)
+
+                        border.color: settings.colors.border
+                        border.width: vpx(6)
+                        radius: vpx(6)
+                    }
+
+
+                    Image {
+                        anchors.fill: parent
+
+                        source: "../assets/img/no_image.png"
+                        fillMode: Image.PreserveAspectFit
+
+                        visible: video.error != MediaPlayer.NoError ? 
+                            true : 
+                            false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            video.playbackState === 1 ? video.pause() : video.play()
+                            toggle_up.play()
+                        }
+
+                        onEntered: {
+                            video_play_icon.hovered = true
+                        }
+
+                        onExited: {
+                            video_play_icon.hovered = false
+                        }
+
+                        Image { //video_play_icon
+                            id: video_play_icon
+                            anchors.centerIn: parent
+                            source: video.playbackState === 1 ? "../assets/img/pause.svg" : "../assets/img/play.svg"
+                            width: vpx(96)
+                            height: width
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
+                            antialiasing: true
+
+                            opacity: 0
+
+                            property bool hovered: false
+
+                            states: State{
+                                name: "hover"
+                                PropertyChanges{target: video_play_icon; opacity: 0.9}
+                            }
+                            
+                            state: {
+                                if(info_outer_wrapper.currentItem != video && info_outer_wrapper.currentItem != mute_button){ 
+                                    return video_play_icon.hovered ? "hover" : ""
+                                 } else {
+                                    return "hover"
+                                 }
+                            }
+
+
+                            transitions: Transition {
+                                NumberAnimation {
+                                    properties: "opacity"
+                                    duration: 150 
+                                    easing.type: Easing.EaseInOut
+                                }
+                            }
+
+                        }
+
+                        MouseArea {
+                            id: mute_button
+
+                            width: vpx(24)
+                            height: width
+                            cursorShape: Qt.PointingHandCursor
+
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.margins: vpx(12)
+
+                            property var controls: {
+                                "name" : "mute",
+                                "up" : video,
+                                "down" : play_button,
+                                "left" : video,
+                                "right" : null
+                            }
+
+                            onClicked: {
+                                video.muted = !video.muted
+                                toggle_up.play()
+                            }
+
+                            Rectangle { 
+                                id: mute_border
+                                anchors.fill: parent
+                                anchors.margins: vpx(-3)
+                                color: "transparent"
+
+                                visible: !(info_outer_wrapper.currentItem != parent)
+
+                                border.color: Qt.hsla(1,1,1,0.6)
+                                border.width: vpx(3)
+                                radius: vpx(6)
+                            }
+
+
+                            Image {
+                                id: mute_icon
+                                anchors.fill: parent
+                                source: video.muted ? "../assets/img/mute.png" : "../assets/img/sound.png"
+
+                                opacity: 0
+                                states: State{
+                                    name: "hover"
+                                    PropertyChanges{target: mute_icon; opacity: 0.9}
+                                }
+                                
+                                state: video_play_icon.state 
+
+                                transitions: Transition {
+                                    NumberAnimation {
+                                        properties: "opacity"
+                                        duration: 150 
+                                        easing.type: Easing.EaseInOut
+                                    }
+                                }
+                                
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle { //play_button
+            id: play_button
+            color: settings.colors.green
+            height: vpx(48)
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: vpx(24)
+
+            radius: vpx(6)
+
+            state: hovered ? 
+                    "selected" :
+                    info_outer_wrapper.currentItem != this ? 
+                        "" : 
+                        "selected"
+
+            property bool hovered: false
+
+            states: [
+                State {
+                    name: "selected"
+                    PropertyChanges{target: play_button; color: "#1e824c"}
+                }
+            ]
+
+            property var controls: {
+                "name" : "play",
+                "up" : video_wrapper.visible ? video : info_panel_close,
+                "down" : null,
+                "left" : info_panel_close,
+                "right" : video_wrapper.visible ? video : favorite_button
+            }
+
+
+            Rectangle {
+                id: button_label
+                anchors.centerIn: parent
+
+                width: game_launch_icon.width + game_launch_text.width + vpx(6)
+                Image {
+                    id: game_launch_icon
+                    height: vpx(24)
+                    width: vpx(24)
+
+                    source: play_button.state != "selected" ? "../assets/img/play_alt.svg" : "../assets/img/play_alt_filled.svg"
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                    id: game_launch_text
+                    text: "launch"
+                    color: "#ffffff"
+                    font.family: regular.name
+                    font.pixelSize: vpx(24)
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: game_launch_icon.right
+                    anchors.leftMargin: vpx(6)
+                }
+            }
+
+            Rectangle { //game_launch_border
+                id: game_launch_border
                 anchors.fill: parent
+                color: "transparent"
+
+                visible: parent.state != "selected" ? false : true
+
+                border.color: settings.colors.border
+                border.width: vpx(3)
+                radius: vpx(6)
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
 
                 hoverEnabled: true
 
                 onClicked: {
-                    videoPreview.playbackState === MediaPlayer.PlayingState ? videoPreview.pause() : videoPreview.play()
-                    toggle.play()
+                    toggle_down.play()
+                    if(settings.lastPlayed){
+                        api.memory.set("collectionIndex", currentCollectionIndex)
+                        api.memory.set("gameIndex", games.gameView.currentIndex)
+                    }
+                    currentGame.launch()
                 }
 
                 onEntered: {
-                    videoSound.state = "videoHovered"
-                    muteIcon.state = "videoHovered"
+                    play_button.hovered = true
                 }
 
                 onExited: {
-                    videoSound.state = ""
-                    muteIcon.state = ""
+                    play_button.hovered = false
                 }
             }
-
-            //Mute button
-            MouseArea {
-                id: videoSound
-                enabled: false
-
-                
-                anchors {
-                    bottom: parent.bottom
-                    bottomMargin: vpx(12)
-
-                    right: parent.right
-                    rightMargin: vpx(12)
-                }
-
-                height: vpx(24)
-                width: vpx(24)
-
-
-                states: State {
-                    name: "videoHovered"
-                    PropertyChanges { 
-                        target: videoSound;
-                        enabled: true 
-                    }
-                }
-
-                onClicked: {
-                    videoPreview.muted ? videoPreview.muted = false : videoPreview.muted = true
-                    mouse.accepted = true
-                    select.play()
-                }
-
-                Image {
-                    id: muteIcon
-                    source: videoPreview.muted ? "../assets/img/mute.png" : "../assets/img/sound.png"
-                    anchors.fill: parent
-
-                    opacity: 0
-
-                    states: State {
-                        name: "videoHovered"
-                        PropertyChanges { 
-                            target: muteIcon;
-                            opacity: 1 
-                        }
-                    }
-
-                    transitions: Transition {
-                        NumberAnimation {
-                            properties: "opacity"
-                            duration: 250 
-                            easing.type: Easing.EaseInOut
-                        }
-                    }
-                }
-            }
-        }
-        //Info Text Wrapper
-        Rectangle{
-            
-            id: gameInfo
-
-            color: Qt.hsla(0,0,0,0.65)
-
-            anchors{
-
-                top: videoWrapper.bottom
-                topMargin: vpx(12)
-
-                left: parent.left
-                leftMargin: vpx(12)
-
-                right: parent.right
-                rightMargin: vpx(12)
-
-                bottom: parent.bottom
-                bottomMargin: vpx(12)
-
-            }
-
-            //Game Logo Wrapper
-            Item{
-                
-                id: gameLogoWrapper
-
-                height: gameLogo.source != "" ? vpx(100) : vpx(65)
-                
-                anchors{
-
-                    top: parent.top
-                    topMargin: vpx(6)
-
-                    left: parent.left
-                    leftMargin: vpx(6)
-
-                    right: parent.right
-                    rightMargin: vpx(6)
-
-                }
-
-                clip: true
-
-                //Game Logo
-                Image{
-
-                    id: gameLogo
-                    source: currentGame.assets.logo
-
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-
-                }
-
-                Text {
-                    id: gameTitle
-                    anchors.fill: parent
-
-                    visible: currentGame.assets.logo === ""
-
-                    text: currentGame.title
-                    color: "white"
-
-                    font.pixelSize: vpx(48)
-                    font.family: bold.name
-
-                    horizontalAlignment: Text.AlignHCenter
-
-                    elide: Text.ElideRight
-                }
-            }
-
-            //Game Developer Textbox
-            Text{
-
-                id: gameDeveloper
-
-                anchors{
-
-                    top: gameLogoWrapper.bottom
-                    topMargin: vpx(6)
-
-                    left: parent.left
-                    leftMargin: vpx(12)
-
-                    right: parent.right
-                    rightMargin: vpx(12)
-
-                }
-
-                height: text != "" ? vpx(36) : 0
-
-                text: if(currentGame.developer != "" ) {
-                    if (currentGame.publisher != "" && currentGame.publisher != currentGame.developer){
-                        currentGame.developer + " / " + currentGame.publisher
-                    } else {
-                        currentGame.developer
-                    }
-                } else { 
-                    if(currentGame.publisher != ""){
-                        currentGame.publisher
-                    } else {
-                        ""
-                    }
-                }
-                
-                
-
-                font.family: bold.name
-                font.pixelSize: vpx(24)
-
-                verticalAlignment: Text.AlignTop
-                horizontalAlignment: Text.AlignHCenter
-                
-                color: "white"
-                
-                elide: Text.ElideRight
-
-            }
-
-            //Game Description Textbox
-            Text{
-
-                id: gameDescription
-
-                anchors{
-
-                    top: gameDeveloper.bottom
-                    topMargin: vpx(6)
-
-                    left: parent.left
-                    leftMargin: vpx(12)
-
-                    right: parent.right
-                    rightMargin: vpx(12)
-
-                    bottom: parent.bottom
-                    bottomMargin: vpx(12)
-
-                }
-
-                text: currentGame.description != "" ? currentGame.description : "No information to display..."
-                
-                font.family: regular.name
-                font.pixelSize: vpx(20)
-                font.italic: currentGame.description != "" ? false : true
-                
-                verticalAlignment: Text.AlignTop
-                
-                color: "white"
-                
-                wrapMode: Text.WordWrap
-                elide: Text.ElideRight
-
-            }
-
         }
     }
-    property Rectangle info: infoWrapper
-    property Rectangle videoWrapper: infoWrapper.videoWrapper
-    property Video video: infoWrapper.videoWrapper.video
+    property Rectangle play_button: play_button 
+    property ListModel detailsModel: infoDetails_list.detailsModel
+    property Video video: video
 }

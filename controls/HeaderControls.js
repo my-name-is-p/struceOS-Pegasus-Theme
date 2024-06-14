@@ -1,39 +1,21 @@
 function down(){
-    games.gameView.focus = true
-    header.lastFocus.selected = false
-    toggle.play()
+    U.focusToggle()
 }
 
 function right(){
-    header.lastFocus.selected = false
-    header.lastFocus = header.lastFocus.next
-    header.lastFocus.selected = true
-    toggle.play()
+    if(header.currentItem.controls.next != null){
+        header.currentItem = header.currentItem.controls.next
+    }
+    toggle_up.play()
 }
 
 function left() {
-    header.lastFocus.selected = false
-    header.lastFocus = header.lastFocus.prev
-    header.lastFocus.selected = true
-    toggle.play()
+    if(header.currentItem.controls.prev != null){
+        header.currentItem = header.currentItem.controls.prev
+    }
+    toggle_up.play()
 }
 
 function accept(){
-    U.removeButtonFocusOnClick()
-    switch(header.lastFocus.curr){
-        case "utilitiesSearch":
-            U.toggleSearch("searchBar")
-            break
-        case "utilitiesSettings":
-            U.toggleSettings("settings")
-            break
-        case "utilitiesInfo":
-            U.toggleInfo('info')
-            break
-        case "collectionTitle":
-            U.toggleCollections("collections")
-            break
-        default:
-            break
-    }
+    U.focusToggle(header.currentItem.controls.name)
 }
