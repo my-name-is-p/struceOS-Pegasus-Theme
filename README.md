@@ -42,6 +42,7 @@ Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) an
 
 # Customizable Settings
 The most useful settings are now in a settings panel within the theme. The rest can be found in template/Settings.qml. The default settings are below for reference:
+<details>
 
     property var colors: {
         "martinique" : "#392e4a",
@@ -117,6 +118,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
         0.5
     property string version: "1.3.0"                                        //struceOS version
     property bool working: false
+</details>
 
 # Installation
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
