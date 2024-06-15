@@ -43,6 +43,7 @@ Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) an
 # Customizable Settings
 The most useful settings are now in a settings panel within the theme. The rest can be found in template/Settings.qml. The default settings are below for reference:
 <details>
+    <summary>Default Settings</summary>
 
     property var colors: {
         "martinique" : "#392e4a",
