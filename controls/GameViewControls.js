@@ -16,13 +16,13 @@ function changeCollection(event,i){
         U.focusToggle()
         currentCollection = U.getCollection(currentCollectionIndex)
         games.gameView.currentIndex = 0
-    U.bgFadeOutIn()
+    U.changeGame()
 }
 
 
 function up(){
     if(games.gameView.currentIndex - settings.columns >= 0){
-        games.gameView.currentIndex = games.gameView.currentIndex - settings.columns
+        games.gameView.moveCurrentIndexUp()
     } else {
         header.focus = true
         if(header.searchTerm.text != ""){
@@ -32,38 +32,23 @@ function up(){
             let b = settings.columns - 1
             if(a < b / 2 && (b - a) > b / 2){
                 header.currentItem = header.gv_up_1
-            } else if (a != b) {
-                header.currentItem = header.gv_up_2
             } else {
-                header.currentItem = header.gv_up_3
+                header.currentItem = header.gv_up_2
             }
         }
-        toggle_up.play()
     }
 }
 
 function down() {
-    if(games.gameView.currentIndex + settings.columns < games.gameView.count){
-        games.gameView.currentIndex = games.gameView.currentIndex + settings.columns
-    } else {
-        games.gameView.currentIndex = games.gameView.count - 1
-    }
+    games.gameView.moveCurrentIndexDown()
 }
 
 function left() {
-    if(games.gameView.currentIndex - 1 >= 0){
-        games.gameView.currentIndex = games.gameView.currentIndex - 1
-    } else {
-        games.gameView.currentIndex = 0
-    }
+    games.gameView.moveCurrentIndexLeft()
 }
 
 function right() {
-    if(games.gameView.currentIndex + 1 < games.gameView.count){
-        games.gameView.currentIndex = games.gameView.currentIndex + 1
-    } else {
-        games.gameView.currentIndex = games.gameView.count - 1
-    }
+    games.gameView.moveCurrentIndexRight()
 }
 
 function first() {

@@ -57,7 +57,8 @@ Rectangle {
 
         Rectangle {
             id: collectionView_panel
-            color: Qt.hsla(0.79, 0.2, 0.26, 0.98)
+            color: settings.colors.martinique
+            opacity: 0.95
 
             anchors.top: parent.top
             anchors.topMargin: vpx(-6)

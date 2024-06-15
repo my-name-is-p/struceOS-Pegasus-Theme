@@ -52,6 +52,9 @@ Item {
             anchors.bottom: parent.bottom
             fillMode: Image.PreserveAspectFit
 
+            antialiasing: true
+            smooth: true
+
             Text {
                 id: collectionTitle_text
                 anchors{
@@ -80,7 +83,7 @@ Item {
 
             Text { //gameCount_text
                 id: gameCount_text
-                text: currentCollection.games.count
+                text: games.gameView.count
                 color: settings.colors.white
                 anchors.centerIn: parent
 
@@ -217,14 +220,33 @@ Item {
         property var controls: {
             "name": "settings",
             "next": info_button,
+            "prev": favorite_button,
+        }
+    }
+
+    HeaderButton{   //favorite_button
+        id: favorite_button
+
+        anchors.right: settings_button.left
+        anchors.rightMargin: vpx(24)
+
+        source: filterEnabled ? "heart_filled" : "heart_empty.svg"
+        target: "favorite"
+
+        property var filterEnabled: false
+
+        property var controls: {
+            "name": "favorite",
+            "next": settings_button,
             "prev": search_button,
         }
     }
 
+
     HeaderButton{   //search_button
         id: search_button
 
-        anchors.right: settings_button.left
+        anchors.right: favorite_button.left
         anchors.rightMargin: vpx(24)
 
         source: "search.png"
@@ -232,7 +254,7 @@ Item {
 
         property var controls: {
             "name": "search",
-            "next": settings_button,
+            "next": favorite_button,
             "prev": collection_title_wrapper,
         }
     }
@@ -240,6 +262,7 @@ Item {
     property Item gv_up_1: collection_title_wrapper
     property HeaderButton gv_up_2: search_button
     property HeaderButton gv_up_3: settings_button
+    property HeaderButton favorite: favorite_button
     property Rectangle searchbox: searchbox
     property TextInput searchTerm: searchTerm
 }

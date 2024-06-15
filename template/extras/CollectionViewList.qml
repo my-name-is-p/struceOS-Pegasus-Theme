@@ -17,11 +17,9 @@
 // Thank you to VGmove creator of EasyLaunch <https://github.com/VGmove/EasyLaunch>
 // for the collection logos, images, audio, and various functionality
 
-
 import QtQuick 2.0
 import "../../utils.js" as U
 import "../../controls/CollectionControls.js" as COLLECTION_controls
-
 
 Item {
     anchors.fill: parent
@@ -54,8 +52,6 @@ Item {
         }
     }
 
-
-
     ListView {
         id: collectionView_list
         anchors.fill: parent
@@ -69,6 +65,8 @@ Item {
 
         property bool mouseClick: false
 
+        keyNavigationWraps: true
+        
         onCurrentIndexChanged: { // new game selected
             if(collectionsView.collectionView_outer_wrapper.state === "opened"){
                 if(!mouseClick)
@@ -92,6 +90,9 @@ Item {
 
                 fillMode: Image.PreserveAspectFit
                 horizontalAlignment: Image.alignLeft
+
+                antialiasing: true
+                smooth: true
             }
 
             Text {
@@ -141,8 +142,8 @@ Item {
                     onClicked: {
                         collectionView_list.mouseClick = true
                         collectionView_list.currentIndex = index
+                        U.changeGame()
                         COLLECTION_controls.accept()
-                        collectionView_list.currentIndex = 0
                     }
                 }
             }
@@ -151,5 +152,3 @@ Item {
     property ListView currentItem: collectionView_list
     property ListModel collectionsModel: collectionsModel
 }
-
-

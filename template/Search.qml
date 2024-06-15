@@ -45,12 +45,21 @@ id: root
     SortFilterProxyModel {
         id: gamesFiltered
             sourceModel: currentCollection.games
-            filters: RegExpFilter { 
-                roleName: "title"; 
-                pattern: firstWordIgnoreList + header.searchTerm.text 
-                caseSensitivity: Qt.CaseInsensitive;
-                enabled: header.searchTerm.text != ""
-            }
+            filters: [
+                RegExpFilter { 
+                    roleName: "title"; 
+                    pattern: firstWordIgnoreList + header.searchTerm.text 
+                    caseSensitivity: Qt.CaseInsensitive;
+                    enabled: header.searchTerm.text != ""
+                },
+
+                ValueFilter { 
+                    roleName: "favorite"; 
+                    value: true;
+                    enabled: header.favorite.filterEnabled
+                }
+
+            ]
     }
 }
 

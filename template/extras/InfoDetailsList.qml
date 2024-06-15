@@ -76,12 +76,6 @@ Item{
         }
     }
 
-    MouseArea{
-        id: details_list_scroll_wheel
-        anchors.fill: details_list
-
-    }
-
     ListView {
         id: details_list
 

@@ -319,7 +319,7 @@ Rectangle {
                     property var controls: {
                         "name" : "video",
                         "up" : favorite_button,
-                        "down" : mute_button,
+                        "down" : play_button,
                         "left" : info_panel_close,
                         "right" : mute_button
                     }

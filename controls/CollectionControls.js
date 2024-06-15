@@ -1,17 +1,9 @@
 function down(){
-    if(collectionsView.collectionView_list.currentItem.currentIndex + 1 < collectionsView.collectionView_list.currentItem.count) {
-        collectionsView.collectionView_list.currentItem.currentIndex++
-    } else {
-        collectionsView.collectionView_list.currentItem.currentIndex = 0
-    }
+    collectionsView.collectionView_list.currentItem.incrementCurrentIndex()
 }
 
 function up(){
-    if(collectionsView.collectionView_list.currentItem.currentIndex - 1 >= 0) {
-        collectionsView.collectionView_list.currentItem.currentIndex--
-    } else {
-        collectionsView.collectionView_list.currentItem.currentIndex = collectionsView.collectionView_list.currentItem.count - 1
-    }
+    collectionsView.collectionView_list.currentItem.decrementCurrentIndex()
 }
 
 function accept(){
@@ -19,5 +11,5 @@ function accept(){
     currentCollection = U.getCollection(currentCollectionIndex)
     U.focusToggle()
     games.gameView.currentIndex = 0
-    currentBG = U.getAsset(currentGame, currentGame.assets, "bg")
+    U.changeGame()
 }

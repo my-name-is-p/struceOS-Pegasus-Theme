@@ -25,7 +25,6 @@ function changeGame(){
     bgFadeOutIn()
 }
 
-
 function focusToggle(focus = "gameView"){
     settingsPanel.state = ""
     info.video.stop()
@@ -49,8 +48,8 @@ function focusToggle(focus = "gameView"){
             header.searchTerm.focus = true
             break
         case "collections":
-            collectionsView.collectionView_outer_wrapper.state = "opened"
             collectionsView.collectionView_list.currentItem.currentIndex = 0
+            collectionsView.collectionView_outer_wrapper.state = "opened"
             collectionsView.collectionView_list.focus = true
             break
         default:
@@ -117,16 +116,8 @@ function getCollection(i){
 
 function getAsset(data, assets, type = "", log = false) {
     var shortName = data.collections.get(0).shortName.toString()
-    if(log){
-        let temp = []
-        for (const [key, value] of Object.entries(assets)) {
-            if(value != ""){
-                temp.push(`${key}: ${value}` + "\n");
-            }
-        }
-    }
-
     let source = ""
+
     switch(shortName){
         case "gog":
             switch(type){
@@ -142,21 +133,20 @@ function getAsset(data, assets, type = "", log = false) {
             }
             break;
 
-            case "steam":
-                switch(type){
-                    case "bg":
-                        let i = Math.floor(Math.random() * assets.screenshots.length)
-                        source = assets.screenshots[i]
-                        break;
-                    case "banner":
-                        source = assets.steam
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            default:
+        case "steam":
+            switch(type){
+                case "bg":
+                    let i = Math.floor(Math.random() * assets.screenshots.length)
+                    source = assets.screenshots[i]
+                    break;
+                case "banner":
+                    source = assets.steam
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
             break;
     }
 
@@ -178,5 +168,45 @@ function getAsset(data, assets, type = "", log = false) {
                 break;
         }
     }
-    return source != "" ? source : type !="bg" ? "../assets/" + settings.defaultGameImage : ""
+
+    return {
+        "source": source != "" ? source : type !="bg" ? "../assets/" + settings.defaultGameImage : "",
+        "default": !(source != "") 
+    }
 }
+
+/*
+switch(video.status){
+    case MediaPlayer.NoMedia:
+        U.clog("No Media")
+        break
+    case MediaPlayer.Loading:
+        U.clog("Loading")
+        break
+    case MediaPlayer.Loaded:
+        U.clog("Loaded")
+        break
+    case MediaPlayer.Buffering:
+        U.clog("Buffering")
+        break
+    case MediaPlayer.Stalled:
+        U.clog("Stalled")
+        break
+    case MediaPlayer.Buffered:
+        U.clog("Buffered")
+        break
+    case MediaPlayer.EndOfMedia:
+        U.clog("EndOfMedia")
+        break
+    case MediaPlayer.InvalidMedia:
+        U.clog("InvalidMedia")
+        break
+    case MediaPlayer.InvalidMedia:
+        U.clog("InvalidMedia")
+        break
+    default:
+        U.clog("Case Defaulted")
+        break
+}
+U.clog(video.status)
+*/

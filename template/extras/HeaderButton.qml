@@ -35,9 +35,9 @@ Item {
         height: parent.width
         width: parent.width
 
-        color: "transparent"
+        color: parent.filterEnabled ? settings.colors.martinique : "transparent"
 
-        border.width: vpx(4)
+        border.width: parent.filterEnabled ? 0 : vpx(4)
         border.color: settings.colors.white
 
         radius: vpx(100)
@@ -85,7 +85,13 @@ Item {
             }
 
             onClicked: {
-                U.focusToggle(parent.parent.target)
+                if(target != "favorite"){
+                    U.focusToggle(parent.parent.target)
+                } else {
+                    parent.parent.filterEnabled = !parent.parent.filterEnabled
+                    games.gameView.currentIndex = 0
+                    toggle_up.play()
+                }
             }
         }
 

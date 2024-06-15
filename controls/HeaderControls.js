@@ -1,4 +1,8 @@
 function down(){
+    if(header.currentItem.controls.name != "collections")
+        games.gameView.currentIndex = settings.columns - 1
+    else
+        games.gameView.currentIndex = 0
     U.focusToggle()
 }
 
@@ -17,5 +21,10 @@ function left() {
 }
 
 function accept(){
-    U.focusToggle(header.currentItem.controls.name)
+    if(header.currentItem.controls.name != "favorite")
+        U.focusToggle(header.currentItem.controls.name)
+    else
+        header.favorite.filterEnabled = !header.favorite.filterEnabled
+        //games.gameView.currentIndex = 0
+        toggle_up.play()
 }

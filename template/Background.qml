@@ -61,7 +61,7 @@ Rectangle {
 
             onRunningChanged: {
                 if(!bgFadeOut.running){
-                    currentBG = U.getAsset(currentGame, currentGame.assets, "bg")
+                    currentBG = U.getAsset(currentGame, currentGame.assets, "bg").source
                 }
             }
         }

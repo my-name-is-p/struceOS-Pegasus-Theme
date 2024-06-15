@@ -31,33 +31,48 @@ Rectangle { //games
 
     color: "transparent"
 
+    MouseArea {
+        id: gameView_scrollwheel
+        anchors.fill: parent
+        onWheel: {
+            let speed = 12
+                speed = speed / 1000
+            let scrollDelta = wheel.angleDelta.y / 4;
+
+            // Estimate vertical velocity (adjust time interval as needed)
+            let yVelocity = scrollDelta / speed;
+
+            // Call flick with estimated velocity (no horizontal velocity)
+            gameView.flick(0.0, yVelocity);
+        }
+    }
+
     GridView { //gameView
         id: gameView
         delegate: gameThumb
         model: search.games
         anchors.fill: parent
 
-        interactive: true
+        interactive: false
         clip: true
+
+        keyNavigationWraps: false
 
         cellWidth: parent.width / settings.columns
         cellHeight: cellWidth * 0.6
 
-        keyNavigationWraps: false
         highlightMoveDuration: 100
         highlightFollowsCurrentItem: true
 
         
         onCurrentIndexChanged: { // new game selected
             if(loadTimeout){
-                select.play()
                 U.changeGame()
                 if(!settings.lastPlayed){
                     api.memory.set("collectionIndex", currentCollectionIndex)
                     api.memory.set("gameIndex", gameView.currentIndex)
                 }
             }
-            mouseSelect = false
         }
     }
 
@@ -74,7 +89,7 @@ Rectangle { //games
             Image {
 
                 id: banner
-                source: U.getAsset(gameData, assets, "banner")
+                source: U.getAsset(gameData, assets, "banner").source
                 opacity: 0
 
                 smooth: true
@@ -108,6 +123,43 @@ Rectangle { //games
                         easing.type: Easing.EaseInOut
                     }
                 }
+
+                Item{
+                    id: game_title_text_bu
+                    anchors.fill: parent
+                    clip: true
+                    visible: U.getAsset(gameData, assets, "banner").default
+
+                    Rectangle {
+                        anchors.fill: game_title
+                        anchors.margins: vpx(-6)
+                        color: settings.colors.black90
+                        radius: vpx(6)
+                    }
+
+                    Text {
+                        id: game_title
+                        text: title
+                        color: settings.colors.white
+
+                        anchors.centerIn: parent
+
+
+                        font.family: regular.name
+                        font.pixelSize: vpx(24)
+
+                        wrapMode: Text.WordWrap
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+
+                        Component.onCompleted: {
+                            if(game_title.width > banner.paintedWidth - 24){
+                                game_title.width = (banner.paintedWidth - 24)
+                            }
+                        }
+                    }
+                }
+
                 Item { //Highlight selected game
                     anchors{
                         top: parent.top
@@ -123,7 +175,7 @@ Rectangle { //games
                         leftMargin: parent.width > banner.paintedWidth ? (parent.width - banner.paintedWidth) / 2 : 0
                     }
 
-                    Rectangle {
+                    Rectangle { //border
 
                         id: border
                         color: "transparent"
@@ -140,12 +192,13 @@ Rectangle { //games
                     }
                 }
 
-                Rectangle {
+                Rectangle { //favorite_icon
                     id: favorite_icon
 
                     anchors.right: parent.right
+                    anchors.rightMargin: parent.width > parent.paintedWidth ? ((parent.width - banner.paintedWidth)/2) - vpx(6) : vpx(-6)
                     anchors.top: parent.top
-                    anchors.margins: vpx(-6)
+                    anchors.topMargin: vpx(-6)
 
                     height: vpx(24)
                     width: vpx(24)
@@ -195,6 +248,7 @@ Rectangle { //games
                         api.memory.set("gameIndex", gameView.currentIndex)
                     }
                     event.accepted = true;
+                    toggle_down.play()
                 }
             }
             

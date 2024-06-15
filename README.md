@@ -5,6 +5,7 @@
 ![screenshot_3](.meta/screenshot_3.png)
 ![screenshot_4](.meta/screenshot_4.png)
 ![screenshot_5](.meta/screenshot_5.png)
+![screenshot_6](.meta/screenshot_6.png)
 
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
@@ -13,23 +14,20 @@ A simple theme for easy navigation.
 - Info panel with video player.
 - Customizable settings.
 
-If you have any issues, please open a ticket or  let me know on [discord](https://discord.gg/Pa92b2Q2pa)
+If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
-# Version 1.3.0 Updates
-1. Updated collection logos
-2. Simplified toggling panels
-3. Fixed background images when searching
-4. Changed audio files for UI sounds
-5. Updated header layout and functions
-6. Updated info panel layout and functions
-7. Added Favorites icon
+# Version 1.3.1 Updates
+1. Added favorite toggle to gameView
+2. Fixed favorite icon placement in gameView
+3. Added text labels to games with default banner image
+4. Changed game count to update with filters
+5. Updated gameView controls to use built in functions
 
 # Thank yous
 Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
 
 # To come in future updates
 1. Gamepad and Keyboard controls for the settings panel
-2. Filter by favorites
 
 # Controls
 - Keyboard/Mouse
@@ -130,6 +128,16 @@ Download struceOS-Pegasus-Theme-1.3.0.zip from [last releases](https://github.co
 
 <details>
     <summary>Changelogs</summary>
+
+## 1.3.1
+
+```
+1. Added favorite toggle to gameView
+2. Fixed favorite icon placement in gameView
+3. Added text labels to games with default banner image
+4. Changed game count to update with filters
+5. Updated gameView controls to use built in functions
+```
 
 ## 1.3.0
 

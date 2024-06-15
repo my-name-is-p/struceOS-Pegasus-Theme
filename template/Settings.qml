@@ -84,7 +84,7 @@ Item {
     property var firstWordIgnore: ["the","the legend of", "lego"]          //Words to ignore in search as the first word
 
     //DevTools
-    property bool enableDevTools:                                       //Dispalys "console" and a button for testing purposes 
+    property bool enableDevTools:                                        //Dispalys "console" and a button for testing purposes 
         api.memory.get("struceOS_dev_enableDevTools") != undefined ?
         api.memory.get("struceOS_dev_enableDevTools") :
         false
@@ -92,6 +92,6 @@ Item {
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.3.0"                                    //struceOS version
+    property string version: "1.3.1"                                    //struceOS version
     property bool working: false
 }

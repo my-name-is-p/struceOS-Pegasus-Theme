@@ -20,7 +20,15 @@
 
 // Changelogs
 
-// #1.2.2
+// #1.3.1
+//      1. Added favorite toggle to gameView
+//      2. Fixed favorite icon placement in gameView
+//      3. Added text labels to games with default banner image
+//      4. Changed game count to update with filters
+//      5. Updated gameView controls to use built in functions
+
+
+// #1.3.0
 //      1. Updated some collection logos
 //      2. Simplified toggling panels
 //      3. Fixed background images when searching
@@ -81,7 +89,7 @@ FocusScope {
     property int currentCollectionIndex: 4
     property var currentCollection: U.getCollection(currentCollectionIndex)
     property var currentGame: games.gameView.currentItem.gameData
-    property string currentBG: U.getAsset(currentGame, currentGame.assets, "bg")
+    property string currentBG: U.getAsset(currentGame, currentGame.assets, "bg").source
     property bool mouseSelect: false
     property int allGames: settings.allGames ? -1 : 0
 
@@ -124,11 +132,13 @@ Component.onCompleted: {
 
         //--START gameView Controls
             if(games.gameView.focus){
+                let sound = null
                 //Up
                 if(
                     event.key == Qt.Key_W || 
                     event.key == Qt.Key_Up
                 ){
+                    sound = games.gameView.currentIndex + 1 - settings.columns > 0 ? select : toggle_up
                     GV_controls.up()
                 }
                 //Down
@@ -136,6 +146,7 @@ Component.onCompleted: {
                     event.key == Qt.Key_S || 
                     event.key == Qt.Key_Down
                 ){
+                    sound = select
                     GV_controls.down()
                 }
                 //left
@@ -143,6 +154,7 @@ Component.onCompleted: {
                     event.key == Qt.Key_A || 
                     event.key == Qt.Key_Left
                 ){
+                    sound = select
                     GV_controls.left()
                 }
                 //Right
@@ -150,16 +162,27 @@ Component.onCompleted: {
                     event.key == Qt.Key_D || 
                     event.key == Qt.Key_Right
                 ){
+                    sound = select
                     GV_controls.right()
                 }
                 //First
                 if(api.keys.isPageUp(event)){
+                    sound = select
                     GV_controls.first()
                 }
                 //Last
                 if(api.keys.isPageDown(event)){
+                    sound = select
                     GV_controls.last()
                 }
+
+                if(api.keys.isFilters(event)){
+                    currentGame.favorite = !currentGame.favorite
+                    sound = toggle_up
+                }
+                
+                if(sound != null)
+                    sound.play()
             }
         //--END gameView Controls
 
@@ -290,6 +313,11 @@ Component.onCompleted: {
                     event.accepted = true
                 }
 
+                if(api.keys.isFilters(event)){
+                    currentGame.favorite = !currentGame.favorite
+                    toggle_up.play()
+                }
+
                 if (api.keys.isCancel(event) && !event.isAutoRepeat){
                     U.focusToggle()
                     event.accepted = true
@@ -324,7 +352,7 @@ Component.onCompleted: {
     MediaPlayer {
 		id: home
 		source: "assets/sounds/home.mp3"
-		volume: 0.80
+		volume: 0.65
 		loops : 1
 	}
 //
