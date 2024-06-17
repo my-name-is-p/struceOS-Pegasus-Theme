@@ -284,11 +284,131 @@ Rectangle {
                         leftMargin: vpx(24)
                     }
 
-                    Item { //background_settings
-                        id: background_settings
+                    Item { //general_settings
+                        id: general_settings
                         anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.right: parent.right
+
+                        height: vpx(95)
+
+                        Text { //general_settings_title
+                            id: general_settings_title
+                            text: "General Settings"
+                            color: settings.colors.white
+
+                            font.family: bold.name
+                            font.bold: true
+                            font.pixelSize: vpx(24)
+                        }
+
+                        Row { //general_settings_mute
+                            id: general_settings_mute
+                            anchors.top: general_settings_title.bottom
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: column_minus.height
+
+                            Text { //general_settings_mute_label
+                                id: general_settings_mute_label
+                                text: "Mute UI:"
+                                color: settings.colors.white
+
+                                font.family: regular.name
+                                font.pixelSize: vpx (16)
+                            }
+
+                            CustomCheckbox {
+                                id: general_settings_mute_checkbox
+                                anchors.right: parent.right
+
+                                state: settings.uiMute ? "checked" : ""
+
+                                MouseArea { //checkbox_click
+                                    id: general_settings_mute_chekbox_click
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+
+                                    onClicked: {
+                                        select.play()
+                                        if(general_settings_mute_checkbox.state != "checked"){
+                                            settings.uiMute = !settings.uiMute
+                                            parent.state = "checked"
+                                        } else {
+                                            settings.uiMute = !settings.uiMute
+                                            parent.state = ""
+                                        }
+                                        api.memory.set("struceOS_ui_Mute", settings.uiMute)
+                                    }
+                                }
+                            }
+                        }
+
+                        Row { //general_settings_volume
+                            id: general_settings_volume
+                            anchors.top: general_settings_mute.bottom
+                            anchors.topMargin: vpx(12)
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: column_minus.height
+
+                            Text { //video_settings_volume_label
+                                id: general_settings_volume_label
+                                text: "UI volume (0-1): "
+                                color: settings.colors.white
+
+                                font.family: regular.name
+                                font.pixelSize: vpx (16)
+                            }
+
+                            MinusButton { //column_minus
+                                id: general_volume_minus
+
+                                anchors.right: general_volume_plus.left
+                                anchors.rightMargin: vpx(12)
+
+                                anchors.verticalCenter: general_settings_volume_amount.verticalCenter
+                                
+                                property string name: "general_volume_minus"
+                                property Text currentValue: general_settings_volume_amount
+
+                            }
+
+                            PlusButton { //column_plus
+                                id: general_volume_plus
+
+                                anchors.right: general_settings_volume_amount.left
+                                anchors.rightMargin: vpx(12)
+
+                                anchors.verticalCenter: general_settings_volume_amount.verticalCenter
+
+                                property string name: "general_volume_plus"
+                                property Text currentValue: general_settings_volume_amount
+
+                            }
+
+                            Text { //video_settings_volume_amount
+                                id: general_settings_volume_amount
+                                text: settings.uiVolume.toFixed(2)
+                                color: settings.colors.white
+
+                                anchors.right: parent.right
+
+                                font.family: regular.name
+                                font.pixelSize: vpx (16)
+                            }
+                        }
+                    }
+
+
+
+                    Item { //background_settings
+                        id: background_settings
+                        anchors.top: general_settings.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        anchors.topMargin: vpx(24)
 
                         height: vpx(95)
 

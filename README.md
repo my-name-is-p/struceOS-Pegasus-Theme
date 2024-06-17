@@ -1,11 +1,11 @@
 # struceOS-Pegasus-Theme
 
-![screenshot_1](.meta/screenshot_1.png)
-![screenshot_2](.meta/screenshot_2.png)
-![screenshot_3](.meta/screenshot_3.png)
-![screenshot_4](.meta/screenshot_4.png)
-![screenshot_5](.meta/screenshot_5.png)
-![screenshot_6](.meta/screenshot_6.png)
+![screenshot_1](.meta/screenshot_1.jpg)
+![screenshot_2](.meta/screenshot_2.jpg)
+![screenshot_3](.meta/screenshot_3.jpg)
+![screenshot_4](.meta/screenshot_4.jpg)
+![screenshot_5](.meta/screenshot_5.jpg)
+![screenshot_6](.meta/screenshot_6.jpg)
 
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
@@ -16,12 +16,18 @@ A simple theme for easy navigation.
 
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
+# Version 1.3.2 Updates
+1. Added UI Mute setting
+2. Updated getAsset() function to getAssets()
+3. Reworked asset usage to better use Skyscraper output
+4. Changed Search to match any title containing the search term
+
 # Metadata Generation and Asset Scraping
 I recommend using [muldjord's skyscraper](https://github.com/muldjord/skyscraper) for metadata generation. Simply follow the directions for your installation type. Example commands below (tested in PowerShell on Windows 11):
 
 <details>
     <summary>skyscraper commands</summary>
-I setup my pegasus emulators as such:
+I setup my emulators for pegasus as such:
     
     /Emulators
         /Dreamcast
@@ -37,7 +43,7 @@ I setup my pegasus emulators as such:
                 (usually named the same as the emulator eg: _PCSX2)
         /Switch
 
-config.ini and struceos-artwork.xml can be found in skyscraper-config or can be created manually
+config.ini, struceos-artwork.xml, and struceos-artwork-2.xml can be found in skyscraper-config or can be created manually
 
 Add to config.ini: 
 
@@ -57,7 +63,7 @@ struceos-artwork.xml:
         <output type="marquee" resource="marquee"/>
     </artwork>
 
-struceos-artwork-2.xml (combines screenshot and wheel for the thumbnail photo):
+struceos-artwork-2.xml (alternate: combines screenshot and wheel for the thumbnail photo):
 
     <?xml version="1.0" encoding="UTF-8"?>
     <artwork>
@@ -75,7 +81,6 @@ struceos-artwork-2.xml (combines screenshot and wheel for the thumbnail photo):
       <output type="marquee" resource="marquee"/>
     </artwork>
     
-
 
 Commands:
 
@@ -99,13 +104,6 @@ A full set of assets for manual setup would be (multiples listed in order of pri
 3. **assets.logo/assets.wheel** - used for the logo in the info panel
 4. **assets.video** - used for the video in the info panel
 
-# Version 1.3.1 Updates
-1. Added favorite toggle to gameView
-2. Fixed favorite icon placement in gameView
-3. Added text labels to games with default banner image
-4. Changed game count to update with filters
-5. Updated gameView controls to use built in functions
-
 # Thank yous
 Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
 
@@ -125,6 +123,7 @@ Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) an
 
 # Customizable Settings
 The most useful settings are now in a settings panel within the theme. The rest can be found in template/Settings.qml. The default settings are below for reference:
+
 <details>
     <summary>Default Settings</summary>
 
@@ -187,10 +186,6 @@ The most useful settings are now in a settings panel within the theme. The rest 
         api.memory.get("struceOS_video_volume") :
         0.40
 
-    //Search Settings
-    property var firstWordIgnore: 
-        ["the","the legend of", "the legend of zelda:", "lego"]             //Words to ignore at the beginning
-
     //DevTools
     property bool enableDevTools:                                           //Dispalys "console" and a button for testing purposes 
         api.memory.get("struceOS_dev_enableDevTools") != undefined ?
@@ -200,20 +195,30 @@ The most useful settings are now in a settings panel within the theme. The rest 
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.3.0"                                        //struceOS version
+    property string version: "1.3.2"                                        //struceOS version
     property bool working: false
 </details>
+
 
 # Installation
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.3.1.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.3.2.zip from [last releases](https://github.com/strucep/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
 <details>
     <summary>Changelogs</summary>
+
+## 1.3.2 
+
+```
+1. Added UI Mute setting
+2. Updated getAsset() function to getAssets()
+3. Reworked asset usage to better fit Skyscraper output
+4. Changed Search to match any title containing the search term
+```
 
 ## 1.3.1
 

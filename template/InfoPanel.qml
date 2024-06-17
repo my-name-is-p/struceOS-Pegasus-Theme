@@ -309,7 +309,7 @@ Rectangle {
                     source: currentGame.assets.video
                     width: parent.width
                     height: video.width / 1.778
-                    fillMode: VideoOutput.PreserveAspectCrop
+                    fillMode: VideoOutput.PreserveAspectFit
                     anchors.centerIn: parent
 
                     muted: settings.videoMute

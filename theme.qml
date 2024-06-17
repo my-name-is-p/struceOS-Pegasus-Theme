@@ -20,6 +20,12 @@
 
 // Changelogs
 
+// #1.3.2
+//      1. Added UI Mute setting
+//      2. Updated getAsset() function to getAssets()
+//      3. Reworked asset usage to better fit Skyscraper output
+//      4. Changed Search to match any title containing the search term
+
 // #1.3.1
 //      1. Added favorite toggle to gameView
 //      2. Fixed favorite icon placement in gameView
@@ -84,12 +90,12 @@ FocusScope {
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
 
-    property bool loadTimeout: false
+    //property bool loadTimeout: false
 
     property int currentCollectionIndex: 4
     property var currentCollection: U.getCollection(currentCollectionIndex)
-    property var currentGame: games.gameView.currentItem.gameData
-    property string currentBG: U.getAsset(currentGame, currentGame.assets, "bg").source
+    property var currentGame: search.currentGame(games.gameView.currentIndex)
+    property string currentBG
     property bool mouseSelect: false
     property int allGames: settings.allGames ? -1 : 0
 
@@ -112,7 +118,8 @@ Component.onCompleted: {
     currentCollection = U.getCollection(currentCollectionIndex) || 0
     games.gameView.currentIndex = api.memory.get("gameIndex") || 0
     games.gameView.focus = true
-    loadTimeout = true
+    collectionsView.collectionView_list.currentItem.currentIndex = settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
+    currentBG = U.getAssets(currentGame.assets).bg
     home.play()
     U.clog("struceOS v" + settings.version + (settings.working ? "-working" : ""))
 }
@@ -121,14 +128,15 @@ Component.onCompleted: {
     Keys.onPressed: {
         //--Dev Keys--//
         //--END Dev Keys--//
-
+        if(games.gameView.focus || header.focus || collectionsView.collectionView_list.focus){
         //--START Collection Quick Change
-        if(event.key != Qt.Key_A && event.key != Qt.Key_D){
-            if (api.keys.isNextPage(event) || api.keys.isPrevPage(event)) {
-                GV_controls.changeCollection(event, currentCollectionIndex)
+            if(event.key != Qt.Key_A && event.key != Qt.Key_D){
+                if (api.keys.isNextPage(event) || api.keys.isPrevPage(event)) {
+                    COLLECTION_controls.changeCollection(event, currentCollectionIndex)
+                }
             }
-        }
         //--END Collection Quick Change
+        }
 
         //--START gameView Controls
             if(games.gameView.focus){
@@ -180,7 +188,6 @@ Component.onCompleted: {
                     currentGame.favorite = !currentGame.favorite
                     sound = toggle_up
                 }
-                
                 if(sound != null)
                     sound.play()
             }
@@ -234,6 +241,7 @@ Component.onCompleted: {
                     event.key == Qt.Key_Down
                 ){
                     COLLECTION_controls.down()
+                    select.play()
                 }
                 //up
                 if(
@@ -241,6 +249,17 @@ Component.onCompleted: {
                     event.key == Qt.Key_Up
                 ){
                     COLLECTION_controls.up()
+                    select.play()
+                }
+                //Left
+                if(event.key == Qt.Key_A || event.key == Qt.Key_Left){
+                    COLLECTION_controls.left()
+                    select.play()
+                }
+                //Right
+                if(event.key == Qt.Key_D || event.key == Qt.Key_Right){
+                    COLLECTION_controls.right()
+                    select.play()
                 }
                 //accept
                 if (
@@ -331,28 +350,28 @@ Component.onCompleted: {
     MediaPlayer {
 		id: select
 		source: "assets/sounds/lc.wav"
-		volume: 0.50
+		volume: settings.uiMute ? 0 : settings.uiVolume
 		loops : 1
 	}
 
     MediaPlayer {
 		id: toggle_up
 		source: "assets/sounds/hc_down.wav"
-		volume: 0.50
+		volume: settings.uiMute ? 0 : settings.uiVolume
 		loops : 1
 	}
 
     MediaPlayer {
 		id: toggle_down
 		source: "assets/sounds/hc_up.wav"
-		volume: 0.50
+		volume: settings.uiMute ? 0 : settings.uiVolume
 		loops : 1
 	}
 
     MediaPlayer {
 		id: home
 		source: "assets/sounds/home.mp3"
-		volume: 0.65
+		volume: settings.uiMute ? 0 : settings.uiVolume
 		loops : 1
 	}
 //

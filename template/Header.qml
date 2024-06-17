@@ -171,7 +171,7 @@ Item {
                 anchors.leftMargin: vpx(24)
                 anchors.rightMargin: vpx(24)
                 clip: true
-                enabled: searchbox.state === "opened"
+                enabled: searchbox.opacity
 
                 TextInput {
                     id: searchTerm
@@ -250,7 +250,7 @@ Item {
         anchors.rightMargin: vpx(24)
 
         source: "search.png"
-        target: "search"
+        target: searchbox.opacity ? "" : "search"
 
         property var controls: {
             "name": "search",

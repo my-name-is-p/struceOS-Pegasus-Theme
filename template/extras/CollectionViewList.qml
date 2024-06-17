@@ -67,14 +67,6 @@ Item {
 
         keyNavigationWraps: true
         
-        onCurrentIndexChanged: { // new game selected
-            if(collectionsView.collectionView_outer_wrapper.state === "opened"){
-                if(!mouseClick)
-                    select.play()
-            }
-            mouseClick = false
-        }
-
     }
 
     Component {
@@ -132,17 +124,16 @@ Item {
                     hoverEnabled: true
 
                     onEntered: {
-                        parent.parent.focus = true
+                        collectionView_list.currentIndex = index
                     }
 
                     onExited: {
-                        parent.parent.focus = false
+                        //parent.parent.focus = false
                     }
 
                     onClicked: {
                         collectionView_list.mouseClick = true
                         collectionView_list.currentIndex = index
-                        U.changeGame()
                         COLLECTION_controls.accept()
                     }
                 }

@@ -24,7 +24,7 @@ Item{
     anchors.fill: parent
     ListModel {
         id: detailsModel
-        property var details: ["title","developer","publisher","release","players"]
+        property var details: ["title","developer","publisher","release", "genre","players"]
         property var currentGame: root.currentGame
 
         property var test: settings.bgOverlayOpacity
@@ -88,6 +88,7 @@ Item{
         model: detailsModel
         pixelAligned: true
     }
+
 
     Component {
         id: details_list_item

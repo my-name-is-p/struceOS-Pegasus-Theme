@@ -17,14 +17,6 @@ function clog(str, tag = "", clear = false){
     consoleLog.text = temp
 }
 
-function bgFadeOutIn(){
-    background.bgFadeOut.start()
-}
-
-function changeGame(){
-    bgFadeOutIn()
-}
-
 function focusToggle(focus = "gameView"){
     settingsPanel.state = ""
     info.video.stop()
@@ -32,6 +24,7 @@ function focusToggle(focus = "gameView"){
     info.currentItem = info.play_button
     header.searchbox.state = ""
     collectionsView.collectionView_outer_wrapper.state = ""
+    games.gameView.focus = "false"
     switch (focus){
         case "settings":
             settingsPanel.state = "opened"
@@ -48,7 +41,7 @@ function focusToggle(focus = "gameView"){
             header.searchTerm.focus = true
             break
         case "collections":
-            collectionsView.collectionView_list.currentItem.currentIndex = 0
+            collectionsView.collectionView_list.currentItem.currentIndex = settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
             collectionsView.collectionView_outer_wrapper.state = "opened"
             collectionsView.collectionView_list.focus = true
             break
@@ -56,7 +49,8 @@ function focusToggle(focus = "gameView"){
             games.gameView.focus = true
             break
     }
-    toggle_up.play()
+    if(focus != "noSound")
+        toggle_up.play()
 }
 
 
@@ -71,6 +65,14 @@ function settingsUpdate(setting, currentValue){
         case "column_minus":
             if(currentValueInt > settings.columnsMin ){ settings.columns-- }
             api.memory.set("struceOS_gameView_columns", settings.columns)
+            break;
+        case "general_volume_plus":
+            currentValueFloat + 0.05 < 1.0 ? settings.uiVolume = (currentValueFloat + 0.05).toFixed(2) : settings.uiVolume = 1
+            api.memory.set("struceOS_ui_volume", settings.uiVolume)
+            break
+        case "general_volume_minus":
+            currentValueFloat - 0.05 > 0 ? settings.uiVolume = parseFloat((currentValueFloat - 0.05).toFixed(2)) : settings.uiVolume = 0
+            api.memory.set("struceOS_ui_volume", settings.uiVolume)
             break;
         case "bg_opacity_plus":
             currentValueFloat + 0.05 < 1.0 ? settings.bgOverlayOpacity = (currentValueFloat + 0.05).toFixed(2) : settings.bgOverlayOpacity = 1
@@ -114,99 +116,46 @@ function getCollection(i){
     }
 }
 
-function getAsset(data, assets, type = "", log = false) {
-    var shortName = data.collections.get(0).shortName.toString()
-    let source = ""
 
-    switch(shortName){
-        case "gog":
-            switch(type){
-                case "bg":
-                    let i = Math.floor(Math.random() * assets.screenshots.length)
-                    source = assets.screenshots[i]
-                    break;
-                case "banner":
-                    source = assets.boxFront
-                    break;
-                default:
-                    break;
-            }
-            break;
+function getAssets(assets){
+    let random = assets.screenshots.length > 1 ? Math.floor(Math.random() * assets.screenshots.length) : 0
+    let gotAssets = {}
 
-        case "steam":
-            switch(type){
-                case "bg":
-                    let i = Math.floor(Math.random() * assets.screenshots.length)
-                    source = assets.screenshots[i]
-                    break;
-                case "banner":
-                    source = assets.steam
-                    break;
-                default:
-                    break;
-            }
-            break;
-        default:
-            break;
-    }
+    // Background
+    gotAssets.bg = 
+        assets.screenshots[random] != undefined ?
+        assets.screenshots[random] :
+            assets.screenshot != "" ?
+            assets.screenshots :
+                assets.background != "" ? 
+                assets.background : 
+                    "default"
 
-    if(source === ""){
-        switch(type){
-            case "bg":
-                source = assets.background != "" ? assets.background : assets.screenshot
-                break;
-            case "banner":
-                source = assets.banner != "" ? assets.banner : assets.boxFront != "" ? assets.boxFront : assets.logo
-                break;
-            case "logo":
-                source = assets.logo
-                break;
-            case "video":
-                source = assets.video
-                break;
-            default:
-                break;
-        }
-    }
+    // Banner
+    gotAssets.banner = 
+        assets.steam != "" ? 
+        assets.steam : 
+            assets.banner != "" ? 
+            assets.banner : 
+                assets.boxFront != "" ? 
+                assets.boxFront : 
+                    assets.logo != "" ? 
+                    assets.logo :
+                        "default"
 
-    return {
-        "source": source != "" ? source : type !="bg" ? "../assets/" + settings.defaultGameImage : "",
-        "default": !(source != "") 
-    }
+    // Logo
+    gotAssets.logo = 
+        assets.logo != "" ? 
+        assets.logo : 
+            assets.wheel != "" ?
+            assets.wheel :
+                "default"
+
+    // Video
+    gotAssets.video = 
+        assets.video != "" ?
+        assets.video :
+            "default"
+
+    return gotAssets
 }
-
-/*
-switch(video.status){
-    case MediaPlayer.NoMedia:
-        U.clog("No Media")
-        break
-    case MediaPlayer.Loading:
-        U.clog("Loading")
-        break
-    case MediaPlayer.Loaded:
-        U.clog("Loaded")
-        break
-    case MediaPlayer.Buffering:
-        U.clog("Buffering")
-        break
-    case MediaPlayer.Stalled:
-        U.clog("Stalled")
-        break
-    case MediaPlayer.Buffered:
-        U.clog("Buffered")
-        break
-    case MediaPlayer.EndOfMedia:
-        U.clog("EndOfMedia")
-        break
-    case MediaPlayer.InvalidMedia:
-        U.clog("InvalidMedia")
-        break
-    case MediaPlayer.InvalidMedia:
-        U.clog("InvalidMedia")
-        break
-    default:
-        U.clog("Case Defaulted")
-        break
-}
-U.clog(video.status)
-*/

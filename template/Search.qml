@@ -26,40 +26,24 @@ id: root
     readonly property alias games: gamesFiltered
     property string firstWordIgnoreList
     function currentGame(index) { return currentCollection.games.get(gamesFiltered.mapToSource(index)) }
-    function firstWordIgnore(list) {
-        let temp = ""
-        for(var i = 0; i < list.length; i++){
-            if(i < list.length - 1){
-                temp = temp + list[i] + " |"
-            } else {
-                temp = temp + list[i] + " "
-            }
-        }
-        return temp
-    }
-    
-    Component.onCompleted: {
-        firstWordIgnoreList = "^(" + firstWordIgnore(settings.firstWordIgnore) + ")?"
-    }
 
     SortFilterProxyModel {
         id: gamesFiltered
-            sourceModel: currentCollection.games
-            filters: [
-                RegExpFilter { 
-                    roleName: "title"; 
-                    pattern: firstWordIgnoreList + header.searchTerm.text 
-                    caseSensitivity: Qt.CaseInsensitive;
-                    enabled: header.searchTerm.text != ""
-                },
+        sourceModel: currentCollection.games
+        filters: [
+            RegExpFilter { 
+                roleName: "title"; 
+                pattern: header.searchTerm.text 
+                caseSensitivity: Qt.CaseInsensitive;
+                enabled: header.searchTerm.text != ""
+            },
 
-                ValueFilter { 
-                    roleName: "favorite"; 
-                    value: true;
-                    enabled: header.favorite.filterEnabled
-                }
-
-            ]
+            ValueFilter { 
+                roleName: "favorite"; 
+                value: true;
+                enabled: header.favorite.filterEnabled
+            }
+        ]
     }
 }
 

@@ -14,125 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// Thank you to VGmove creator of EasyLaunch <https://github.com/VGmove/EasyLaunch>
+// for the collection logos, images, audio, and various functionality
+
+
 import QtQuick 2.0
-import "../utils.js" as U
-import "extras"
+import "../../utils.js" as U
+
 Item {
-    id: games
-
-    anchors.top: header.bottom
-
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-
-    anchors.rightMargin: vpx(24)
-    anchors.leftMargin: vpx(24)
-
-    MouseArea {
-        id: gameView_scrollwheel
-        anchors.fill: parent
-        onWheel: {
-            let speed = 11.25
-                speed = speed / 1000
-            let scrollDelta = wheel.angleDelta.y / 6;
-
-            // Estimate vertical velocity (adjust time interval as needed)
-            let yVelocity = scrollDelta / speed;
-
-            // Call flick with estimated velocity (no horizontal velocity)
-            gameView.flick(0.0, yVelocity);
-        }
-    }
-    
-    GridView { //gameView
-        id: gameView
-        delegate: gameThumb.thumb
-        model: search.games
-        anchors.fill: parent
-
-        interactive: false
-        clip: true
-
-        keyNavigationWraps: false
-
-        cellWidth: parent.width / settings.columns
-        cellHeight: cellWidth * 0.6
-
-        highlightMoveDuration: 100
-        highlightFollowsCurrentItem: true
-
-        
-        onCurrentIndexChanged: { // new game selected
-        }
-    }
-
-    GameThumbnails {
-        id: gameThumb
-    }
-
-    property GridView gameView: gameView
-}
-
-/* ORIGINAL
-Rectangle { //games
-    id: games
-    anchors.top: header.bottom
-
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-
-    anchors.rightMargin: vpx(24)
-    anchors.leftMargin: vpx(24)
-
-    color: "transparent"
-
-    MouseArea {
-        id: gameView_scrollwheel
-        anchors.fill: parent
-        onWheel: {
-            let speed = 11.25
-                speed = speed / 1000
-            let scrollDelta = wheel.angleDelta.y / 6;
-
-            // Estimate vertical velocity (adjust time interval as needed)
-            let yVelocity = scrollDelta / speed;
-
-            // Call flick with estimated velocity (no horizontal velocity)
-            gameView.flick(0.0, yVelocity);
-        }
-    }
-
-    GridView { //gameView
-        id: gameView
-        delegate: gameThumb
-        model: search.games
-        anchors.fill: parent
-
-        interactive: false
-        clip: true
-
-        keyNavigationWraps: false
-
-        cellWidth: parent.width / settings.columns
-        cellHeight: cellWidth * 0.6
-
-        highlightMoveDuration: 100
-        highlightFollowsCurrentItem: true
-
-        
-        onCurrentIndexChanged: { // new game selected
-            //if(loadTimeout){
-                //U.changeGame()
-                if(!settings.lastPlayed){
-                    api.memory.set("collectionIndex", currentCollectionIndex)
-                    api.memory.set("gameIndex", gameView.currentIndex)
-                }
-            //}
-        }
-    }
-
     Component {
         id: gameThumb
         //Game Banner Wrapper
@@ -144,9 +33,8 @@ Rectangle { //games
 
             //Game Banner Image
             Image {
-
                 id: banner
-                source: U.getAssets(assets).banner
+                source: U.getAssets(assets).banner != "default" ? U.getAssets(assets).banner : "../../assets/" + settings.defaultGameImage
                 opacity: 0
 
                 smooth: true
@@ -185,7 +73,7 @@ Rectangle { //games
                     id: game_title_text_bu
                     anchors.fill: parent
                     clip: true
-                    visible: U.getAssets(assets).banner != "default"
+                    visible: !(U.getAssets(assets).banner != "default")
 
                     Rectangle {
                         anchors.fill: game_title
@@ -216,7 +104,6 @@ Rectangle { //games
                             if(game_title.height > banner.paintedHeight - 24){
                                 game_title.height = (banner.paintedHeight - 24)
                             }
-
                         }
                     }
                 }
@@ -271,20 +158,18 @@ Rectangle { //games
                     color: Qt.hsla(0.79, 0.2, 0.26, 1.0)
 
                     Image {
-                        source: "../assets/img/heart_filled.svg"
+                        source: "../../assets/img/heart_filled.svg"
                         anchors.centerIn: parent
                         fillMode: Image.PreserveAspectFit
                         height: vpx(12)
                     }
                 }
-
             }
 
 
             //Loading Image
             Image {
-
-                source: "assets/img/loading.png"
+                source: "../../assets/img/loading.png"
                 visible: banner.status === Image.Loading
 
                 anchors.centerIn: parent
@@ -333,11 +218,9 @@ Rectangle { //games
                 }
 
                 onClicked: {
-                    gameView.focus = true
-                    gameView.currentIndex = index
-                    mouseSelect = true
-                    if(header.searchbox.state === "opened") 
-                        header.searchTerm.focus = false;
+                    U.focusToggle("noSound")
+                    background.bgFadeOut.start()
+                    gameView.currentIndex = index                        
                     select.play()
                 }
 
@@ -349,13 +232,8 @@ Rectangle { //games
                     }
                     toggle_down.play()
                 }
-
             }
         }
-
     }
-    property GridView gameView: gameView
+    property Component thumb: gameThumb
 }
-*/
-
-

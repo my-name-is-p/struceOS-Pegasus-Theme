@@ -33,9 +33,25 @@ Rectangle {
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
 
-        onStatusChanged: {
-            if(backgroundGame.status === Image.Ready)
-                bgFadeIn.start()
+        NumberAnimation {
+            id: bgFadeOut
+            target: backgroundGame
+            
+            properties: "opacity"
+            from: backgroundGame.opacity
+            to: 0
+            
+            duration: 350
+            
+            onRunningChanged: {
+                if(!bgFadeOut.running){
+                    currentBG = U.getAssets(currentGame.assets).bg != "default" ? U.getAssets(currentGame.assets).bg : ""
+                    if(!settings.lastPlayed){
+                        api.memory.set("collectionIndex", currentCollectionIndex)
+                        api.memory.set("gameIndex", gameView.currentIndex)
+                    }
+                }
+            }
         }
 
         NumberAnimation {
@@ -49,26 +65,12 @@ Rectangle {
             duration: 350
         }
 
-        NumberAnimation {
-            id: bgFadeOut
-            target: backgroundGame
-            
-            properties: "opacity"
-            from: backgroundGame.opacity
-            to: 0
-            
-            duration: 350
-
-            onRunningChanged: {
-                if(!bgFadeOut.running){
-                    currentBG = U.getAsset(currentGame, currentGame.assets, "bg").source
-                }
-            }
+        onStatusChanged: {
+            if(backgroundGame.status === Image.Ready)
+                bgFadeIn.start()
         }
     }
-    property Image backgroundGame: backgroundGame
-    property Animation bgFadeOut: bgFadeOut
-    
+    property Animation bgFadeOut: bgFadeOut    
 
     //Background Overlay
     Image {

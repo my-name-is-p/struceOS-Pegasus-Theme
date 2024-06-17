@@ -37,6 +37,16 @@ Item {
     property string fontFamilyBold: 
         "assets/fonts/Open Sans/OpenSans-Bold.ttf"
 
+    //General Settings
+    property bool uiMute: 
+        api.memory.get("struceOS_ui_Mute") != undefined ?
+        api.memory.get("struceOS_ui_Mute") : 
+        false
+    property real uiVolume:                                          //Video volume
+        api.memory.get("struceOS_ui_volume") != undefined ?
+        api.memory.get("struceOS_ui_volume") :
+        0.60
+
     //gameView Settings
     property int columns:                                               //Number of columns to display in gameView
         api.memory.get("struceOS_gameView_columns") != undefined ?
@@ -68,7 +78,7 @@ Item {
         api.memory.get("struceOS_background_overlayOpacity") != undefined ?
         api.memory.get("struceOS_background_overlayOpacity") :
         0.75
-    property string bgOverlaySource: "img/bg-gradient.png"              //Image source for the background overlay (will only look in assets)
+    property string bgOverlaySource: "img/bg-gradient.jpg"              //Image source for the background overlay (will only look in assets)
     
     //Video Settings
     property bool videoMute:                                            //Mute video by default
@@ -80,9 +90,6 @@ Item {
         api.memory.get("struceOS_video_volume") :
         0.40
 
-    //Search Settings
-    property var firstWordIgnore: ["the","the legend of", "lego"]          //Words to ignore in search as the first word
-
     //DevTools
     property bool enableDevTools:                                        //Dispalys "console" and a button for testing purposes 
         api.memory.get("struceOS_dev_enableDevTools") != undefined ?
@@ -92,6 +99,6 @@ Item {
         api.memory.get("struceOS_dev_log_opacity") != undefined ?
         api.memory.get("struceOS_dev_log_opacity") :
         0.5
-    property string version: "1.3.1"                                    //struceOS version
+    property string version: "1.3.2"                                    //struceOS version
     property bool working: false
 }
