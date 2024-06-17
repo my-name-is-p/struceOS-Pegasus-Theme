@@ -57,6 +57,26 @@ struceos-artwork.xml:
         <output type="marquee" resource="marquee"/>
     </artwork>
 
+struceos-artwork-2.xml (combines screenshot and wheel for the thumbnail photo):
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <artwork>
+      <output type="screenshot" resource="screenshot"/>
+      <output type="cover" width="1280" height="720">
+        <layer resource="screenshot" width="1040" height="585" x="-20" y="20" align="right" valign="top">
+          <rounded radius="6"/>
+          <stroke width="5"/>
+        </layer>
+        <layer resource="wheel" width="540" x="20" y="-20" align="left" valign="bottom">
+            <shadow distance="5" softness="5" opacity="70"/>
+        </layer>
+      </output>
+      <output type="wheel" resource="wheel"/>
+      <output type="marquee" resource="marquee"/>
+    </artwork>
+    
+
+
 Commands:
 
     Pull data:
