@@ -71,7 +71,13 @@ Commands:
 
 </details>
 
-These commands will generate a metadata.pegasus.txt file that will have the necessary assets for the theme if they are available through [screenscraper.fr](https://www.screenscraper.fr/)
+These commands will generate a metadata.pegasus.txt file that will have the necessary assets for the theme if they are available through [screenscraper.fr](https://www.screenscraper.fr/). Otherwise placeholders are used.
+
+A full set of assets for manual setup would be (multiples listed in order of priority):
+1. **assets.screenshots/assets.screenshot/assets.background** - used for the background image when the game is selected (will randomly rotate through assets.screenshots if available)
+2. **assets.banner/assets.boxFront/assets.logo** - used for the thumbnail image in the gameView (logo is a last resort)
+3. **assets.logo/assets.wheel** - used for the logo in the info panel
+4. **assets.video** - used for the video in the info panel
 
 # Version 1.3.1 Updates
 1. Added favorite toggle to gameView
