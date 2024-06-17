@@ -71,7 +71,7 @@ Commands:
 
 </details>
 
-These commands will generate a metadata.pegasus.txt file that will have the necessary assets for the theme if they are available through screenscraper.fr
+These commands will generate a metadata.pegasus.txt file that will have the necessary assets for the theme if they are available through [screenscraper.fr](https://www.screenscraper.fr/)
 
 # Version 1.3.1 Updates
 1. Added favorite toggle to gameView
