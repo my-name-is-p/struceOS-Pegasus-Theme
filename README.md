@@ -16,6 +16,62 @@ A simple theme for easy navigation.
 
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
+# Metadata Generation and Asset Scraping
+I recommend using [muldjord's skyscraper](https://github.com/muldjord/skyscraper) for metadata generation. Simply follow the directions for your installation type. Example commands below (tested in PowerShell on Windows 11):
+
+<details>
+    <summary>skyscraper commands</summary>
+I setup my pegasus emulators as such:
+    
+    /Emulators
+        /Dreamcast
+        /Gamecube
+        /Genesis
+        /N64
+        /PS2
+            /_games
+                (contains all roms)
+            /_media
+                (will store assets dowloaded by skyscraper)
+            /_emulator
+                (usually named the same as the emulator eg: _PCSX2)
+        /Switch
+
+config.ini and struceos-artwork.xml can be found in skyscraper-config or can be created manually
+
+Add to config.ini: 
+
+    [screenscraper]
+    videos="true"
+
+    [pegasus]
+    videos="true"
+
+struceos-artwork.xml:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <artwork>
+        <output type="screenshot" resource="screenshot"/>
+        <output type="cover" resource="cover"/>
+        <output type="wheel" resource="wheel"/>
+        <output type="marquee" resource="marquee"/>
+    </artwork>
+
+Commands:
+
+    Pull data:
+    skyscraper -p {platform} -s {source} -i {path/to/roms} --region us
+
+    skyscraper -p ps2 -s screenscraper -i f:\Games\Emulators\PS2\_games --region us --refresh
+
+    Output metadata.pegasus.txt:
+    skyscraper -p {platform} -f pegasus -a {path/to/struceos-artwork.xml} -e "{path/to/emulator} {file.path}" -i {path/to/roms} -g {output/path/metadata.pegasus.txt} -o {output/path/assets}
+
+    skyscraper -p ps2 -f pegasus -a "[REDACTED]\Local\pegasus-frontend\themes\struceOS-Pegasus-Theme-main\skyscraper-config\struceos-artwork.xml" -e "_PCSX2\pcsx2-qt.exe {file.path}" -i f:\Games\Emulators\PS2\_games -g f:\Games\Emulators\PS2 -o f:\Games\Emulators\PS2\_media
+
+</details>
+
+
 # Version 1.3.1 Updates
 1. Added favorite toggle to gameView
 2. Fixed favorite icon placement in gameView
