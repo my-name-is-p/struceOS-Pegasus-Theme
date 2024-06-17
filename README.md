@@ -60,7 +60,7 @@ struceos-artwork.xml:
 Commands:
 
     Pull data:
-    skyscraper -p {platform} -s {source} -i {path/to/roms} --region us --refresh
+    skyscraper -p {platform} -s {source} -i {path/to/roms} --region {eu, us, jp, wor} --refresh
 
     skyscraper -p ps2 -s screenscraper -i f:\Games\Emulators\PS2\_games --region us --refresh
 
