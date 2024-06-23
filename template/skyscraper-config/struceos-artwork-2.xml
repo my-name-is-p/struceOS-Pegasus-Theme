@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artwork>
+  <output type="screenshot" resource="screenshot" width="1920" height="1080"/>
+  <output type="cover" width="1280" height="720">
+    <layer resource="screenshot" width="1040" height="585" x="-48" y="48" align="right" valign="top">
+      <rounded radius="20"/>
+    </layer>
+    <layer resource="wheel" height="200" x="48" y="-48" align="left" valign="bottom">
+        <shadow distance="5" softness="5" opacity="70"/>
+    </layer>
+  </output>
+  <output type="wheel" resource="wheel"/>
+  <output type="marquee" resource="marquee"/>
+</artwork>
