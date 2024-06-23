@@ -12,7 +12,7 @@ A simple theme for easy navigation.
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
 # Version 1.4.0 Updates
-1. Start of rewrite to simplfy logic and improve modularity
+1. Start of rewrite to simplify logic and improve modularity
 2. Added a clock
 3. Redesigned collection list
 
@@ -252,7 +252,7 @@ Download struceOS-Pegasus-Theme-1.4.0.zip from [last releases](https://github.co
 ## 1.4.0 
 
 ```
-1. Start of rewrite to simplfy logic and improve modularity
+1. Start of rewrite to simplify logic and improve modularity
 2. Added a clock
 3. Redesigned collection list
 ```

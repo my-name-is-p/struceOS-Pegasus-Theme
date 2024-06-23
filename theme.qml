@@ -20,7 +20,7 @@
 
 // Changelogs
 // #1.4.0
-//      1. Start of rewrite to simplfy logic and improve modularity
+//      1. Start of rewrite to simplify logic and improve modularity
 //      2. Added a clock
 //      3. Redesigned collection list
 
