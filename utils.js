@@ -1,58 +1,24 @@
-function clog(str, tag = "", clear = false){
-    let temp = consoleLog.text
-    let s = "\n"
-    if(!clear){
-        if( tag != ""){
-            temp = consoleLog.text + s + tag + ">>>"  +  s + str + s + "<<<" + tag
-        } else {
-            temp = consoleLog.text + s + str
-        }
-    } else {
-        if( tag != ""){
-            temp = tag + ">>>"  +  s + str + s + "<<<" + tag
-        } else {
-            temp = str
-        }
-    }
-    consoleLog.text = temp
+function alphaDecToHex(alpha) {
+    // let t = Math.round(Math.max(0, Math.min(alpha, 1)) * 255)
+    // t = t.toString(16).toUpperCase()
+    // t = t.padStart(2, '0')
+    //return t
+    
+    //condensed
+    return Math.round(Math.max(0, Math.min(alpha, 1)) * 255).toString(16).toUpperCase().padStart(2, '0')
 }
 
-function focusToggle(focus = "gameView"){
-    settingsPanel.state = ""
-    info.video.stop()
-    info.state = ""
-    info.currentItem = info.play_button
-    header.searchbox.state = ""
-    collectionsView.collectionView_outer_wrapper.state = ""
-    games.gameView.focus = "false"
-    switch (focus){
-        case "settings":
-            settingsPanel.state = "opened"
-            settingsPanel.focus = true
-            break
-        case "info":
-            info.state = "opened" 
-            info.focus = true
-            info.detailsModel.populateModel()
-            info.video.play()
-            break
-        case "search":
-            header.searchbox.state = "opened"
-            header.searchTerm.focus = true
-            break
-        case "collections":
-            collectionsView.collectionView_list.currentItem.currentIndex = settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
-            collectionsView.collectionView_outer_wrapper.state = "opened"
-            collectionsView.collectionView_list.focus = true
-            break
-        default:
-            games.gameView.focus = true
-            break
-    }
-    if(focus != "noSound")
-        toggle_up.play()
-}
+function addAlphaToHex(alpha, hex) {
+    hex = hex.replace(/^#/, '')
 
+    if (!/^[0-9a-f]{6}$/i.test(hex)) {
+        throw new Error('Invalid hex code format (must be 6 digits)')
+    }
+
+    const alphaHex = alphaDecToHex(alpha)
+
+    return `#${alphaDecToHex(alpha)}${hex}`
+}
 
 function settingsUpdate(setting, currentValue){
     let currentValueInt = parseInt(currentValue.text)
@@ -114,48 +80,4 @@ function getCollection(i){
             games: api.allGames
         }
     }
-}
-
-
-function getAssets(assets){
-    let random = assets.screenshots.length > 1 ? Math.floor(Math.random() * assets.screenshots.length) : 0
-    let gotAssets = {}
-
-    // Background
-    gotAssets.bg = 
-        assets.screenshots[random] != undefined ?
-        assets.screenshots[random] :
-            assets.screenshot != "" ?
-            assets.screenshots :
-                assets.background != "" ? 
-                assets.background : 
-                    "default"
-
-    // Banner
-    gotAssets.banner = 
-        assets.steam != "" ? 
-        assets.steam : 
-            assets.banner != "" ? 
-            assets.banner : 
-                assets.boxFront != "" ? 
-                assets.boxFront : 
-                    assets.logo != "" ? 
-                    assets.logo :
-                        "default"
-
-    // Logo
-    gotAssets.logo = 
-        assets.logo != "" ? 
-        assets.logo : 
-            assets.wheel != "" ?
-            assets.wheel :
-                "default"
-
-    // Video
-    gotAssets.video = 
-        assets.video != "" ?
-        assets.video :
-            "default"
-
-    return gotAssets
 }

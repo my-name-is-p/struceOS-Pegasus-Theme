@@ -19,6 +19,10 @@
 // for easy to read code
 
 // Changelogs
+// #1.4.0
+//      1. Start of rewrite to simplfy logic and improve modularity
+//      2. Added a clock
+//      3. Redesigned collection list
 
 // #1.3.2
 //      1. Added UI Mute setting
@@ -70,22 +74,27 @@
 
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add Gamepad controls to Settings and Info panels
-// 2. Rework info panel
 // --------------------------------------------------------------------------------------------
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtMultimedia 5.9
+
+
 import "template"
 import "template/extras"
+import "controls"
 
 import "utils.js" as U
-import "controls/GameViewControls.js" as GV_controls
-import "controls/HeaderControls.js" as HEADER_controls
-import "controls/CollectionControls.js" as COLLECTION_controls
-import "controls/InfoControls.js" as INFO_controls
 
 FocusScope {
     id: root
+    //Keys.forwardTo: custom_keys
+
+    //--Settings--Customize these to your liking. Now found in template/Settings.qml. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
+    Settings {
+        id: settings
+    }
+    //---------------------------------------------------------------------------------------------------------------------//
 
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
@@ -95,256 +104,48 @@ FocusScope {
     property int currentCollectionIndex: 4
     property var currentCollection: U.getCollection(currentCollectionIndex)
     property var currentGame: search.currentGame(games.gameView.currentIndex)
-    property string currentBG
-    property bool mouseSelect: false
-    property int allGames: settings.allGames ? -1 : 0
 
-//--Settings--Customize these to your liking. Now found in template/Settings.qml. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
-Settings {
-    id: settings
-}
-//---------------------------------------------------------------------------------------------------------------------//
+    property bool fade_block: false
+
+    //Quick access variables (QAV)
+    property string bg
+    property var p: settings.theme          //theme palette
+    property var s: null                    //key sound
+    property string f: "games"                 //current focus
+    property var g: {                       //gameView Details
+        "g": games.gameView,                    //gameView GridView
+        "i": games.gameView.currentIndex,       //gameView GridView - current index
+        "start": 0,                             //gameView GridView - first index
+        "end": games.gameView.count - 1,        //gameView GridView - final index
+        "cols": settings.columns,               //gameView GridView - column count
+        "current": search.currentGame(games.gameView.currentIndex)
+    }
+    property var c: {                       //collections Details
+        "c": api.collections,                   //all collections
+        "i": 0,                                 //current collection index
+        "start": 0,                             //fist collection
+        "end": api.collections.count - 1,       //last collection
+        "all": settings.allGames,               //all games toggle
+        "current": U.getCollection(0),          //current collection
+    }
+
 
 Search {
     id: search
 }
-
 //--Run on loaded--//
 Component.onCompleted: {
-    currentCollectionIndex = 
+    c.i = 
         api.memory.get("collectionIndex") != undefined ? 
         api.memory.get("collectionIndex") : 
         0;
-    currentCollection = U.getCollection(currentCollectionIndex) || 0
-    games.gameView.currentIndex = api.memory.get("gameIndex") || 0
-    games.gameView.focus = true
-    collectionsView.collectionView_list.currentItem.currentIndex = settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
-    currentBG = U.getAssets(currentGame.assets).bg
+    currentCollection = c.current = U.getCollection(c.i) || 0
+    g.g.currentIndex = g.i = api.memory.get("gameIndex") || 0
+    bg = getAssets(currentGame.assets).bg
     home.play()
-    U.clog("struceOS v" + settings.version + (settings.working ? "-working" : ""))
+    log("struceOS v" + settings.version + (settings.working ? "-working" : ""))
 }
 
-//--Custom controls--//
-    Keys.onPressed: {
-        //--Dev Keys--//
-        //--END Dev Keys--//
-        if(games.gameView.focus || header.focus || collectionsView.collectionView_list.focus){
-        //--START Collection Quick Change
-            if(event.key != Qt.Key_A && event.key != Qt.Key_D){
-                if (api.keys.isNextPage(event) || api.keys.isPrevPage(event)) {
-                    COLLECTION_controls.changeCollection(event, currentCollectionIndex)
-                }
-            }
-        //--END Collection Quick Change
-        }
-
-        //--START gameView Controls
-            if(games.gameView.focus){
-                let sound = null
-                //Up
-                if(
-                    event.key == Qt.Key_W || 
-                    event.key == Qt.Key_Up
-                ){
-                    sound = games.gameView.currentIndex + 1 - settings.columns > 0 ? select : toggle_up
-                    GV_controls.up()
-                }
-                //Down
-                if(
-                    event.key == Qt.Key_S || 
-                    event.key == Qt.Key_Down
-                ){
-                    sound = select
-                    GV_controls.down()
-                }
-                //left
-                if(
-                    event.key == Qt.Key_A || 
-                    event.key == Qt.Key_Left
-                ){
-                    sound = select
-                    GV_controls.left()
-                }
-                //Right
-                if(
-                    event.key == Qt.Key_D || 
-                    event.key == Qt.Key_Right
-                ){
-                    sound = select
-                    GV_controls.right()
-                }
-                //First
-                if(api.keys.isPageUp(event)){
-                    sound = select
-                    GV_controls.first()
-                }
-                //Last
-                if(api.keys.isPageDown(event)){
-                    sound = select
-                    GV_controls.last()
-                }
-
-                if(api.keys.isFilters(event)){
-                    currentGame.favorite = !currentGame.favorite
-                    sound = toggle_up
-                }
-                if(sound != null)
-                    sound.play()
-            }
-        //--END gameView Controls
-
-        //--START header Controls
-            if(header.focus){
-                //Down
-                if(event.key == Qt.Key_S || event.key == Qt.Key_Down){
-                    HEADER_controls.down()
-                }
-                //Left
-                if(event.key == Qt.Key_A || event.key == Qt.Key_Left){
-                    HEADER_controls.left()
-                }
-                //Right
-                if(event.key == Qt.Key_D || event.key == Qt.Key_Right){
-                    HEADER_controls.right()
-                }
-                //Accept
-                if ((api.keys.isAccept(event) && !event.isAutoRepeat) || event.key == Qt.Key_Space) {
-                    HEADER_controls.accept()
-                    event.accepted = true
-                }
-            }
-        //--END header controls
-
-        //--START searchbox Controls
-            if(header.searchTerm.focus){
-                if ((api.keys.isCancel(event) && !event.isAutoRepeat) || event.key == Qt.Key_Down ) {
-                    event.accepted = true;
-                    U.focusToggle()
-                }
-            }
-        //--END searchbox controls
-        
-        //--START settings panel controls--//
-            if(settingsPanel.focus){
-                if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.focusToggle()
-                    event.accepted = true
-                }
-            }
-        //--END settings panel controls--//
-
-        //--START collections panel controls--//
-            if(collectionsView.collectionView_list.focus){
-                //down
-                if(
-                    event.key == Qt.Key_S || 
-                    event.key == Qt.Key_Down
-                ){
-                    COLLECTION_controls.down()
-                    select.play()
-                }
-                //up
-                if(
-                    event.key == Qt.Key_W || 
-                    event.key == Qt.Key_Up
-                ){
-                    COLLECTION_controls.up()
-                    select.play()
-                }
-                //Left
-                if(event.key == Qt.Key_A || event.key == Qt.Key_Left){
-                    COLLECTION_controls.left()
-                    select.play()
-                }
-                //Right
-                if(event.key == Qt.Key_D || event.key == Qt.Key_Right){
-                    COLLECTION_controls.right()
-                    select.play()
-                }
-                //accept
-                if (
-                    ((api.keys.isAccept(event) && 
-                    !event.isAutoRepeat) || 
-                    event.key == Qt.Key_Space) && 
-                    event.accepted != true
-                ){
-                    COLLECTION_controls.accept()
-                    collectionsView.currentItem.currentIndex = 0
-                    event.accepted = true
-                }
-                if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.focusToggle()
-                    collectionsView.currentItem.currentIndex = 0
-                    event.accepted = true
-                }
-            }
-        //--END collections panel controls--//
-
-        //Open/close info panel with button press
-        if(api.keys.isDetails(event)){
-            if(info.state != "opened"){
-                U.focusToggle("info")
-            } else {
-                U.focusToggle()
-            }
-        }
-        //--START info panel controls--//
-            if(info.focus){
-                //Up
-                if(
-                    event.key == Qt.Key_W || 
-                    event.key == Qt.Key_Up
-                ){
-                    INFO_controls.up()
-                }
-
-                //Down
-                if(
-                    event.key == Qt.Key_S || 
-                    event.key == Qt.Key_Down
-                ){
-                    INFO_controls.down()
-                }
-
-                //left
-                if(
-                    event.key == Qt.Key_A || 
-                    event.key == Qt.Key_Left
-                ){
-                    INFO_controls.left()
-                }
-
-                //Right
-                if(
-                    event.key == Qt.Key_D || 
-                    event.key == Qt.Key_Right
-                ){
-                    INFO_controls.right()
-                }
-
-                if (
-                    ((api.keys.isAccept(event) && 
-                    !event.isAutoRepeat) || 
-                    event.key == Qt.Key_Space) && 
-                    event.accepted != true
-                ){
-                    INFO_controls.accept()
-                    event.accepted = true
-                }
-
-                if(api.keys.isFilters(event)){
-                    currentGame.favorite = !currentGame.favorite
-                    toggle_up.play()
-                }
-
-                if (api.keys.isCancel(event) && !event.isAutoRepeat){
-                    U.focusToggle()
-                    event.accepted = true
-                }
-            }
-        //--END info panel controls--//
-    }
-//
 
 //--Audio--//
     MediaPlayer {
@@ -355,7 +156,7 @@ Component.onCompleted: {
 	}
 
     MediaPlayer {
-		id: toggle_up
+		id: toggle
 		source: "assets/sounds/hc_down.wav"
 		volume: settings.uiMute ? 0 : settings.uiVolume
 		loops : 1
@@ -376,116 +177,159 @@ Component.onCompleted: {
 	}
 //
 
-//--Background--//
-    Background {
-        id: background
-    }
-//
 
-//--Header--//
-    Header {
-        id: header
-    }
-//
+//[>--\/-MAIN-\/--<]
+    //--Background--//
+        Background {
+            id: background
+            Keys.forwardTo: parent
+        }
+    //
+    //--Header--//
+        Header {
+            id: header
+            Keys.forwardTo: parent
 
-//--GameLayout--//
-    GameLayout{
-        id: games
-        //visible: false
-    }
-//
+            focus: f === "header"
+        }
+    //
+    //--CollectionsList--//
+        CollectionsView {
+            id: collectionsList
+            Keys.forwardTo: parent
 
-//--Info Panel--//
-    InfoPanel {
-        id: info
-    }
-//
+            focus: f === "collections"
 
-//--CollectionsView--//
-    CollectionsView{
-        id: collectionsView
-    }
-//
+            anchors.top: header.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+    //
+    //--GameLayout--//
+        GameLayout{
+            id: games
+            Keys.forwardTo: parent
 
-//-- Settings Panel--//
-    SettingsPanel{
-        id: settingsPanel
-    }
-//
+            focus: f === "games"
 
-//--Dev Tools--//
-    Rectangle{
-        width: parent.width / 3
-        visible: settings.enableDevTools
-        anchors{
-            top: parent.top
-            right: parent.right
-            bottom: testButton.top
-            bottomMargin: vpx(12)
+            anchors.top: collectionsList.bottom
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            anchors.rightMargin: vpx(24)
+            anchors.leftMargin: vpx(24)
+        }
+    //
+    //--Info Panel--//
+        InfoPanel {
+            id: info
+            Keys.forwardTo: parent
+
+            focus: f === "info"
+            state: f === "info" ? "opened" : ""
+        }
+    //
+    //-- Settings Panel--//
+        SettingsPanel{
+            id: settingsPanel
+            Keys.forwardTo: parent
+
+            focus: f === "settings"
+            state: f === "settings" ? "opened" : ""
+        }
+    //
+    //--Dev Tools--//
+        Rectangle{
+            id:clog_window
+            width: parent.width / 3
+            visible: settings.enableDevTools
+            anchors{
+                top: parent.top
+                right: parent.right
+                bottom: devButton.top
+                bottomMargin: vpx(12)
+            }
+
+            color: U.addAlphaToHex(settings.consoleLogBackground,p.black)
+
+            clip: true
+
+            Item{
+                    anchors.fill: parent
+                    anchors.margins: vpx(12)
+                    clip: true
+                TextEdit{
+                    id: consoleLog
+                    color: p.white
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    wrapMode: TextEdit.WordWrap
+                }
+            }
         }
 
-        color: Qt.rgba (0,0,0, settings.consoleLogBackground)
+        Rectangle {
+            id: devButton
+            height: vpx(48)
+            width: vpx(48)
+            radius: vpx(48)
+            color: p.white
+            visible: devButtonMouse.enabled
 
-        clip: true
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                margins: vpx(12)
+            }
 
-        Item{
+            states: [
+                State{
+                    name: "hovered"
+                    PropertyChanges{target: devButton; color: p.black}
+                }
+            ]
+
+            MouseArea {
+                id: devButtonMouse
+                enabled: settings.enableDevTools
                 anchors.fill: parent
-                anchors.margins: vpx(12)
-                clip: true
-            TextEdit{
-                id: consoleLog
-                color: settings.colors.white
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                wrapMode: TextEdit.WordWrap
+                hoverEnabled: true
+
+                onEntered: {
+                    devButton.state = "hovered"
+                }
+
+                onExited: {
+                    devButton.state = ""
+                }
+
+                onClicked: {
+                    select.play()
+                    log("DEV-BUTTON", true)
+                    mouse.event = accepted
+                }
             }
         }
-    }
-
-
-    Rectangle {
-        id: testButton
-        height: vpx(48)
-        width: vpx(48)
-        radius: vpx(48)
-        color: settings.colors.white
-        visible: testButtonMouse.enabled
-
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-            margins: vpx(12)
+    //
+    //--FUNCTIONS--//
+        Functions {
+        id: functions 
         }
+        //GetSimpleKeys
+        property var gsk: functions.gsk
+        //GetCurrentGame
+        property var gcg: functions.gcg
+        //Log
+        property var log: functions.log
+        //getAssets
+        property var getAssets: functions.getAssets
+    //
+//[>--/\-MAIN-/\--<]
 
-        states: [
-            State{
-                name: "hovered"
-                PropertyChanges{target: testButton; color: settings.colors.black}
-            }
-        ]
 
-        MouseArea {
-            id: testButtonMouse
-            enabled: settings.enableDevTools
-            anchors.fill: parent
-            hoverEnabled: true
 
-            onEntered: {
-                testButton.state = "hovered"
-            }
-
-            onExited: {
-                testButton.state = ""
-            }
-
-            onClicked: {
-                select.play()
-                U.clog("--dev button clicked--")
-                mouse.event = accepted
-            }
-        }
-    }
-//
     focus: true
 }
