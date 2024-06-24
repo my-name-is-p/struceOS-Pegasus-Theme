@@ -1,21 +1,41 @@
 # struceOS-Pegasus-Theme
 
+- [Description](#description)
+- [Version Updates](#current-version)
+- [To come in future updates](#to-come)
+- [Metadata Generation and Asset Scraping](#meta-data)
+- [Controls](#controls)
+    - [Mouse/Keyboard](#controls-mkb)
+    - [Gamepad](#controls-gamepad)
+- [Settings](#settings)
+- [Thank yous](#thank-yous)
+- [Installation](#installation)
+- [Download](#download)
+- [Changelog](#changelog)
+
 ![screenshot_1](.meta/screenshot_1.jpg)
 ![screenshot_2](.meta/screenshot_2.jpg)
 ![screenshot_3](.meta/screenshot_3.jpg)
 ![screenshot_4](.meta/screenshot_4.jpg)
 ![screenshot_5](.meta/screenshot_5.jpg)
 
+<a id="description"></a>
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
 
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
+<a id="current-version"></a>
 # Version 1.4.0 Updates
 1. Start of rewrite to simplify logic and improve modularity
 2. Added a clock
 3. Redesigned collection list
 
+<a id="to-come"></a>
+# To come in future updates
+1. Gamepad and Keyboard controls for the settings panel
+
+<a id="meta-data"></a>
 # Metadata Generation and Asset Scraping
 I recommend using [muldjord's skyscraper](https://github.com/muldjord/skyscraper) for metadata generation. Simply follow the directions for your installation type. Example commands below (tested in PowerShell on Windows 11):
 
@@ -98,24 +118,54 @@ A full set of assets for manual setup would be (multiples listed in order of pri
 3. **assets.logo/assets.wheel** - used for the logo in the info panel
 4. **assets.video** - used for the video in the info panel
 
-# Thank yous
-Thank you to both [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
-
-# To come in future updates
-1. Gamepad and Keyboard controls for the settings panel
-
 # Controls
+<a id="controls-mkb"></a>
 - Keyboard/Mouse
-    - Navigate: WASD / Arrow Keys / Mouse click
-    - Prev/Next Collection: Q / E
-    - Toggle Info Panel: I 
+    - Main view
+        - Navigate: WASD / Arrow Keys / Mouse click
+        - Prev/Next Collection: Q / E / - / =
+        - Quick collection select: 1 - 9
+        - Toggle Info Panel: I
+        - Toggle Favorite: F
+        - Select: Enter / Space
+        - Pegasus Menu: Esc
+    - Header
+        - Navigate: WASD / Arrow Keys / Mouse click / Q / E / - / =
+        - Toggle Info Panel: I
+        - Toggle Favorite Filter: F
+        - Select: Enter / Space
+    - Info view
+        - Navigate: WASD / Arrow Keys / Mouse click
+        - Previous/Next game: Q / E / - / =
+        - First/Last game: LT / RT
+        - Toggle Info Panel: I
+        - Toggle Favorite: F
+        - Select: Enter / Space
 
+<a id="controls-gamepad"></a>
 - Gamepad
-    - Navigate: Joystick / D-Pad
-    - Prev/Next Collection: RB / LB
-    - Toggle Info Panel: X / ▢
+    - Main view
+        - Navigate: Joystick / D-Pad
+        - Previous/Next collection: LB / RB
+        - First/Last game: LT / RT
+        - Toggle Info Panel: X (Xbox) / ▢ (PS)
+        - Toggle Favorite: Y (Xbox) / △ (PS)
+        - Select: A (Xbox) / X (PS)
+        - Pegasus Menu: B (Xbox) / ⭘
+    - Header
+        - Navigate: Joystick / D-Pad / LB / RB
+        - Toggle Info Panel: X (Xbox) / ▢ (PS)
+        - Toggle Favorite Filter: Y (Xbox) / △ (PS)
+        - Select: A (Xbox) / X (PS)
+    - Info view
+        - Navigate: Joystick / D-Pad
+        - Previous/Next game: LB / RB
+        - First/Last game: LT / RT
+        - Toggle Info Panel: X (Xbox) / ▢ (PS)
+        - Toggle Favorite: Y (Xbox) / △ (PS)
+        - Select: A (Xbox) / X (PS)
 
-# Customizable Settings
+# Settings
 The most useful settings are now in a settings panel within the theme. The rest can be found in template/Settings.qml. The default settings are below for reference:
 
 <details>
@@ -237,6 +287,8 @@ The most useful settings are now in a settings panel within the theme. The rest 
     property bool working: false
 </details>
 
+# Thank yous
+Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
 
 # Installation
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
@@ -246,6 +298,7 @@ Download struceOS-Pegasus-Theme-1.4.0.zip from [last releases](https://github.co
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
+<a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
 
