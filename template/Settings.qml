@@ -18,43 +18,43 @@ Item {
     property string headerSize: api.memory.get("struceOS_ui_headerSize") || "m"
 
     property bool twelvehour: 
-        api.memory.get("struceOS_ui_twelvehour") === false ?
-            false : true
+        api.memory.get("struceOS_ui_twelvehour") != undefined ?
+            api.memory.get("struceOS_ui_twelvehour") : true
 
     //audio
         //video
-        property bool videoMute: 
-            api.memory.get("struceOS_video_videoMute") === false ?
-                false : true
+        property bool videoMute:
+            api.memory.get("struceOS_video_videoMute") != undefined ?
+                api.memory.get("struceOS_video_videoMute") : true
 
         property real videoVolume: api.memory.get("struceOS_video_volume") || 0.40
     
         //ui
         property bool uiMute: 
-            api.memory.get("struceOS_ui_Mute") === false ?
-                false : true
+            api.memory.get("struceOS_ui_Mute") != undefined ?
+                api.memory.get("struceOS_ui_Mute") : false
 
-        property real uiVolume: api.memory.get("struceOS_ui_volume") || 0.60
+        property real uiVolume: api.memory.get("struceOS_ui_volume") || 0.40
 
     //game_layout
     property int columns: api.memory.get("struceOS_gameLayout_columns") || 5
 
     property bool lastPlayed: 
-        api.memory.get("struceOS_gameLayout_lastPlayed") === false ?
-            false : true
+        api.memory.get("struceOS_gameLayout_lastPlayed") != undefined ?
+            api.memory.get("struceOS_gameLayout_lastPlayed") : true
 
     property bool allGames: 
-        api.memory.get("struceOS_gameLayout_allGames") === false ?
-            false : true
+        api.memory.get("struceOS_gameLayout_allGames") != undefined ?
+            api.memory.get("struceOS_gameLayout_allGames") : true
 
     property bool showThumbs: 
-        api.memory.get("struceOS_gameLayout_thumbnails") === false ?
-            false : true
+        api.memory.get("struceOS_gameLayout_thumbnails") != undefined ?
+            api.memory.get("struceOS_gameLayout_thumbnails") : true
 
     //background
     property bool bgOverlayOn:
-        api.memory.get("struceOS_background_overlayOn") === false ?
-        false : true
+        api.memory.get("struceOS_background_overlayOn") != undefined ?
+            api.memory.get("struceOS_background_overlayOn") : true
 
     property real bgOverlayOpacity: api.memory.get("struceOS_background_overlayOpacity") || 0.75
 
@@ -62,10 +62,11 @@ Item {
 
     //devtools
     property bool enableDevTools:
-        api.memory.get("struceOS_dev_enableDevTools") === false ?
-        false : true
+        api.memory.get("struceOS_dev_enableDevTools") != undefined ?
+            api.memory.get("struceOS_dev_enableDevTools") : false
 
-    property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.5
+
+    property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
     property string version: "1.5.0"
     property string name: "struceOS"

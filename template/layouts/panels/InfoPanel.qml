@@ -49,6 +49,8 @@ Item {
             }
 
             property var onUp: function(){
+                video.video.stop()
+                games.currentIndex = 0
                 header.current = header.collection
                 f = header
                 panel.current = panel
@@ -83,6 +85,8 @@ Item {
             }
 
             property var onUp: function(){
+                video.video.stop()
+                games.currentIndex = games.columns - 1
                 header.current = header.search_button
                 f = header
                 panel.current = panel

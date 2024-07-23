@@ -136,6 +136,8 @@ FocusScope {
         property var collectionNext: U.collectionNext
         //collectionPrevious
         property var collectionPrevious: U.collectionPrevious
+        //clearMemory
+        property var clearMemory: U.clearMemory
     //--
 
    	FontLoader { id: regular; source: settings.fontFamilyRegular }

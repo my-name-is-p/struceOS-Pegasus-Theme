@@ -87,6 +87,62 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
+                clearMemory()
+                mouse.event = accepted
+            }
+
+            onDoubleClicked: {
+                mouse.event = accepted
+            }
+        }
+    }
+
+    Rectangle { //button
+        id: clear_mem
+
+        anchors.verticalCenter: button.verticalCenter
+        anchors.left: parent.left
+        anchors.margins: vpx(24)
+
+        height: clear_mem_text.height + vpx(12)
+        width: clear_mem_text.width + vpx(12)
+
+        radius: vpx(6)
+
+        color: hovered ? p.launch : p.launch_hover
+
+        visible: true
+
+        property var hovered: false
+
+        Text {
+            id: clear_mem_text
+            anchors.centerIn: parent
+            text: "clear memory"
+
+            color: clear_mem.hovered ? p.white : p.black
+        }
+
+        MouseArea { //button_click
+            id: clear_mem_click
+            enabled: true
+            anchors.fill: parent
+            hoverEnabled: true
+
+            cursorShape: Qt.PointingHandCursor
+
+            onEntered: {
+                clear_mem.hovered = true
+            }
+
+            onExited: {
+                clear_mem.hovered = false
+            }
+
+            onClicked: {
+                audio.stopAll()
+                audio.select.play()
+                clearMemory()
                 mouse.event = accepted
             }
 
