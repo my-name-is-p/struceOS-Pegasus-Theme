@@ -87,7 +87,6 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
-                clearMemory()
                 mouse.event = accepted
             }
 

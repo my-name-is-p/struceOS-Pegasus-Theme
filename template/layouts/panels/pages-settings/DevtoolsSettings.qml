@@ -219,6 +219,7 @@ Item {
                 api.memory.set("struceOS_dev_enableDevTools", settings.enableDevTools)
                 if(settings.enableDevTools)
                     log("struceOS v" + settings.version + (settings.working ? "-working" : ""), false, true)
+                
             }
             property var onAccept: onClicked
 
