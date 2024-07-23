@@ -1,31 +1,21 @@
 // struceOS
 // Copyright (C) 2024 strucep
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-// Thank you to VGmove creator of EasyLaunch <https://github.com/VGmove/EasyLaunch>
-// for the collection logos, images, audio, and various functionality
-
-
-import QtQuick 2.0
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
-    readonly property alias games: gamesFiltered
+    id: search
+    property alias model: gamesFiltered
     property string firstWordIgnoreList
-    function currentGame(index) { return currentCollection.games.get(gamesFiltered.mapToSource(index)) }
+
+    function currentGame(index) { 
+        return currentCollection.games.get(gamesFiltered.mapToSource(index)) 
+    }
+
+    function populateModel(){
+        gamesFiltered.clear() // Clear existing entries
+    }
 
     SortFilterProxyModel {
         id: gamesFiltered
@@ -33,15 +23,33 @@ id: root
         filters: [
             RegExpFilter { 
                 roleName: "title"; 
-                pattern: header.searchTerm.text 
+                pattern: header.search_term.text 
                 caseSensitivity: Qt.CaseInsensitive;
-                enabled: header.searchTerm.text != ""
+                enabled: header.search_term.text != ""
             },
 
             ValueFilter { 
                 roleName: "favorite"; 
                 value: true;
-                enabled: header.favorite.filterEnabled
+                enabled: sortfilt_menu.favorite.enabled
+            }
+        ]
+        sorters: [
+            RoleSorter { 
+                roleName: "sortBy" 
+                sortOrder: sortfilt_menu.title.asc ? Qt.AscendingOrder : Qt.DescendingOrder
+                enabled: sortfilt_menu.title.enabled
+            },
+            RoleSorter { 
+                roleName: "lastPlayed" 
+                sortOrder: sortfilt_menu.last_played.asc ? Qt.DescendingOrder : Qt.AscendingOrder
+                enabled: sortfilt_menu.last_played.enabled
+            },
+
+            RoleSorter { 
+                roleName: "playTime" 
+                sortOrder: sortfilt_menu.play_time.asc ? Qt.AscendingOrder : Qt.DescendingOrder
+                enabled: sortfilt_menu.play_time.enabled
             }
         ]
     }

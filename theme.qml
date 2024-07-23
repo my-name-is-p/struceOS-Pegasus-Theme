@@ -19,6 +19,18 @@
 // for easy to read code
 
 // Changelogs
+// #1.5.0 
+//      1. Moved panel items to new window
+//      2. Added sort/filter menu
+//      3. Added navigation for controllers/kb to all menues
+//      4. Removed old code
+//      5. Finished rewrite to simplify for now
+
+// #1.4.1 - Unreleased
+//      1. Moved sort/filter to top of gameView
+//      2. Changed thumbnails to gameOS style
+//      3. Continue rewrite to simplify
+
 // #1.4.0
 //      1. Start of rewrite to simplify logic and improve modularity
 //      2. Added a clock
@@ -73,263 +85,172 @@
 //      1. Initial release
 
 // TO DO --------------------------------------------------------------------------------------
-// 1. Add Gamepad controls to Settings and Info panels
+// 1. Add button hints
+// 2. Add genre filters
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15
 import QtMultimedia 5.9
 
-
 import "template"
-import "template/extras"
-import "controls"
+import "template/layouts"
+import "template/widgets"
 
 import "utils.js" as U
 
 FocusScope {
     id: root
-    //Keys.forwardTo: custom_keys
 
-    //--Settings--Customize these to your liking. Now found in template/Settings.qml. Default settings: <https://github.com/strucep/struceOS-Pegasus-Theme?tab=readme-ov-file#customizable-settings> --//
-    Settings {
-        id: settings
+    property int currentCollectionIndex: 0
+    property var currentCollection: {
+        if(currentCollectionIndex >= 0)
+            return api.collections.get(currentCollectionIndex)
+        else{
+            return {
+                name: "All games",
+                shortName: "allgames",
+                games: api.allGames
+            }
+        }
     }
-    //---------------------------------------------------------------------------------------------------------------------//
+    property GridView games: game_layout.games
+    property var currentGame: search.currentGame(games.currentIndex)
+
+    property Item f: game_layout
+    property string bg: getAssets(currentGame.assets).bg
+    property var p: settings.theme
+    property var s: null
+    
+    //--FUNCTIONS--//
+        //GetSimpleKeys
+        property var gsk: U.gsk
+        //Log
+        property var log: U.log
+        //getAssets
+        property var getAssets: U.getAssets
+        //alphaDecToHex
+        property var alphaDecToHex: U.alphaDecToHex
+        //alphaDecToHex
+        property var addAlphaToHex: U.addAlphaToHex
+        //collectionNext
+        property var collectionNext: U.collectionNext
+        //collectionPrevious
+        property var collectionPrevious: U.collectionPrevious
+    //--
 
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
 
-    //property bool loadTimeout: false
-
-    property int currentCollectionIndex: 4
-    property var currentCollection: U.getCollection(currentCollectionIndex)
-    property var currentGame: search.currentGame(games.gameView.currentIndex)
-
-    property bool fade_block: false
-
-    //Quick access variables (QAV)
-    property string bg
-    property var p: settings.theme          //theme palette
-    property var s: null                    //key sound
-    property string f: "games"                 //current focus
-    property var g: {                       //gameView Details
-        "g": games.gameView,                    //gameView GridView
-        "i": games.gameView.currentIndex,       //gameView GridView - current index
-        "start": 0,                             //gameView GridView - first index
-        "end": games.gameView.count - 1,        //gameView GridView - final index
-        "cols": settings.columns,               //gameView GridView - column count
-        "current": search.currentGame(games.gameView.currentIndex)
-    }
-    property var c: {                       //collections Details
-        "c": api.collections,                   //all collections
-        "i": 0,                                 //current collection index
-        "start": 0,                             //fist collection
-        "end": api.collections.count - 1,       //last collection
-        "all": settings.allGames,               //all games toggle
-        "current": U.getCollection(0),          //current collection
+    Settings {
+        id: settings
     }
 
+    Search {
+        id: search
+    }
 
-Search {
-    id: search
-}
-//--Run on loaded--//
-Component.onCompleted: {
-    c.i = 
-        api.memory.get("collectionIndex") != undefined ? 
-        api.memory.get("collectionIndex") : 
-        0;
-    currentCollection = c.current = U.getCollection(c.i) || 0
-    g.g.currentIndex = g.i = api.memory.get("gameIndex") || 0
-    bg = getAssets(currentGame.assets).bg
-    home.play()
-    log("struceOS v" + settings.version + (settings.working ? "-working" : ""))
-}
+    Audio {
+        id: audio
+    }
 
+    Images {
+        id: images
+    }
 
-//--Audio--//
-    MediaPlayer {
-		id: select
-		source: "assets/sounds/lc.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
-		loops : 1
-	}
+    Background {
+        id: background
+        fade_time: 200
+    }
+    
+    Header {
+        id: header
 
-    MediaPlayer {
-		id: toggle
-		source: "assets/sounds/hc_down.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
-		loops : 1
-	}
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-    MediaPlayer {
-		id: toggle_down
-		source: "assets/sounds/hc_up.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
-		loops : 1
-	}
+        focus: f === this
+    }
 
-    MediaPlayer {
-		id: home
-		source: "assets/sounds/home.mp3"
-		volume: settings.uiMute ? 0 : settings.uiVolume
-		loops : 1
-	}
-//
+    CollectionMenu {
+        id: collections_menu
 
+        anchors.top: header.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-//[>--\/-MAIN-\/--<]
-    //--Background--//
-        Background {
-            id: background
-            Keys.forwardTo: parent
-        }
-    //
-    //--Header--//
-        Header {
-            id: header
-            Keys.forwardTo: parent
+        focus: f === this
+    }
 
-            focus: f === "header"
-        }
-    //
-    //--CollectionsList--//
-        CollectionsView {
-            id: collectionsList
-            Keys.forwardTo: parent
+    PanelArea {
+        id: panel_area
 
-            focus: f === "collections"
+        anchors.right: parent.right
+        anchors.left: sortfilt_menu.right
+        anchors.top: collections_menu.bottom
 
-            anchors.top: header.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-        }
-    //
-    //--GameLayout--//
-        GameLayout{
-            id: games
-            Keys.forwardTo: parent
+        focus: f === this
+    }
 
-            focus: f === "games"
+    SortFilterToolbar{
+        id: sortfilt_toolbar
 
-            anchors.top: collectionsList.bottom
+        anchors.left: sortfilt_menu.right
+        anchors.right: parent.right
+        anchors.top: panel_area.bottom
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
+        focus: f === this
 
-            anchors.rightMargin: vpx(24)
-            anchors.leftMargin: vpx(24)
-        }
-    //
-    //--Info Panel--//
-        InfoPanel {
-            id: info
-            Keys.forwardTo: parent
+    }
 
-            focus: f === "info"
-            state: f === "info" ? "opened" : ""
-        }
-    //
-    //-- Settings Panel--//
-        SettingsPanel{
-            id: settingsPanel
-            Keys.forwardTo: parent
+    SortFilterMenu {
+        id: sortfilt_menu
 
-            focus: f === "settings"
-            state: f === "settings" ? "opened" : ""
-        }
-    //
-    //--Dev Tools--//
-        Rectangle{
-            id:clog_window
-            width: parent.width / 3
-            visible: settings.enableDevTools
-            anchors{
-                top: parent.top
-                right: parent.right
-                bottom: devButton.top
-                bottomMargin: vpx(12)
-            }
+        anchors.left: parent.left
+        anchors.top: collections_menu.bottom
+        anchors.bottom: parent.bottom
 
-            color: U.addAlphaToHex(settings.consoleLogBackground,p.black)
+        focus: f === this
+    }
 
-            clip: true
+    GameLayout {
+        id: game_layout
 
-            Item{
-                    anchors.fill: parent
-                    anchors.margins: vpx(12)
-                    clip: true
-                TextEdit{
-                    id: consoleLog
-                    color: p.white
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    wrapMode: TextEdit.WordWrap
-                }
-            }
-        }
+        anchors.top: sortfilt_toolbar.bottom
+        anchors.left: sortfilt_menu.right
+        anchors.bottom: parent.bottom
 
-        Rectangle {
-            id: devButton
-            height: vpx(48)
-            width: vpx(48)
-            radius: vpx(48)
-            color: p.white
-            visible: devButtonMouse.enabled
+        width: parent.width
 
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-                margins: vpx(12)
-            }
+        focus: f === this
+    }
 
-            states: [
-                State{
-                    name: "hovered"
-                    PropertyChanges{target: devButton; color: p.black}
-                }
-            ]
+    LaunchWindow {
+        id:launch_window
 
-            MouseArea {
-                id: devButtonMouse
-                enabled: settings.enableDevTools
-                anchors.fill: parent
-                hoverEnabled: true
+        anchors.fill: parent
 
-                onEntered: {
-                    devButton.state = "hovered"
-                }
+        visible: false
+    }
 
-                onExited: {
-                    devButton.state = ""
-                }
-
-                onClicked: {
-                    select.play()
-                    log("DEV-BUTTON", true)
-                    mouse.event = accepted
-                }
-            }
-        }
-    //
-    //--FUNCTIONS--//
-        Functions {
-        id: functions 
-        }
-        //GetSimpleKeys
-        property var gsk: functions.gsk
-        //GetCurrentGame
-        property var gcg: functions.gcg
-        //Log
-        property var log: functions.log
-        //getAssets
-        property var getAssets: functions.getAssets
-    //
-//[>--/\-MAIN-/\--<]
+    DevTools{
+        id: devtools
+    }
 
 
+    Component.onCompleted: {
+        currentCollectionIndex = api.memory.get("collectionIndex") || 0
+        games.currentIndex = api.memory.get("gameIndex") || 0
+        bg = getAssets(currentGame.assets).bg
+
+        if(settings.enableDevTools)
+            log("struceOS v" + settings.version + (settings.working ? "-working" : ""))
+
+        audio.stopAll()
+        audio.home.play()
+    }
+
+    property string test: settings.enableDevTools ? "test" : undefined
 
     focus: true
 }

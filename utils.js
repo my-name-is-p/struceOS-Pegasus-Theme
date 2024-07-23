@@ -1,13 +1,113 @@
+// struceOS
+// Copyright (C) 2024 strucep
+
+// GetSimpleKeys
+// returns a simplfied control set
+function gsk(event) {
+    if(isNaN(parseInt(event.text))){
+        let key = event.key
+        //not a switch because checking enum and event -- remember not to try changing
+        if(key == Qt.Key_Left || key == Qt.Key_A)
+            return "left"
+        if(key == Qt.Key_Right || key == Qt.Key_D)
+            return "right"
+        if(key == Qt.Key_Up || key == Qt.Key_W)
+            return "up"
+        if(key == Qt.Key_Down || key == Qt.Key_S)
+            return "down"
+        if(api.keys.isNextPage(event) || key == Qt.Key_Equal)
+            return "next"
+        if(api.keys.isPrevPage(event) || key == Qt.Key_Minus)
+            return "prev"
+        if(api.keys.isPageUp(event))
+            return "first"
+        if(api.keys.isPageDown(event))
+            return "last"
+        if(api.keys.isFilters(event))
+            return "filter"
+        if(api.keys.isDetails(event))
+            return "details"
+        if((api.keys.isAccept(event) || key == Qt.Key_Space) && !event.isAutoRepeat)
+            return "accept"
+        if(api.keys.isCancel(event))
+            return "cancel"
+    }else{
+        return parseInt(event.text)
+    }
+    return undefined
+}
+
+//getAssets
+function getAssets(assets){
+    let random = assets.screenshots.length > 1 ? Math.floor(Math.random() * assets.screenshots.length) : 0
+    let gotAssets = {}
+
+    // Background
+    gotAssets.bg = 
+        assets.screenshots[random] != undefined ?
+        assets.screenshots[random] :
+            assets.screenshot != "" ?
+            assets.screenshot :
+                assets.background != "" ? 
+                assets.background : 
+                    assets.banner != "" ? 
+                    assets.banner : 
+                        assets.boxFront != "" ? 
+                        assets.boxFront : 
+                    "default"
+
+    // Banner
+    gotAssets.banner = 
+        assets.steam != "" ? 
+        assets.steam : 
+            assets.banner != "" ? 
+            assets.banner : 
+                assets.boxFront != "" ? 
+                assets.boxFront : 
+                    assets.logo != "" ? 
+                    assets.logo :
+                        "default"
+
+    // Logo
+    gotAssets.logo = 
+        assets.logo != "" ? 
+        assets.logo : 
+                "default"
+
+    // Video
+    gotAssets.video = 
+        assets.video != "" ?
+        assets.video :
+            "default"
+    return gotAssets
+}
+
+//log
+function log(str = "", tag = "", clear = false){
+    let temp = devtools.log_text.text
+    let s = "\n"
+    if(!clear){
+        if( tag != ""){
+            temp = devtools.log_text.text + s + "[>--" + str + "--<]" 
+        } else {
+            temp = devtools.log_text.text + s + str
+        }
+    } else {
+        if( tag != ""){
+            temp = "[>--" + str + "--<]" 
+        } else {
+            temp = str
+        }
+    }
+    devtools.log_text.text = temp
+}
+
+//alphaDecToHex - Converts Decimal alpha value to Hex value
 function alphaDecToHex(alpha) {
-    // let t = Math.round(Math.max(0, Math.min(alpha, 1)) * 255)
-    // t = t.toString(16).toUpperCase()
-    // t = t.padStart(2, '0')
-    //return t
-    
-    //condensed
     return Math.round(Math.max(0, Math.min(alpha, 1)) * 255).toString(16).toUpperCase().padStart(2, '0')
 }
 
+//addAlphaToHex - Adds an alpha value to a standard 6-digit Hex code
 function addAlphaToHex(alpha, hex) {
     hex = hex.replace(/^#/, '')
 
@@ -16,68 +116,87 @@ function addAlphaToHex(alpha, hex) {
     }
 
     const alphaHex = alphaDecToHex(alpha)
-
     return `#${alphaDecToHex(alpha)}${hex}`
 }
 
-function settingsUpdate(setting, currentValue){
-    let currentValueInt = parseInt(currentValue.text)
-    let currentValueFloat = parseFloat(currentValue.text)
-    switch(setting){
-        case "column_plus":
-            if(currentValueInt < settings.columnsMax){ settings.columns++ }
-            api.memory.set("struceOS_gameView_columns", settings.columns)
-            break;
-        case "column_minus":
-            if(currentValueInt > settings.columnsMin ){ settings.columns-- }
-            api.memory.set("struceOS_gameView_columns", settings.columns)
-            break;
-        case "general_volume_plus":
-            currentValueFloat + 0.05 < 1.0 ? settings.uiVolume = (currentValueFloat + 0.05).toFixed(2) : settings.uiVolume = 1
-            api.memory.set("struceOS_ui_volume", settings.uiVolume)
-            break
-        case "general_volume_minus":
-            currentValueFloat - 0.05 > 0 ? settings.uiVolume = parseFloat((currentValueFloat - 0.05).toFixed(2)) : settings.uiVolume = 0
-            api.memory.set("struceOS_ui_volume", settings.uiVolume)
-            break;
-        case "bg_opacity_plus":
-            currentValueFloat + 0.05 < 1.0 ? settings.bgOverlayOpacity = (currentValueFloat + 0.05).toFixed(2) : settings.bgOverlayOpacity = 1
-            api.memory.set("struceOS_background_overlayOpacity", settings.bgOverlayOpacity)
-            break;
-        case "bg_opacity_minus":
-            currentValueFloat - 0.05 > 0 ? settings.bgOverlayOpacity = parseFloat((currentValueFloat - 0.05).toFixed(2)) : settings.bgOverlayOpacity = 0
-            api.memory.set("struceOS_background_overlayOpacity", settings.bgOverlayOpacity)
-            break;
-        case "video_volume_plus":
-            currentValueFloat + 0.05 < 1.0 ? settings.videoVolume = (currentValueFloat + 0.05).toFixed(2) : settings.videoVolume = 1
-            api.memory.set("struceOS_video_volume", settings.videoVolume)
-            break;
-        case "video_volume_minus":
-            currentValueFloat - 0.05 > 0 ? settings.videoVolume = parseFloat((currentValueFloat - 0.05).toFixed(2)) : settings.videoVolume = 0
-            api.memory.set("struceOS_video_volume", settings.videoVolume)
-            break;
-        case "dev_log_opacity_plus":
-            currentValueFloat + 0.05 < 1.0 ? settings.consoleLogBackground = (currentValueFloat + 0.05).toFixed(2) : settings.consoleLogBackground = 1
-            api.memory.set("struceOS_dev_log_opacity", settings.consoleLogBackground)
-            break;
-        case "dev_log_opacity_minus":
-            currentValueFloat - 0.05 > 0 ? settings.consoleLogBackground = parseFloat((currentValueFloat - 0.05).toFixed(2)) : settings.consoleLogBackground = 0
-            api.memory.set("struceOS_dev_log_opacity", settings.consoleLogBackground)
-            break;
-        default:
-            break;
+//collectionNext
+function collectionNext(){
+    games.currentIndex = 0
+    if(currentCollectionIndex != api.collections.count - 1){
+        currentCollectionIndex++
+    }else{
+        if(settings.allGames)
+            currentCollectionIndex = -1
+        else
+            currentCollectionIndex = 0
     }
-    select.play()
+    background.refresh()
 }
 
-function getCollection(i){
-    if(i >= 0){
-        return api.collections.get(i)
-    } else if (i === -1) {
-        return {
-            name: "All games",
-            shortName: "allgames",
-            games: api.allGames
+//collectionPrevious
+function collectionPrevious(){
+    games.currentIndex = 0
+    if(currentCollectionIndex != -1){
+        if(currentCollectionIndex != 0){
+            currentCollectionIndex--
+        }else{
+            if(settings.allGames)
+                currentCollectionIndex = -1
+            else
+                currentCollectionIndex = api.collections.count - 1
         }
+    }else{
+        currentCollectionIndex = api.collections.count - 1
     }
+    background.refresh()
 }
+
+function logVideoStates(){
+    log("--video.status--")
+    log("NoMedia: " + MediaPlayer.NoMedia)
+    log("Loading: " + MediaPlayer.Loading)
+    log("Loaded: " + MediaPlayer.Loaded)
+    log("Buffering: " + MediaPlayer.Buffering)
+    log("Stalled: " + MediaPlayer.Stalled)
+    log("Buffered: " + MediaPlayer.Buffered)
+    log("EndOfMedia: " + MediaPlayer.EndOfMedia)
+    log("InvalidMedia: " + MediaPlayer.UnknownStatus)
+    log("--video.playbackState--")
+    log("PlayingState: " + MediaPlayer.PlayingState)
+    log("PausedState: " + MediaPlayer.PausedState)
+    log("StoppedState: " + MediaPlayer.StoppedState)
+}
+
+function logFocus(){
+    log("root: " + root.focus)
+    log("settings: " + settings.focus)
+    log("search: " + search.focus)
+    log("audio: " + audio.focus)
+    log("images: " + images.focus)
+    log("background: " + background.focus)
+    log("header: " + header.focus)
+    log("collections_menu: " + collections_menu.focus)
+    log("panel_area: " + panel_area.focus)
+    log("sortfilt_toolbar: " + sortfilt_toolbar.focus)
+    log("sortfilt_menu: " + sortfilt_menu.focus)
+    log("game_layout: " + game_layout.focus)
+    log("launch_window: " + launch_window.focus)
+}
+
+function clearMemory(){
+    api.memory.unset("struceOS_ui_headerSize")
+    api.memory.unset("struceOS_ui_twelvehour")
+    api.memory.unset("struceOS_video_videoMute")
+    api.memory.unset("struceOS_video_volume")
+    api.memory.unset("struceOS_ui_Mute")
+    api.memory.unset("struceOS_ui_volume")
+    api.memory.unset("struceOS_gameLayout_columns")
+    api.memory.unset("struceOS_gameLayout_lastPlayed")
+    api.memory.unset("struceOS_gameLayout_allGames")
+    api.memory.unset("struceOS_gameLayout_thumbnails")
+    api.memory.unset("struceOS_background_overlayOn")
+    api.memory.unset("struceOS_background_overlayOpacity")
+    api.memory.unset("struceOS_dev_enableDevTools")
+    api.memory.unset("struceOS_dev_log_opacity")
+}
+
