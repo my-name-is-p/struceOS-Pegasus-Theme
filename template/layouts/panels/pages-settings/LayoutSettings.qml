@@ -140,7 +140,7 @@ Item { //page
                     text: "small"
 
                     anchors.right: header_settings_size_medium.left
-                    anchors.rightMargin: vpx(12)
+                    anchors.rightMargin: vpx(18)
 
                     siblings: parent.children
 
@@ -165,7 +165,7 @@ Item { //page
                     text: "medium"
 
                     anchors.right: header_settings_size_large.left
-                    anchors.rightMargin: vpx(12)
+                    anchors.rightMargin: vpx(18)
 
                     siblings: parent.children
 

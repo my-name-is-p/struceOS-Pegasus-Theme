@@ -99,7 +99,7 @@ Item {
             visible: collection.selected
 
             border.color: p.border
-            border.width: vpx(3)
+            border.width: vpx(6)
             radius: vpx(6)
         }
 
@@ -349,7 +349,7 @@ Item {
                             current.onDown()
                         }else{
                             if(games.currentIndex < stest.columns / 2){
-                                games.currentIndex = stest.columns - 1
+                                games.currentIndex = Math.min(games.count - 1, stest.columns - 1)
                             }
                             onCancel()
                         }

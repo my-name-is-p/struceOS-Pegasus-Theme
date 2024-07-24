@@ -28,11 +28,15 @@ Item {
 
     Rectangle {
         id: radio_item_select
-        anchors.fill: parent
-        anchors.margins: vpx(-3)
-        radius: vpx(3)
 
-        opacity: radio_button.selected || radio_button.hovered ? 0.3 : 0
+        anchors.fill: parent
+        anchors.margins: vpx(-6)
+
+        color: addAlphaToHex(0.6, p.white)
+
+        radius: vpx(6)
+
+        visible: radio_button.selected || radio_button.hovered
     }
     
     Item { //radio_item

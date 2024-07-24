@@ -17,6 +17,18 @@ Item {
 
 
     Rectangle {
+        id: select
+
+        anchors.fill: parent
+        anchors.margins:vpx(-6)
+
+        color: addAlphaToHex(0.6, p.white)
+        radius: vpx(6)
+
+        visible: donation_button.selected || donation_button.hovered
+    }
+
+    Rectangle {
         id: background
         anchors.fill: parent
 

@@ -22,7 +22,7 @@ Item {
     property bool selected: false
     property bool hovered: false
 
-    Item {
+    Item { //icon_wrapper
         id: icon_wrapper
         height: parent.height - vpx(6)
         width: height
@@ -37,7 +37,7 @@ Item {
 
         }
 
-        Rectangle {
+        Rectangle { //hover
             id: hover
             anchors.fill: parent
             color: button_wrapper.hover_color
@@ -48,7 +48,7 @@ Item {
             Behavior on opacity {NumberAnimation {duration: stest.hover_speed}}
         }
 
-        Image { 
+        Image { //icon
             id: icon
             source: button_wrapper.icon
             anchors.fill: parent
@@ -61,7 +61,7 @@ Item {
             visible: false
         }
 
-        Rectangle {
+        Rectangle { //icon_color
             id: icon_color
             anchors.fill: icon
             color: button_wrapper.icon_color
@@ -76,11 +76,12 @@ Item {
         }
     }
 
-    Rectangle {
+    Rectangle { //select
         id: select
         anchors.fill: parent
+        anchors.margins: vpx(-3)
         color: p.t
-        border.width: vpx(3)
+        border.width: vpx(6)
         border.color: p.border
 
         radius: vpx(6)
@@ -88,7 +89,7 @@ Item {
         visible: parent.selected
     }
 
-    MouseArea{
+    MouseArea{ //click
         id: click
 
         anchors.fill: parent

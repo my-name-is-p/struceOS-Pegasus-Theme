@@ -103,13 +103,40 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
+            Image {
+                id: leftSlash
+                source: images.slash
+
+                anchors.left: leftBumper.right
+                anchors.leftMargin: vpx(6)
+
+                width: vpx(12)
+                height: vpx(12)
+                
+
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Image {
+                id: key_q
+                source: images.key_q
+
+                anchors.left: leftSlash.right
+                anchors.leftMargin: vpx(6)
+                
+                width: vpx(24)
+                height: vpx(24)
+
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             Item { //page_list
                 id: page_list
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                anchors.left: leftBumper.right
-                anchors.leftMargin: vpx(12)
+                anchors.left: key_q.right
+                anchors.leftMargin: vpx(24)
 
                 property Item current: page_list_layout
 
@@ -239,17 +266,45 @@ Item {
                 }
             }
 
+            Image {
+                id: key_e
+                source: images.key_e
+
+                anchors.left: page_list.right
+                anchors.leftMargin: vpx(24)
+                
+                width: vpx(24)
+                height: vpx(24)
+
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Image {
+                id: rightSlash
+                source: images.slash
+
+                anchors.left: key_e.right
+                anchors.leftMargin: vpx(6)
+
+                width: vpx(12)
+                height: vpx(12)
+                
+
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+
             Image { //rightBumper
                 id: rightBumper
-
                 source: images.rightBumper
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: rightSlash.right
+                anchors.leftMargin: vpx(6)
 
                 width: vpx(32)
                 height: vpx(32)
 
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: page_list.right
-                anchors.leftMargin: vpx(12)
 
             }
         }

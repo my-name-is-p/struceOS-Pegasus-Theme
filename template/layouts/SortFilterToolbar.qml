@@ -98,7 +98,7 @@ Item { //sortfilt_toolbar_wrapper
             anchors.fill: parent
 
             border.color: p.border
-            border.width: vpx(3)
+            border.width: vpx(6)
             radius: vpx(6)
 
             color: p.t

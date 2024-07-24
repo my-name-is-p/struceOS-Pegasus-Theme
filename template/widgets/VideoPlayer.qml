@@ -349,13 +349,16 @@ Item { //viewer
                 property var onDown: onPrevious
                 property var onLast: onNext
 
-                Rectangle {
+                Rectangle { //video_scrub_handle_select
                     id: video_scrub_handle_select
                     anchors.fill: parent
-                    anchors.margins: vpx(6)
+                    anchors.margins: vpx(-6)
                     color: p.t
+
                     border.color: p.border
                     border.width: parent.selected ? vpx(6) : 0
+
+                    radius: vpx(6)
                 }
 
                 Timer {
@@ -610,9 +613,13 @@ Item { //viewer
                 Rectangle {
                     id: volume_slide_handle_select
                     anchors.fill: parent
+                    anchors.margins: vpx(-6)
                     color: p.t
+
                     border.color: p.border
                     border.width: parent.selected ? vpx(6) : 0
+
+                    radius: vpx(6)
                 }
 
             }

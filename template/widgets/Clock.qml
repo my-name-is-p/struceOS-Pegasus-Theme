@@ -97,7 +97,7 @@ import QtQuick 2.0
             color: p.t
 
             border.color: p.border
-            border.width: vpx(3)
+            border.width: vpx(6)
             radius: vpx(6)
 
             visible: clock_container.selected

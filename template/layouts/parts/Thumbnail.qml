@@ -35,13 +35,13 @@ Component {
             Rectangle { //thumb_border
                 id: thumb_border
                 anchors.fill: parent
-                anchors.margins: thumb.active ? vpx(-6) : vpx(0)
+                anchors.margins: thumb.active ? vpx(-8) : vpx(0)
 
                 color: addAlphaToHex(0.4, p.black)
 
                 radius: vpx(10)
                 border.color: p.border
-                border.width: thumb.active ? vpx(8) : 0
+                border.width: thumb.active ? vpx(10) : 0
 
                 Behavior on border.width {NumberAnimation {duration: thumb.transition_speed}}
                 Behavior on anchors.margins {NumberAnimation {duration: thumb.transition_speed}}

@@ -165,13 +165,13 @@ Item { //slider
                 id: handle_select
 
                 anchors.fill: parent
-                anchors.margins: vpx(-3)
+                anchors.margins: vpx(-6)
 
                 color: p.t
 
-                radius: vpx(3)
+                radius: vpx(6)
 
-                border.width: vpx(3)
+                border.width: vpx(6)
                 border.color: p.border
 
                 visible: handle.selected
@@ -189,9 +189,9 @@ Item { //slider
 
             color: p.t
 
-            radius: vpx(3)
+            radius: vpx(6)
 
-            border.width: vpx(3)
+            border.width: vpx(6)
             border.color: p.border
 
             visible: slider.selected && !handle.selected

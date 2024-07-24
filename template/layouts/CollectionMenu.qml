@@ -132,14 +132,16 @@ Rectangle {
                 id: collectionTitle_border
 
                 anchors.fill: parent
-                anchors.margins: vpx(-12)
+                anchors.margins: vpx(-6)
+
+                property bool selected: (collections_list.currentItem == parent && f === collections_menu) || hover
 
                 color: p.t
 
                 property bool hover: false
 
                 border.color: p.border
-                border.width: (collections_list.currentItem == parent && f === collections_menu) || hover ? vpx(3) : vpx(0)
+                border.width: selected || hover ? vpx(6) : vpx(0)
                 radius: vpx(6)
 
                 MouseArea {
@@ -161,6 +163,8 @@ Rectangle {
                     onClicked: {
                         games.currentIndex = 0
                         currentCollectionIndex = stest.allGames ? index - 1 : index
+                        collections_menu.positionViewAtCurrentIndex()
+                        background.refresh()
                         audio.stopAll()
                         audio.toggle_down.play()
                     }
