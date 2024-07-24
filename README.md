@@ -238,7 +238,7 @@ Download struceOS-Pegasus-Theme-1.5.0.zip from [last releases](https://github.co
 5. Finished rewrite to simplify for now
 ```
 
-## 1.4.1 
+## 1.4.1 - Unreleased
 
 ```
 1. Moved sort/filter to top of gameView
