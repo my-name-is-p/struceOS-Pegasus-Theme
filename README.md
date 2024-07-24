@@ -30,7 +30,7 @@ If you have any issues, please open a ticket or let me know on [discord](https:/
 # Version 1.5.0 Updates
 1. Moved panel items to new window
 2. Added sort/filter menu
-3. Added navigation for controllers/kb to all menues
+3. Added navigation for controllers/kb to all menus
 4. Removed old code
 5. Finished rewrite to simplify for now
 
@@ -233,7 +233,7 @@ Download struceOS-Pegasus-Theme-1.5.0.zip from [last releases](https://github.co
 ```
 1. Moved panel items to new window
 2. Added sort/filter menu
-3. Added navigation for controllers/kb to all menues
+3. Added navigation for controllers/kb to all menus
 4. Removed old code
 5. Finished rewrite to simplify for now
 ```

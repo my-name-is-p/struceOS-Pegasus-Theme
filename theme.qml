@@ -22,7 +22,7 @@
 // #1.5.0 
 //      1. Moved panel items to new window
 //      2. Added sort/filter menu
-//      3. Added navigation for controllers/kb to all menues
+//      3. Added navigation for controllers/kb to all menus
 //      4. Removed old code
 //      5. Finished rewrite to simplify for now
 
