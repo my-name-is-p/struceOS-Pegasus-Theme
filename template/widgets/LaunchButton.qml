@@ -64,11 +64,11 @@ Rectangle { //launch
         id: launch_select
 
         anchors.fill: launch
-        anchors.margins: vpx(-3)
+        anchors.margins: vpx(-6)
 
         color: p.t
 
-        border.width: vpx(3)
+        border.width: vpx(6)
         border.color: p.border
 
         radius: vpx(6)

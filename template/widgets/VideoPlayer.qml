@@ -17,6 +17,20 @@ Item { //viewer
 
     property Item enter: play_pause
 
+    Rectangle { //video_select
+        id: video_select
+
+        anchors.fill: parent
+        anchors.margins: vpx(-8)
+
+        color: p.t
+
+        radius: vpx(16)
+
+        border.color: p.border
+        border.width: parent.selected && parent.current === viewer ? vpx(12) : 0
+
+    }
 
     Rectangle { //viewer_mask
         id: viewer_mask
@@ -655,14 +669,6 @@ Item { //viewer
         cursorShape: Qt.PointingHandCursor
     }
 
-    Rectangle { //video_select
-        id: video_select
-        anchors.fill: parent
-        color: p.t
-        border.color: p.border
-        border.width: parent.selected && parent.current === viewer ? vpx(6) : 0
-
-    }
 
     Keys.onPressed: { //Keys
         let key = gsk(event)

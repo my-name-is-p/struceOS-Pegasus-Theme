@@ -75,8 +75,9 @@ Item {
     Rectangle {
         id: select
         anchors.fill: parent
+        anchors.margins: vpx(-3)
         color: p.t
-        border.width: vpx(3)
+        border.width: vpx(6)
         border.color: p.border
 
         radius: vpx(6)
