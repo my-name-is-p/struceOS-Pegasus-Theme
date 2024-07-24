@@ -99,7 +99,7 @@ Rectangle { //launch
             audio.stopAll()
             audio.toggle_down.play()
             launch_window.visible = true
-            if(settings.lastPlayed){
+            if(stest.lastPlayed){
                 api.memory.set("collectionIndex", currentCollectionIndex)
                 api.memory.set("gameIndex", games.currentIndex)
             }

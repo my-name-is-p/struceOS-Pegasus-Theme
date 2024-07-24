@@ -10,7 +10,7 @@ Item {
     property Item current: collection
 
     height: {
-        switch(settings.headerSize){
+        switch(stest.headerSize){
             case "l":
                 return vpx(96)
             case "s":
@@ -111,16 +111,19 @@ Item {
 
             onClicked: {
                 header.current = collection
-                if(f != collections_menu)
+                if(f != collections_menu){
+                    collections_menu.positionViewAtCurrentIndex()
                     f = collections_menu
-                else
+                }else{
                     f = game_layout
+                }
                 audio.stopAll()
                 audio.toggle_down.play()
             }
         }
 
         property var onAccept: function(){
+            collections_menu.positionViewAtCurrentIndex()
             f = collections_menu
         }
 
@@ -214,7 +217,7 @@ Item {
         }
     }
 
-    UIButton {
+    UIButton { //settings_button
         id: settings_button
         anchors.right: info_button.left
 
@@ -236,6 +239,8 @@ Item {
             if(f != panel_area || panel_area.current != panel_area.settings_panel){
                 f = panel_area
                 panel_area.current = panel_area.settings_panel
+                if(panel_area.fullReset)
+                    panel_area.fullReset()
                 header.current = collection
             }else{
                 panel_area.settings_panel.onCancel() 
@@ -257,7 +262,7 @@ Item {
         }
     }
 
-    UIButton {
+    UIButton { //info_button
         id: info_button
 
         anchors.right: clock.left
@@ -280,7 +285,7 @@ Item {
             if(f != panel_area || panel_area.current != panel_area.info_panel){
                 f = panel_area
                 panel_area.current = panel_area.info_panel
-                panel_area.info_panel.video.play()
+                panel_area.info_panel.video.safePlay()
                 header.current = collection
             }else{
                 panel_area.info_panel.onCancel() 
@@ -310,9 +315,9 @@ Item {
         selected: header.current === this
 
         property var onAccept: function(){
-            settings.twelvehour = !settings.twelvehour
+            stest.twelvehour = !stest.twelvehour
             clock.clock.set()
-            api.memory.set("struceOS_ui_twelvehour", settings.twelvehour)
+            api.memory.set("struceOS_ui_twelvehour", stest.twelvehour)
         }
 
         property var onLeft: function(){
@@ -343,8 +348,8 @@ Item {
                         if(current.onDown != undefined){
                             current.onDown()
                         }else{
-                            if(games.currentIndex < games.columns / 2){
-                                games.currentIndex = games.columns - 1
+                            if(games.currentIndex < stest.columns / 2){
+                                games.currentIndex = stest.columns - 1
                             }
                             onCancel()
                         }
@@ -385,7 +390,7 @@ Item {
                         header.current = collection
                         panel_area.current = panel_area.info_panel
                         f = panel_area
-                        panel_area.info_panel.video.play()
+                        panel_area.info_panel.video.safePlay()
                         break
                     case "filter":
                         header.current = collection
@@ -410,9 +415,9 @@ Item {
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = settings.allGames ? 8 : 9
+                currentCollectionIndex = stest.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
+                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

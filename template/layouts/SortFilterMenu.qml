@@ -271,7 +271,7 @@ Rectangle { //sortfilt_menu
                     case "details":
                         panel_area.current = panel_area.info_panel
                         f = panel_area
-                        panel_area.info_panel.video.play()
+                        panel_area.info_panel.video.safePlay()
                         s = audio.toggle_down
                         break
                     case "filter":
@@ -293,9 +293,9 @@ Rectangle { //sortfilt_menu
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = settings.allGames ? 8 : 9
+                currentCollectionIndex = stest.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
+                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

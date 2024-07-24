@@ -15,7 +15,7 @@ Item {
 
     Image {
         id: overlay
-        source: "../assets/img/backgrounds/" + settings.bgOverlaySource
+        source: "../assets/img/backgrounds/" + stest.bgOverlaySource
     }
     property string overlay: overlay.source
 

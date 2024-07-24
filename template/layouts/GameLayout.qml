@@ -29,9 +29,8 @@ Item {
 
             property bool active: game_layout.focus
 
-            property int columns: settings.columns
 
-            cellWidth: parent.width / columns
+            cellWidth: parent.width / stest.columns
             cellHeight: cellWidth * 0.6
             
             highlightMoveDuration: 100
@@ -49,10 +48,10 @@ Item {
             if(key != undefined){
                 switch(key){
                     case "up":
-                        if(game_grid_view.columns - game_grid_view.currentIndex <= 0)
+                        if(stest.columns - game_grid_view.currentIndex <= 0)
                             game_grid_view.moveCurrentIndexUp()
                         else {
-                            if(game_grid_view.currentIndex < game_grid_view.columns / 2){
+                            if(game_grid_view.currentIndex < stest.columns / 2){
                                 f = sortfilt_toolbar
                                 s = audio.toggle_down
                             }else{
@@ -64,7 +63,7 @@ Item {
                         }
                         break
                     case "down":
-                        if(game_grid_view.currentIndex + game_grid_view.columns <= game_grid_view.count - 1)
+                        if(game_grid_view.currentIndex + stest.columns <= game_grid_view.count - 1)
                             game_grid_view.moveCurrentIndexDown()
                         else 
                             game_grid_view.currentIndex = game_grid_view.count - 1
@@ -90,7 +89,7 @@ Item {
                     case "details":
                         f = panel_area
                         panel_area.current = panel_area.info_panel
-                        panel_area.info_panel.video.play()
+                        panel_area.info_panel.video.safePlay()
                         s = audio.toggle_down
                         break
                     case "filter":
@@ -98,7 +97,7 @@ Item {
                         break
                     case "accept":
                         launch_window.visible = true
-                        if(settings.lastPlayed){
+                        if(stest.lastPlayed){
                             api.memory.set("collectionIndex", currentCollectionIndex)
                             api.memory.set("gameIndex", game_grid_view.currentIndex)
                         }
@@ -111,9 +110,9 @@ Item {
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = settings.allGames ? 8 : 9
+                currentCollectionIndex = stest.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
+                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

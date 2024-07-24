@@ -30,7 +30,7 @@ import QtQuick 2.0
                 opacity: clock_container.hover || clock_container.selected ? 1 : 0
                 radius: vpx(6)
 
-                Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
+                Behavior on opacity {NumberAnimation {duration: stest.hover_speed}}
             }
         }
 
@@ -39,7 +39,7 @@ import QtQuick 2.0
             id: clock
             anchors.centerIn: parent
 
-            font.pixelSize: settings.headerSize != "s" ? vpx(24) : vpx(16)
+            font.pixelSize: stest.headerSize != "s" ? vpx(24) : vpx(16)
             font.family: bold.name
             font.bold: true
 
@@ -51,7 +51,7 @@ import QtQuick 2.0
 
             function set() {
                 let d = new Date()
-                clock.text = Qt.formatTime(d, settings.twelvehour ? "hh:mm a" : "hh:mm")
+                clock.text = Qt.formatTime(d, stest.twelvehour ? "hh:mm a" : "hh:mm")
                 seconds =  Qt.formatTime(d, "ss")
             }
 
@@ -76,9 +76,9 @@ import QtQuick 2.0
             onClicked: {
                 audio.stopAll()
                 audio.select.play()
-                settings.twelvehour = !settings.twelvehour
+                stest.twelvehour = !stest.twelvehour
                 clock.set()
-                api.memory.set("struceOS_ui_twelvehour", settings.twelvehour)
+                api.memory.set("struceOS_ui_twelvehour", stest.twelvehour)
             }
 
             onEntered: {

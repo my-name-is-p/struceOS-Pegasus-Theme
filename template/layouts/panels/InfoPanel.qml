@@ -15,6 +15,49 @@ Item {
 
     property Item current: panel
 
+    //Functions
+        property var onCancel: function(){
+            current = panel
+            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            video.video.stop()
+            f = game_layout
+        }
+
+        property var onAccept: function(){
+            launch_window.visible = true
+            if(stest.lastPlayed){
+                api.memory.set("collectionIndex", currentCollectionIndex)
+                api.memory.set("gameIndex", games.currentIndex)
+            }
+            s = audio.toggle_down
+            currentGame.launch()
+        }
+
+        property var onPrevious: function(){
+            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            games.moveCurrentIndexLeft()
+            video.video.safePlay()
+        }
+
+        property var onNext: function(){
+            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            games.moveCurrentIndexRight()
+            video.video.safePlay()
+        }
+
+        property var onFirst: function(){
+            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            games.currentIndex = 0
+            video.video.safePlay()
+        }
+
+        property var onLast: function(){
+            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            games.currentIndex = games.count - 1
+            video.video.safePlay()
+        }
+    //--
+
     Item {  //header_buttons
         id: header_buttons
         anchors.top: parent.top
@@ -143,7 +186,6 @@ Item {
                         }
                     }
 
-
                     property var onUp: function(){
                         panel.current = close
                     }
@@ -197,7 +239,7 @@ Item {
                         visible: currentGame.releaseYear != 0
                         width: visible ? released_label.contentWidth : 0
 
-                        Text {
+                        Text { //released_label
                             id: released_label
                             text: "released: " + currentGame.releaseYear
                             font.family: regular.name
@@ -314,7 +356,8 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: vpx(24)
-                Item {
+
+                Item { //stars
                     id: stars
                     width: vpx(144)
                     height: vpx(24)
@@ -443,7 +486,7 @@ Item {
                     color: p.accent
                 }
 
-                Rectangle {
+                Rectangle { //publisher_decor
                     id: publisher_decor
 
                     anchors.top: parent.top
@@ -461,7 +504,7 @@ Item {
                     
                 }
 
-                Text {
+                Text { //publisher_text
                     id: publisher_text
                     text: currentGame.publisher
                     anchors.verticalCenter: parent.verticalCenter
@@ -478,7 +521,7 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                Rectangle {
+                Rectangle { //publish_border
                     id: publisher_border
                     height: parent.height
                     width: parent.width
@@ -512,48 +555,7 @@ Item {
         }
     }
 
-    property var onCancel: function(){
-        current = panel
-        settings.videoMute = api.memory.get("struceOS_video_videoMute")
-        video.video.stop()
-        f = game_layout
-    }
-
-    property var onAccept: function(){
-        launch_window.visible = true
-        if(settings.lastPlayed){
-            api.memory.set("collectionIndex", currentCollectionIndex)
-            api.memory.set("gameIndex", games.currentIndex)
-        }
-        s = audio.toggle_down
-        currentGame.launch()
-    }
-
-    property var onPrevious: function(){
-        settings.videoMute = api.memory.get("struceOS_video_videoMute")
-        games.moveCurrentIndexLeft()
-        video.video.play()
-    }
-
-    property var onNext: function(){
-        settings.videoMute = api.memory.get("struceOS_video_videoMute")
-        games.moveCurrentIndexRight()
-        video.video.play()
-    }
-
-    property var onFirst: function(){
-        settings.videoMute = api.memory.get("struceOS_video_videoMute")
-        games.currentIndex = 0
-        video.video.play()
-    }
-
-    property var onLast: function(){
-        settings.videoMute = api.memory.get("struceOS_video_videoMute")
-        games.currentIndex = games.count - 1
-        video.video.play()
-    }
-
-    Keys.onPressed: {
+    Keys.onPressed: { //Keys
         let key = gsk(event)
         if(key != undefined){
             switch (key){
@@ -630,7 +632,7 @@ Item {
                         current.onAccept()
                     }else{
                         launch_window.visible = true
-                        if(settings.lastPlayed){
+                        if(stest.lastPlayed){
                             api.memory.set("collectionIndex", currentCollectionIndex)
                             api.memory.set("gameIndex", games.currentIndex)
                         }

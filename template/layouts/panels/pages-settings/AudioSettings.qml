@@ -100,7 +100,7 @@ Item {
 
             Text { //ui_audio_settings_volume_text
                 id: ui_audio_settings_volume_text
-                text: "volume"
+                text: "default volume"
                 color: p.text
 
                 font.family: regular.name
@@ -117,7 +117,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (settings.uiVolume*100)
+                value: (stest.uiVolume*100)
                 percent: true
                 selected: ui_audio_settings.selected && ui_audio_settings.current === this
                 memory: "struceOS_ui_volume"
@@ -139,11 +139,11 @@ Item {
             anchors.topMargin: vpx(12)
 
             selected: ui_audio_settings.selected && ui_audio_settings.current === this
-            value: settings.uiMute
+            value: settings_loader.item.uiMute
 
             onClicked: function(){
-                settings.uiMute = !value
-                api.memory.set("struceOS_ui_Mute", settings.uiMute)
+                stest.uiMute = !value
+                api.memory.set("struceOS_ui_Mute", value)
             }
             property var onAccept: onClicked
 
@@ -234,7 +234,7 @@ Item {
 
             Text { //video_audio_settings_volume_text
                 id: video_audio_settings_volume_text
-                text: "volume"
+                text: "default volume"
                 color: p.text
 
                 font.family: regular.name
@@ -251,7 +251,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (settings.videoVolume*100)
+                value: (stest.videoVolume*100)
                 percent: true
                 selected: video_audio_settings.selected && video_audio_settings.current === this
                 memory: "struceOS_video_volume"
@@ -280,11 +280,13 @@ Item {
             anchors.topMargin: vpx(12)
 
             selected: video_audio_settings.selected && video_audio_settings.current === this
-            value: settings.videoMute
+            value: 
+                api.memory.get("struceOS_video_videoMute") != undefined ?
+                    api.memory.get("struceOS_video_videoMute") : true
 
             onClicked: function(){
-                settings.videoMute = !value
-                api.memory.set("struceOS_video_videoMute", settings.videoMute)
+                value = !value
+                api.memory.set("struceOS_video_videoMute", value)
             }
             property var onAccept: onClicked
 

@@ -17,6 +17,22 @@ Item {
 
     property Item current: panel
 
+    property string name: "panel"
+
+    //Functions
+        property var onCancel: function(){
+            current = panel
+            f = game_layout
+        }
+
+        function fullReset(){
+            if(pages.current.reset)
+                pages.current.reset()
+            panel.current = panel
+            panel.Keys.forwardTo = panel
+        }
+    //--
+
     Item { //header_buttons
         id: header_buttons
 
@@ -249,23 +265,28 @@ Item {
             property bool selected: panel.current === this
             property var current: layout_settings
 
-            property var onUp: current.onUp != undefined ? current.onUp : undefined
-            property var onDown: current.onDown != undefined ? current.onDown : undefined
-            property var onLeft: current.onLeft != undefined ? current.onLeft : undefined
-            property var onRight: current.onRight != undefined ? current.onRight : undefined
-            property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
-            property var onNext: current.onNext != undefined ? current.onNext : undefined
-            property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
-            property var onLast: current.onLast != undefined ? current.onLast : undefined
-            property var onDetails: current.onDetails != undefined ? current.onDetails : undefined
-            property var onSort: current.onSort != undefined ? current.onSort : undefined
-            property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
-            property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
+
+            //Functions--
+                property var onUp: current.onUp != undefined ? current.onUp : undefined
+                property var onDown: current.onDown != undefined ? current.onDown : undefined
+                property var onLeft: current.onLeft != undefined ? current.onLeft : undefined
+                property var onRight: current.onRight != undefined ? current.onRight : undefined
+                property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
+                property var onNext: current.onNext != undefined ? current.onNext : undefined
+                property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
+                property var onLast: current.onLast != undefined ? current.onLast : undefined
+                property var onDetails: current.onDetails != undefined ? current.onDetails : undefined
+                property var onSort: current.onSort != undefined ? current.onSort : undefined
+                property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
+                property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
+            //--
 
             LayoutSettings { //layout_settings
                 id: layout_settings
 
                 anchors.fill: parent
+
+                property string name: "layout_settings"
 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
@@ -274,13 +295,6 @@ Item {
                     reset()
                     panel.current = settings_close
                     panel.Keys.forwardTo = panel
-                }
-
-                onCancel: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                    panel.onCancel()
                 }
             }
 
@@ -319,38 +333,28 @@ Item {
                     panel.current = settings_close
                     panel.Keys.forwardTo = panel
                 }
-
-                onCancel: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                    panel.onCancel()
-                }
             }
 
             Keys.forwardTo: current
         }
     }
-    //Background
-        //overlay source
-            //5 default
-            //custom file path
-    //Colors
-        //accent
-        //accent_light
-        //scrub_bar
-        //launch
-        //launch_hover
-        //border
-        //text
-        //text_invert
-        //black
-        //white
-
-    property var onCancel: function(){
-        current = panel
-        f = game_layout
-    }
+    //TO DO--
+        //Background
+            //overlay source
+                //5 default
+                //custom file path
+        //Colors
+            //accent
+            //accent_light
+            //scrub_bar
+            //launch
+            //launch_hover
+            //border
+            //text
+            //text_invert
+            //black
+            //white
+    //--
 
     Keys.onPressed: {
         let key = gsk(event)
@@ -402,6 +406,7 @@ Item {
                     break
                 case "details":
                     panel_area.current = panel_area.info_panel
+                    panel_area.info_panel.video.safePlay()
                     break
                 case "filter":
                     f = sortfilt_menu
@@ -410,8 +415,7 @@ Item {
                 case "cancel":
                     if(current.onCancel != undefined)
                         current.onCancel()
-                    else
-                        onCancel()
+                    onCancel()
                     event.accepted = true
                     break
                 case "accept":

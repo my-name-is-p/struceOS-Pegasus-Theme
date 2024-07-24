@@ -65,10 +65,10 @@ Rectangle {
         id: backgroundOverlay
         source: images.overlay
         opacity: {
-            if(!settings.bgOverlayOn || settings.bgOverlayOpacity * 100 < 1)
+            if(!stest.bgOverlayOn || stest.bgOverlayOpacity * 100 < 1)
                 return 0
             else
-                return settings.bgOverlayOpacity >= 1 ? 1 : settings.bgOverlayOpacity
+                return stest.bgOverlayOpacity >= 1 ? 1 : stest.bgOverlayOpacity
         }
 
         smooth: true

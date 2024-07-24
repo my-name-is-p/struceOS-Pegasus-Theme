@@ -42,7 +42,7 @@ Item {
 
             opacity: selected || hovered ? 1 : 0
 
-            Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
+            Behavior on opacity {NumberAnimation {duration: stest.hover_speed}}
         }
 
         Image { 

@@ -55,13 +55,18 @@ Item { //viewer
             flushMode: VideoOutput.EmptyFrame
             fillMode: VideoOutput.PreserveAspectFit
 
-            muted: settings.videoMute
-            volume: settings.videoVolume
+            muted: stest.videoMute
+            volume: stest.videoVolume
             loops: MediaPlayer.Infinite
 
             onStatusChanged: {
                 if(status === MediaPlayer.EndOfMedia)
                     video.seek(0)
+            }
+
+            function safePlay(){
+                muted = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+                play()
             }
 
         }
@@ -192,9 +197,9 @@ Item { //viewer
             selected: viewer.current === this
 
             onClicked: function(){
-                settings.videoMute = !settings.videoMute
+                video.muted = !video.muted
+                stest.videoMute = video.muted
             }
-
             property var onAccept: onClicked
 
             property var onLeft: function(){
@@ -379,7 +384,7 @@ Item { //viewer
                 radius: vpx(6)
             }
 
-            MouseArea {
+            MouseArea { //video_scrub_click
                 id: video_scrub_click
 
                 anchors.fill: parent
@@ -411,7 +416,7 @@ Item { //viewer
             height: video_time_text.height
             width: video_time_text.width
 
-            Rectangle {
+            Rectangle { //video_time_text_background
                 id: video_time_text_background
                 anchors.fill: video_time_text
                 radius: vpx(6)
@@ -420,7 +425,7 @@ Item { //viewer
                 color: addAlphaToHex(0.3, p.black)
             }
 
-            Text {
+            Text { //video_time_text
                 id: video_time_text
 
                 text: getTime(video.position) + "/" + getTime(video.duration)
@@ -457,7 +462,7 @@ Item { //viewer
 
             property bool show_value: true
             property var text_color: p.white
-            property var value: settings.videoVolume
+            property var value: stest.videoVolume
 
             property bool selected: viewer.current === this
 
@@ -466,25 +471,25 @@ Item { //viewer
             }
 
             property var onNext: function(){
-                let v = Math.round((settings.videoVolume * 100) % 5)
-                v = (settings.videoVolume * 100) - v + 5
-                settings.videoVolume = v < 100 ? v / 100 : 1
+                let v = Math.round((stest.videoVolume * 100) % 5)
+                v = (stest.videoVolume * 100) - v + 5
+                stest.videoVolume = v < 100 ? v / 100 : 1
             }
             property var onRight: onNext
 
             property var onPrevious: function(){
-                let v = Math.round((settings.videoVolume * 100) % 5)
-                v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) -5
-                settings.videoVolume = v > 0 ? v / 100 : 0
+                let v = Math.round((stest.videoVolume * 100) % 5)
+                v = v > 0 ? (stest.videoVolume * 100) - v : (stest.videoVolume * 100) -5
+                stest.videoVolume = v > 0 ? v / 100 : 0
             }
             property var onLeft: onPrevious
 
             property var onFirst: function(){
-                settings.videoVolume = 0
+                stest.videoVolume = 0
             }
 
             property var onLast: function(){
-                settings.videoVolume = 1
+                stest.videoVolume = 1
             }
 
             property var onAccept: function(){
@@ -557,7 +562,7 @@ Item { //viewer
                 id: volume_slide_handle
                 width: vpx(12)
                 height: width
-                y: volume_slide_background.height * (1 - settings.videoVolume)
+                y: volume_slide_background.height * (1 - stest.videoVolume)
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: p.slider
@@ -566,35 +571,35 @@ Item { //viewer
                 property bool selected: viewer.current === this
 
                 property var onNext: function(){
-                    let v = Math.round((settings.videoVolume * 100) % 5)
-                    v = (settings.videoVolume * 100) - v + 5
-                    settings.videoVolume = v < 100 ? v / 100 : 1
+                    let v = Math.round((stest.videoVolume * 100) % 5)
+                    v = (stest.videoVolume * 100) - v + 5
+                    stest.videoVolume = v < 100 ? v / 100 : 1
                 }
                 property var onRight: onNext
 
                 property var onUp: function(){
-                    let v = (settings.videoVolume * 100) + 1
-                    settings.videoVolume = v < 100 ? v / 100 : 1
+                    let v = (stest.videoVolume * 100) + 1
+                    stest.videoVolume = v < 100 ? v / 100 : 1
                 }
                 property var onLeft: onPrevious
 
                 property var onPrevious: function(){
-                    let v = Math.round((settings.videoVolume * 100) % 5)
-                    v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) - 5
-                    settings.videoVolume = v > 0 ? v / 100 : 0
+                    let v = Math.round((stest.videoVolume * 100) % 5)
+                    v = v > 0 ? (stest.videoVolume * 100) - v : (stest.videoVolume * 100) - 5
+                    stest.videoVolume = v > 0 ? v / 100 : 0
                 }
 
                 property var onDown: function(){
-                    let v = (settings.videoVolume * 100) - 1
-                    settings.videoVolume = v > 0 ? v / 100 : 0
+                    let v = (stest.videoVolume * 100) - 1
+                    stest.videoVolume = v > 0 ? v / 100 : 0
                 }
 
                 property var onFirst: function(){
-                    settings.videoVolume = 0
+                    stest.videoVolume = 0
                 }
 
                 property var onLast: function(){
-                    settings.videoVolume = 1
+                    stest.videoVolume = 1
                 }
 
                 property var onAccept: function(){
@@ -628,11 +633,11 @@ Item { //viewer
                 onClicked: {
                     let v = Math.round((1 - (mouseY / volume_slide_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
-                    settings.videoVolume = v
+                    stest.videoVolume = v
                 }
 
                 onPositionChanged: {
-                    settings.videoVolume = Math.round((1 - (volume_slide_handle.y / volume_slide_background.height)) * 100) / 100
+                    stest.videoVolume = Math.round((1 - (volume_slide_handle.y / volume_slide_background.height)) * 100) / 100
                 }
             }
         }
@@ -643,7 +648,7 @@ Item { //viewer
         cursorShape: Qt.PointingHandCursor
     }
 
-    Rectangle {
+    Rectangle { //video_select
         id: video_select
         anchors.fill: parent
         color: p.t
@@ -652,7 +657,7 @@ Item { //viewer
 
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: { //Keys
         let key = gsk(event)
         if(key != undefined){
             switch(key){

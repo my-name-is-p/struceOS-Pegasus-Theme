@@ -17,6 +17,10 @@ Rectangle {
 
     property Item current: info_panel
 
+    //Functions--
+        property var fullReset: current.fullReset != undefined ? current.fullReset : undefined
+    //--
+
     InfoPanel {
         id: info_panel
         visible: panel_area.current === this

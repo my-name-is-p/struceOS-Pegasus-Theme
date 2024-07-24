@@ -11,7 +11,7 @@ Item {
     MediaPlayer {
 		id: select
 		source: "../assets/sounds/lc.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
+		volume: stest.uiMute ? 0 : stest.uiVolume
 		loops : 1
 	}
     property MediaPlayer select: select
@@ -19,7 +19,7 @@ Item {
     MediaPlayer {
 		id: toggle_up
 		source: "../assets/sounds/hc_down.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
+		volume: stest.uiMute ? 0 : stest.uiVolume
 		loops : 1
 	}
     property MediaPlayer toggle_up: toggle_up
@@ -27,7 +27,7 @@ Item {
     MediaPlayer {
 		id: toggle_down
 		source: "../assets/sounds/hc_up.wav"
-		volume: settings.uiMute ? 0 : settings.uiVolume
+		volume: stest.uiMute ? 0 : stest.uiVolume
 		loops : 1
 	}
     property MediaPlayer toggle_down: toggle_down
@@ -35,7 +35,7 @@ Item {
     MediaPlayer {
 		id: home
 		source: "../assets/sounds/home.mp3"
-		volume: settings.uiMute ? 0 : settings.uiVolume
+		volume: stest.uiMute ? 0 : stest.uiVolume
 		loops : 1
 	}
 	property MediaPlayer home: home

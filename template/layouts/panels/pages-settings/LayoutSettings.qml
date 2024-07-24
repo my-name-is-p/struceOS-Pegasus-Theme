@@ -85,8 +85,8 @@ Item { //page
             property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
             property var onLast: current.onLast != undefined ? current.onLast : undefined
             property var onDetails: current.onRight != undefined ? current.onRight : undefined
-            property var onSort: current.onRight != undefined ? current.onRight : undefined
-            property var onCancel: current.onRight != undefined ? current.onRight : undefined
+            property var onSort: current.onSort != undefined ? current.onSort : undefined
+            property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
             property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
         //--
 
@@ -144,14 +144,14 @@ Item { //page
 
                     siblings: parent.children
 
-                    enabled: settings.headerSize === "s"
+                    enabled: stest.headerSize === "s"
 
                     selected: header_settings.selected && header_settings.current === this
 
                     onClicked: function(){
                         resetItems()
-                        settings.headerSize = "s"
-                        api.memory.set("struceOS_ui_headerSize", settings.headerSize)
+                        stest.headerSize = "s"
+                        api.memory.set("struceOS_ui_headerSize", stest.headerSize)
                     }
                     property var onAccept: onClicked
 
@@ -169,14 +169,14 @@ Item { //page
 
                     siblings: parent.children
 
-                    enabled: settings.headerSize === "m"
+                    enabled: stest.headerSize === "m"
 
                     selected: header_settings.selected && header_settings.current === this
 
                     onClicked: function(){
                         resetItems()
-                        settings.headerSize = "m"
-                        api.memory.set("struceOS_ui_headerSize", settings.headerSize)
+                        stest.headerSize = "m"
+                        api.memory.set("struceOS_ui_headerSize", stest.headerSize)
                     }
                     property var onAccept: onClicked
 
@@ -197,14 +197,14 @@ Item { //page
 
                     siblings: parent.children
 
-                    enabled: settings.headerSize === "l"
+                    enabled: stest.headerSize === "l"
 
                     selected: header_settings.selected && header_settings.current === this
 
                     onClicked: function(){
                         resetItems()
-                        settings.headerSize = "l"
-                        api.memory.set("struceOS_ui_headerSize", settings.headerSize)
+                        stest.headerSize = "l"
+                        api.memory.set("struceOS_ui_headerSize", stest.headerSize)
                     }
                     property var onAccept: onClicked
 
@@ -244,14 +244,6 @@ Item { //page
                     page.exitMenu()
             }
 
-            property var onCancel: function(){
-                if(current.onCancel){
-                    current.onCancel()
-                }else{
-                    page.onCancel()
-                }
-            }
-
             property var onDown: current.onDown != undefined ? current.onDown : undefined
             property var onRight: current.onRight != undefined ? current.onRight : undefined
             property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
@@ -260,6 +252,7 @@ Item { //page
             property var onLast: current.onLast != undefined ? current.onLast : undefined
             property var onDetails: current.onRight != undefined ? current.onRight : undefined
             property var onSort: current.onRight != undefined ? current.onRight : undefined
+            property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
             property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
         //--
 
@@ -320,7 +313,7 @@ Item { //page
                 min: 3
                 max: 10
 
-                value: settings.columns
+                value: stest.columns
                 memory: "struceOS_gameLayout_columns"
 
                 selected: game_layout_settings.selected && game_layout_settings.current === this
@@ -342,10 +335,10 @@ Item { //page
             anchors.topMargin: vpx(12)
 
             selected: game_layout_settings.selected && game_layout_settings.current === this
-            value: settings.showThumbs
+            value: stest.showThumbs
 
             onClicked: function(){
-                settings.showThumbs = !value
+                stest.showThumbs = !value
                 api.memory.set("struceOS_gameLayout_thumbnails", value)
             }
             property var onAccept: onClicked
@@ -367,10 +360,10 @@ Item { //page
             anchors.topMargin: vpx(12)
 
             selected: game_layout_settings.selected && game_layout_settings.current === this
-            value: settings.lastPlayed
+            value: stest.lastPlayed
 
             onClicked: function(){
-                settings.lastPlayed = !value
+                stest.lastPlayed = !value
                 api.memory.set("struceOS_gameLayout_lastPlayed", value)
             }
             property var onAccept: onClicked
@@ -392,11 +385,15 @@ Item { //page
             anchors.topMargin: vpx(12)
 
             selected: game_layout_settings.selected && game_layout_settings.current === this
-            value: settings.allGames
+            value: stest.allGames
 
             onClicked: function(){
-                settings.allGames = !value
-                api.memory.set("struceOS_gameLayout_allGames", settings.allGames)
+                if(currentCollectionIndex === -1){
+                    currentCollectionIndex = 0
+                    games.currentIndex = 0
+                }
+                stest.allGames = !value
+                api.memory.set("struceOS_gameLayout_allGames", stest.allGames)
                 collections_menu.model.populateModel()
             }
             property var onAccept: onClicked
@@ -445,20 +442,18 @@ Item { //page
                 if(current.onRight)
                     current.onRight()
             }
-            property var onCancel: function(){
-                if(current.onCancel){
-                    current.onCancel()
-                }else{
-                    page.onCancel()
-                }
-            }
             property var onAccept: function(){
                 if(current.onAccept)
                     current.onAccept()
             }
 
+            property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
+            property var onNext: current.onNext != undefined ? current.onNext : undefined
             property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
             property var onLast: current.onLast != undefined ? current.onLast : undefined
+            property var onDetails: current.onRight != undefined ? current.onRight : undefined
+            property var onSort: current.onRight != undefined ? current.onRight : undefined
+            property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
         //--
 
         height: { //height
@@ -489,11 +484,11 @@ Item { //page
             anchors.topMargin: vpx(12)
 
             selected: background_settings.selected && background_settings.current === this
-            value: settings.bgOverlayOn
+            value: stest.bgOverlayOn
 
             onClicked: function(){
-                settings.bgOverlayOn = !value
-                api.memory.set("struceOS_background_overlayOn", settings.bgOverlayOn)
+                stest.bgOverlayOn = !value
+                api.memory.set("struceOS_background_overlayOn", stest.bgOverlayOn)
             }
             property var onAccept: onClicked
 
@@ -537,7 +532,7 @@ Item { //page
                 min: 1
                 max: 100
 
-                value: (settings.bgOverlayOpacity*100)
+                value: (stest.bgOverlayOpacity*100)
                 percent: true
                 selected: background_settings.selected && background_settings.current === this
                 memory: "struceOS_background_overlayOpacity"

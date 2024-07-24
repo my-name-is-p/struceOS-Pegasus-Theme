@@ -87,6 +87,7 @@
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add button hints
 // 2. Add genre filters
+// 3. Add on screen keyboard
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15
@@ -118,7 +119,7 @@ FocusScope {
 
     property Item f: game_layout
     property string bg: getAssets(currentGame.assets).bg
-    property var p: settings.theme
+    property var p: stest.theme
     property var s: null
     
     //--FUNCTIONS--//
@@ -138,14 +139,17 @@ FocusScope {
         property var collectionPrevious: U.collectionPrevious
         //clearMemory
         property var clearMemory: U.clearMemory
+        //checkSettings
+        property var checkSettings: U.checkSettings
     //--
 
-   	FontLoader { id: regular; source: settings.fontFamilyRegular }
-   	FontLoader { id: bold; source: settings.fontFamilyBold }
+   	FontLoader { id: regular; source: stest.fontFamilyRegular }
+   	FontLoader { id: bold; source: stest.fontFamilyBold }
 
-    Settings {
-        id: settings
-    }
+
+    // Settings{
+    //     id: settings
+    // }
 
     Search {
         id: search
@@ -243,16 +247,31 @@ FocusScope {
     Component.onCompleted: {
         currentCollectionIndex = api.memory.get("collectionIndex") || 0
         games.currentIndex = api.memory.get("gameIndex") || 0
+        if(currentCollectionIndex < 0 && !stest.allGames){
+            currentCollectionIndex = 0
+            games.currentIndex = 0
+        }
         bg = getAssets(currentGame.assets).bg
 
-        if(settings.enableDevTools)
-            log("struceOS v" + settings.version + (settings.working ? "-working" : ""))
+        if(stest.enableDevTools)
+            log(stest.details, true)
 
         audio.stopAll()
         audio.home.play()
     }
 
-    property string test: settings.enableDevTools ? "test" : undefined
+    property string test: stest.enableDevTools ? "test" : undefined
 
     focus: true
+
+    Loader {
+        id: settings_loader
+        sourceComponent: settings_component
+    }
+
+    Component {
+        id: settings_component
+        Settings{}
+    }
+    property Item stest: settings_loader.item
 }

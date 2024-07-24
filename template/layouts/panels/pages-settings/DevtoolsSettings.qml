@@ -64,10 +64,21 @@ Item {
             return sum;
         }
 
+        Text { //theme_info_author
+            id: theme_info_author
+            text: "author: " + stest.author
+            color: p.text
+
+            font.family: regular.name
+            font.pixelSize: vpx(10)
+        }
+        
         Text { //theme_info_name
             id: theme_info_name
-            text: "name: " + settings.name
+            text: "name: " + stest.name
             color: p.text
+
+            anchors.top: theme_info_author.bottom
 
             font.family: regular.name
             font.pixelSize: vpx(10)
@@ -75,7 +86,7 @@ Item {
 
         Text { //theme_info_version
             id: theme_info_version
-            text: "version: " + settings.version  + (settings.working ? "-working" : "")
+            text: "version: " + stest.version  + (stest.working ? "-working" : "")
             color: p.text
 
             anchors.top: theme_info_name.bottom
@@ -190,7 +201,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (settings.consoleLogBackground*100)
+                value: (stest.consoleLogBackground*100)
                 percent: true
                 selected: devtools_settings.selected && devtools_settings.current === this
                 memory: "struceOS_dev_log_opacity"
@@ -212,13 +223,13 @@ Item {
             anchors.topMargin: vpx(12)
 
             selected: devtools_settings.selected && devtools_settings.current === this
-            value: settings.enableDevTools
+            value: stest.enableDevTools
 
             onClicked: function(){
-                settings.enableDevTools = !value
-                api.memory.set("struceOS_dev_enableDevTools", settings.enableDevTools)
-                if(settings.enableDevTools)
-                    log("struceOS v" + settings.version + (settings.working ? "-working" : ""), false, true)
+                stest.enableDevTools = !value
+                api.memory.set("struceOS_dev_enableDevTools", stest.enableDevTools)
+                if(stest.enableDevTools)
+                    log(stest.details, true)
                 
             }
             property var onAccept: onClicked

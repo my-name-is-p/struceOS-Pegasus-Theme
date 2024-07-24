@@ -83,23 +83,16 @@ function getAssets(assets){
 }
 
 //log
-function log(str = "", tag = "", clear = false){
-    let temp = devtools.log_text.text
+function log(str = "", tag = false, clear = false){
     let s = "\n"
+    if(tag)
+        str = "[>--| " + str + " |--<]"
     if(!clear){
-        if( tag != ""){
-            temp = devtools.log_text.text + s + "[>--" + str + "--<]" 
-        } else {
-            temp = devtools.log_text.text + s + str
-        }
+        str = devtools.log_text.text + s + str
     } else {
-        if( tag != ""){
-            temp = "[>--" + str + "--<]" 
-        } else {
-            temp = str
-        }
+        str = str
     }
-    devtools.log_text.text = temp
+    devtools.log_text.text = str
 }
 
 //alphaDecToHex - Converts Decimal alpha value to Hex value
@@ -125,11 +118,12 @@ function collectionNext(){
     if(currentCollectionIndex != api.collections.count - 1){
         currentCollectionIndex++
     }else{
-        if(settings.allGames)
+        if(stest.allGames)
             currentCollectionIndex = -1
         else
             currentCollectionIndex = 0
     }
+    collections_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
 
@@ -140,7 +134,7 @@ function collectionPrevious(){
         if(currentCollectionIndex != 0){
             currentCollectionIndex--
         }else{
-            if(settings.allGames)
+            if(stest.allGames)
                 currentCollectionIndex = -1
             else
                 currentCollectionIndex = api.collections.count - 1
@@ -148,9 +142,11 @@ function collectionPrevious(){
     }else{
         currentCollectionIndex = api.collections.count - 1
     }
+    collections_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
 
+//logVideoStates
 function logVideoStates(){
     log("--video.status--")
     log("NoMedia: " + MediaPlayer.NoMedia)
@@ -167,9 +163,10 @@ function logVideoStates(){
     log("StoppedState: " + MediaPlayer.StoppedState)
 }
 
+//logFocus
 function logFocus(){
     log("root: " + root.focus)
-    log("settings: " + settings.focus)
+    // log("settings: " + settings.focus)
     log("search: " + search.focus)
     log("audio: " + audio.focus)
     log("images: " + images.focus)
@@ -183,7 +180,11 @@ function logFocus(){
     log("launch_window: " + launch_window.focus)
 }
 
+//clearMemory
 function clearMemory(){
+    log("memory cleared -- may require restart")
+    api.memory.unset("collectionIndex")
+    api.memory.unset("gameIndex")
     api.memory.unset("struceOS_ui_headerSize")
     api.memory.unset("struceOS_ui_twelvehour")
     api.memory.unset("struceOS_video_videoMute")
@@ -200,3 +201,28 @@ function clearMemory(){
     api.memory.unset("struceOS_dev_log_opacity")
 }
 
+//checkSettings
+function checkSettings(){
+    log(settings.fontFamilyRegular)
+    log(settings.fontFamilyBold)
+    log(settings.hover_speed)
+    log(settings.headerSize)
+    log(settings.twelvehour)
+    log(settings.videoMute)
+    log(settings.videoVolume)
+    log(settings.uiMute)
+    log(settings.uiVolume)
+    log(settings.columns)
+    log(settings.lastPlayed)
+    log(settings.allGames)
+    log(settings.showThumbs)
+    log(settings.bgOverlayOn)
+    log(settings.bgOverlayOpacity)
+    log(settings.bgOverlaySource)
+    log(settings.enableDevTools)
+    log(settings.consoleLogBackground)
+    log(settings.version)
+    log(settings.name)
+    log(settings.working)
+    log(settings.theme)
+}

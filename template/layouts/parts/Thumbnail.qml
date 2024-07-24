@@ -65,7 +65,7 @@ Component {
                     id: thumb_bg
                     anchors.fill: parent
                     source: {
-                        if(!settings.showThumbs)
+                        if(!stest.showThumbs)
                             return ""
                         else
                             return getAssets(assets).bg != "default" ? getAssets(assets).bg : images.noImage
@@ -194,7 +194,7 @@ Component {
             OpacityMask {
                 anchors.fill: parent
                 opacity: {
-                    if(settings.showThumbs){
+                    if(stest.showThumbs){
                         if(logo.source != "")
                             return thumb_bg.status === Image.Ready && logo.status === Image.Ready ? 1 : 0
                         else 
@@ -288,10 +288,10 @@ Component {
                 }
 
                 onClicked: {
+                    f = header
                     f = game_layout
                     header.current = header.collection
                     games.currentIndex = index
-                    // game_layout.focus = f === game_layout
                     audio.stopAll()
                     audio.select.play()
                     mouse.event = accept
@@ -301,7 +301,7 @@ Component {
                     audio.stopAll()
                     audio.toggle_down.play()
                     launch_window.visible = true
-                    if(settings.lastPlayed){
+                    if(stest.lastPlayed){
                         api.memory.set("collectionIndex", currentCollectionIndex)
                         api.memory.set("gameIndex", games.currentIndex)
                     }
@@ -314,7 +314,7 @@ Component {
         LoadingGraphic {
             anchors.centerIn: parent
             opacity: {
-                if(settings.showThumbs){
+                if(stest.showThumbs){
                     if(logo.source != "")
                         return thumb_bg.status === Image.Ready && logo.status === Image.Ready ? 0 : 0.8
                     else 
