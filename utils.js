@@ -104,12 +104,21 @@ function alphaDecToHex(alpha) {
 function addAlphaToHex(alpha, hex) {
     hex = hex.replace(/^#/, '')
 
-    if (!/^[0-9a-f]{6}$/i.test(hex)) {
-        throw new Error('Invalid hex code format (must be 6 digits)')
-    }
+    if(!validateHex(hex))
+        return
 
     const alphaHex = alphaDecToHex(alpha)
+
     return `#${alphaDecToHex(alpha)}${hex}`
+}
+
+//validateHEx
+function validateHex(hex){
+    hex = hex.replace(/^#/, '')
+    if (!/^[0-9a-f]{6}$/i.test(hex)) 
+        return false
+    else 
+        return true
 }
 
 //collectionNext
@@ -118,7 +127,7 @@ function collectionNext(){
     if(currentCollectionIndex != api.collections.count - 1){
         currentCollectionIndex++
     }else{
-        if(stest.allGames)
+        if(settings.allGames)
             currentCollectionIndex = -1
         else
             currentCollectionIndex = 0
@@ -134,7 +143,7 @@ function collectionPrevious(){
         if(currentCollectionIndex != 0){
             currentCollectionIndex--
         }else{
-            if(stest.allGames)
+            if(settings.allGames)
                 currentCollectionIndex = -1
             else
                 currentCollectionIndex = api.collections.count - 1
@@ -144,6 +153,16 @@ function collectionPrevious(){
     }
     collections_menu.positionViewAtCurrentIndex()
     background.refresh()
+}
+
+function updateColors(){
+    
+}
+
+function resetFocus(){
+    let c = f
+    f = background
+    f = c
 }
 
 //logVideoStates
@@ -162,6 +181,7 @@ function logVideoStates(){
     log("PausedState: " + MediaPlayer.PausedState)
     log("StoppedState: " + MediaPlayer.StoppedState)
 }
+
 
 //logFocus
 function logFocus(){
@@ -199,6 +219,10 @@ function clearMemory(){
     api.memory.unset("struceOS_background_overlayOpacity")
     api.memory.unset("struceOS_dev_enableDevTools")
     api.memory.unset("struceOS_dev_log_opacity")
+    api.memory.unset("struceOS_ui_buttonHints")
+    api.memory.set("struceOS_background_overlaySource", images.overlay_0002)
+    api.memory.set("struceOS_theme_colors", settings.default_theme)
+    f = game_layout
 }
 
 //checkSettings
@@ -218,7 +242,6 @@ function checkSettings(){
     log(settings.showThumbs)
     log(settings.bgOverlayOn)
     log(settings.bgOverlayOpacity)
-    log(settings.bgOverlaySource)
     log(settings.enableDevTools)
     log(settings.consoleLogBackground)
     log(settings.version)

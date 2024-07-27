@@ -6,7 +6,7 @@ import QtQuick 2.15
 Rectangle {
     id: background
     anchors.fill: parent
-    color: p.black
+    color: settings.color_black
 
     property int fade_time: 200
 
@@ -63,12 +63,12 @@ Rectangle {
     //Background Overlay
     Image {
         id: backgroundOverlay
-        source: images.overlay
+        source: settings.bgOverlay
         opacity: {
-            if(!stest.bgOverlayOn || stest.bgOverlayOpacity * 100 < 1)
+            if(!settings.bgOverlayOn || settings.bgOverlayOpacity * 100 < 1)
                 return 0
             else
-                return stest.bgOverlayOpacity >= 1 ? 1 : stest.bgOverlayOpacity
+                return settings.bgOverlayOpacity >= 1 ? 1 : settings.bgOverlayOpacity
         }
 
         smooth: true

@@ -46,7 +46,7 @@ Item {
         CloseButton { //settings_close
             id: settings_close
 
-            icon_color: p.text
+            icon_color: settings.color_text
 
             selected: panel.current === this
 
@@ -83,10 +83,23 @@ Item {
             id:page_selection
 
             anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
+
+            Component.onCompleted: {
+                if(width > parent.width)
+                    anchors.horizontalCenter = parent.horizontalCenter
+                else
+                    anchors.left = parent.left
+            }
 
             height: vpx(48)
+
+            width: { //width
+                let sum = 0
+                for (var i = 0; i < children.length; i++) {
+                    sum += children[i].width + children[i].anchors.leftMargin
+                }
+                return sum;
+            }
 
             property bool selected: false
 
@@ -103,7 +116,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            Image {
+            Image { //leftSlash
                 id: leftSlash
                 source: images.slash
 
@@ -117,7 +130,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            Image {
+            Image { //key_q
                 id: key_q
                 source: images.key_q
 
@@ -167,15 +180,15 @@ Item {
                     id: page_list_layout
                     anchors.verticalCenter: parent.verticalCenter
                     text: "layout"
-                    color: page_selection.selected && parent.current === this ? p.text_invert : p.white
+                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
 
                     font.family: bold.name
                     font.bold: true
                     font.pixelSize: vpx(20)
 
                     property var onNext: function(){
-                        page_list.current = page_list_audio
-                        pages.current = audio_settings
+                        page_list.current = page_list_colors
+                        pages.current = color_settings
                     }
 
                     property var onPrevious: function(){
@@ -196,13 +209,49 @@ Item {
                     }
                 }
 
+                Text { //page_list_colors
+                    id: page_list_colors
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: page_list_layout.right
+                    anchors.leftMargin: vpx(12)
+                    text: "colors"
+                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
+
+                    font.family: bold.name
+                    font.bold: true
+                    font.pixelSize: vpx(20)
+
+                    property var onNext: function(){
+                        page_list.current = page_list_audio
+                        pages.current = audio_settings
+                    }
+
+                    property var onPrevious: function(){
+                        page_list.current = page_list_layout
+                        pages.current = layout_settings
+                    }
+
+                    MouseArea {
+                        cursorShape: Qt.PointingHandCursor
+                        anchors.fill: parent
+
+                        onClicked: {
+                            page_list.current = page_list_colors
+                            pages.current = color_settings
+                            audio.stopAll()
+                            audio.toggle_down.play()
+                        }
+
+                    }
+                }
+
                 Text { //page_list_audio
                     id: page_list_audio
                     anchors.verticalCenter: page_list.verticalCenter
-                    anchors.left: page_list_layout.right
+                    anchors.left: page_list_colors.right
                     anchors.leftMargin: vpx(12)
                     text: "audio"
-                    color: page_selection.selected && page_list.current === this ? p.text_invert : p.white
+                    color: page_selection.selected && page_list.current === this ? settings.color_text_invert : settings.color_white
 
                     font.family: bold.name
                     font.bold: true
@@ -214,8 +263,8 @@ Item {
                     }
 
                     property var onPrevious: function(){
-                        page_list.current = page_list_layout
-                        pages.current = layout_settings
+                        page_list.current = page_list_colors
+                        pages.current = color_settings
                     }
 
                     MouseArea {
@@ -237,7 +286,7 @@ Item {
                     anchors.left: page_list_audio.right
                     anchors.leftMargin: vpx(12)
                     text: "devtools"
-                    color: page_selection.selected && parent.current === this ? p.text_invert : p.white
+                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
 
                     font.family: bold.name
                     font.bold: true
@@ -266,7 +315,7 @@ Item {
                 }
             }
 
-            Image {
+            Image { //key_e
                 id: key_e
                 source: images.key_e
 
@@ -279,7 +328,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            Image {
+            Image { //rightSlash
                 id: rightSlash
                 source: images.slash
 
@@ -292,7 +341,6 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
             }
-
 
             Image { //rightBumper
                 id: rightBumper
@@ -350,6 +398,27 @@ Item {
                     reset()
                     panel.current = settings_close
                     panel.Keys.forwardTo = panel
+                }
+            }
+
+            ColorSettings {
+                id: color_settings
+                anchors.fill: parent
+                
+                selected: pages.selected && pages.current === this
+                visible: pages.current === this
+
+                exitMenu: function(){
+                    reset()
+                    panel.current = settings_close
+                    panel.Keys.forwardTo = panel
+                }
+
+                onCancel: function(){
+                    reset()
+                    panel.current = settings_close
+                    panel.Keys.forwardTo = panel
+                    panel.onCancel()
                 }
             }
 
@@ -489,4 +558,6 @@ Item {
         }
         s = null
     }
+
+    property ListModel color_model: color_settings.color_model
 }

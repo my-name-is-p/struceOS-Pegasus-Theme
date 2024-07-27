@@ -19,6 +19,10 @@
 // for easy to read code
 
 // Changelogs
+// #1.5.1
+//      1. Added button hints
+//      2. Added color options to settings
+
 // #1.5.0 
 //      1. Moved panel items to new window
 //      2. Added sort/filter menu
@@ -48,7 +52,6 @@
 //      3. Added text labels to games with default banner image
 //      4. Changed game count to update with filters
 //      5. Updated gameView controls to use built in functions
-
 
 // #1.3.0
 //      1. Updated some collection logos
@@ -119,9 +122,13 @@ FocusScope {
 
     property Item f: game_layout
     property string bg: getAssets(currentGame.assets).bg
-    property var p: stest.theme
+    property string bgOverlay: images.overlay_0002    
+    property var palette: settings.theme
     property var s: null
     
+    // property var c_test: settings.theme.accent.toString()
+
+
     //--FUNCTIONS--//
         //GetSimpleKeys
         property var gsk: U.gsk
@@ -133,23 +140,23 @@ FocusScope {
         property var alphaDecToHex: U.alphaDecToHex
         //alphaDecToHex
         property var addAlphaToHex: U.addAlphaToHex
+        //validateHex
+        property var validateHex: U.validateHex
         //collectionNext
         property var collectionNext: U.collectionNext
         //collectionPrevious
         property var collectionPrevious: U.collectionPrevious
+        //resetFocus
+        property var resetFocus: U.resetFocus
         //clearMemory
         property var clearMemory: U.clearMemory
         //checkSettings
         property var checkSettings: U.checkSettings
     //--
 
-   	FontLoader { id: regular; source: stest.fontFamilyRegular }
-   	FontLoader { id: bold; source: stest.fontFamilyBold }
+   	FontLoader { id: regular; source: settings.fontFamilyRegular }
+   	FontLoader { id: bold; source: settings.fontFamilyBold }
 
-
-    // Settings{
-    //     id: settings
-    // }
 
     Search {
         id: search
@@ -231,6 +238,21 @@ FocusScope {
         focus: f === this
     }
 
+    ButtonHints {
+        id: button_hints
+
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: settings.buttonHints ? 0 : -(parent.height - parent.height * 0.95)
+        anchors.left: sortfilt_menu.right
+        anchors.right: parent.right
+
+        Behavior on anchors.bottomMargin {NumberAnimation{duration: 125}}
+
+        opacity: settings.buttonHints ? 1 : 0
+
+        Behavior on opacity {NumberAnimation{duration: 125}}
+    }
+
     LaunchWindow {
         id:launch_window
 
@@ -243,35 +265,34 @@ FocusScope {
         id: devtools
     }
 
-
     Component.onCompleted: {
         currentCollectionIndex = api.memory.get("collectionIndex") || 0
         games.currentIndex = api.memory.get("gameIndex") || 0
-        if(currentCollectionIndex < 0 && !stest.allGames){
+        if(currentCollectionIndex < 0 && !settings.allGames){
             currentCollectionIndex = 0
             games.currentIndex = 0
         }
         bg = getAssets(currentGame.assets).bg
 
-        if(stest.enableDevTools)
-            log(stest.details, true)
+        if(settings.enableDevTools)
+            log(settings.details)
 
         audio.stopAll()
         audio.home.play()
     }
 
-    property string test: stest.enableDevTools ? "test" : undefined
+    property string test: settings.enableDevTools ? "test" : undefined
 
     focus: true
 
-    Loader {
+    Loader { //settings_loader
         id: settings_loader
         sourceComponent: settings_component
     }
 
-    Component {
+    Component { //settings_component
         id: settings_component
         Settings{}
     }
-    property Item stest: settings_loader.item
+    property Item settings: settings_loader.item
 }

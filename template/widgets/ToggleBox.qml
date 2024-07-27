@@ -19,11 +19,11 @@ Item {
     property var onClicked: function(){}
 
     height: { //height
-        let sum = 0
+        let h = 0
         for (var i = 0; i < children.length; i++) {
-            sum = children[i].height > sum ? children[i].height : sum
+            h = children[i].height > h ? children[i].height : h
         }
-        return sum;
+        return h;
     }
 
     Rectangle {
@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, p.white)
+        color: addAlphaToHex(0.6, settings.color_white)
 
         radius: vpx(6)
 
@@ -43,7 +43,7 @@ Item {
     Text { //game_layout_settings_columns_text
         id: toggle_text
         text: toggle.text
-        color: p.text
+        color: settings.color_text
 
         anchors.verticalCenter: parent.verticalCenter
 
@@ -62,10 +62,10 @@ Item {
         height: vpx(24)
         width: height
 
-        color: p.t
+        color: settings.color_t
 
         border.width: vpx(3)
-        border.color: p.text
+        border.color: settings.color_text
 
         radius: vpx(6)
 
@@ -78,7 +78,7 @@ Item {
 
             Behavior on height {NumberAnimation{duration: 100}}
             
-            color: p.text
+            color: settings.color_text
 
             radius: vpx(6)
 
@@ -89,7 +89,7 @@ Item {
                 anchors.centerIn: parent
                 text: "✓"
 
-                color: p.accent
+                color: settings.color_accent
             }
         }
     }

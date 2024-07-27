@@ -8,10 +8,16 @@ import "panels"
 Rectangle {
     id: panel_area
 
-    color: addAlphaToHex(0.97, p.accent)
+    color: addAlphaToHex(0.95, settings.color_accent)
     clip: true
 
-    height: focus ? (parent.height - (header.height + collections_menu.height)) * 0.95 : 0
+    property real topMargin: (parent.height - (header.height + collections_menu.height))
+
+    height: f === this ? 
+                settings.buttonHints ? 
+                    topMargin - vpx(72) : 
+                    topMargin * 0.95  : 
+                0
 
     Behavior on height {NumberAnimation {duration: 125}}
 

@@ -72,7 +72,7 @@ Item {
         Text { //ui_audio_settings_title
             id: ui_audio_settings_title
             text: "UI"
-            color: p.text
+            color: settings.color_text
 
             font.family: bold.name
             font.bold: true
@@ -91,17 +91,17 @@ Item {
             anchors.right: parent.right
 
             height: { //height
-                let sum = 0
+                let h = 0
                 for (var i = 0; i < children.length; i++) {
-                    sum = children[i].height > sum ? children[i].height : sum
+                    h = children[i].height > h ? children[i].height : h
                 }
-                return sum;
+                return h;
             }
 
             Text { //ui_audio_settings_volume_text
                 id: ui_audio_settings_volume_text
                 text: "default volume"
-                color: p.text
+                color: settings.color_text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -117,7 +117,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (stest.uiVolume*100)
+                value: (settings.uiVolume*100)
                 percent: true
                 selected: ui_audio_settings.selected && ui_audio_settings.current === this
                 memory: "struceOS_ui_volume"
@@ -142,7 +142,7 @@ Item {
             value: settings_loader.item.uiMute
 
             onClicked: function(){
-                stest.uiMute = !value
+                settings.uiMute = !value
                 api.memory.set("struceOS_ui_Mute", value)
             }
             property var onAccept: onClicked
@@ -206,7 +206,7 @@ Item {
         Text { //video_audio_settings_title
             id: video_audio_settings_title
             text: "Video"
-            color: p.text
+            color: settings.color_text
 
             font.family: bold.name
             font.bold: true
@@ -225,17 +225,17 @@ Item {
             anchors.right: parent.right
 
             height: { //height
-                let sum = 0
+                let h = 0
                 for (var i = 0; i < children.length; i++) {
-                    sum = children[i].height > sum ? children[i].height : sum
+                    h = children[i].height > h ? children[i].height : h
                 }
-                return sum;
+                return h;
             }
 
             Text { //video_audio_settings_volume_text
                 id: video_audio_settings_volume_text
                 text: "default volume"
-                color: p.text
+                color: settings.color_text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -251,7 +251,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (stest.videoVolume*100)
+                value: (settings.videoVolume*100)
                 percent: true
                 selected: video_audio_settings.selected && video_audio_settings.current === this
                 memory: "struceOS_video_volume"

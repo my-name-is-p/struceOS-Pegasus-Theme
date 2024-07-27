@@ -29,8 +29,9 @@ Item {
 
             property bool active: game_layout.focus
 
+            bottomMargin: settings.buttonHints ? vpx(72) : 0
 
-            cellWidth: parent.width / stest.columns
+            cellWidth: parent.width / settings.columns
             cellHeight: cellWidth * 0.6
             
             highlightMoveDuration: 100
@@ -48,10 +49,10 @@ Item {
             if(key != undefined){
                 switch(key){
                     case "up":
-                        if(stest.columns - game_grid_view.currentIndex <= 0)
+                        if(settings.columns - game_grid_view.currentIndex <= 0)
                             game_grid_view.moveCurrentIndexUp()
                         else {
-                            if(game_grid_view.currentIndex < stest.columns / 2){
+                            if(game_grid_view.currentIndex < settings.columns / 2){
                                 f = sortfilt_toolbar
                                 s = audio.toggle_down
                             }else{
@@ -63,7 +64,7 @@ Item {
                         }
                         break
                     case "down":
-                        if(game_grid_view.currentIndex + stest.columns <= game_grid_view.count - 1)
+                        if(game_grid_view.currentIndex + settings.columns <= game_grid_view.count - 1)
                             game_grid_view.moveCurrentIndexDown()
                         else 
                             game_grid_view.currentIndex = game_grid_view.count - 1
@@ -97,7 +98,7 @@ Item {
                         break
                     case "accept":
                         launch_window.visible = true
-                        if(stest.lastPlayed){
+                        if(settings.lastPlayed){
                             api.memory.set("collectionIndex", currentCollectionIndex)
                             api.memory.set("gameIndex", game_grid_view.currentIndex)
                         }
@@ -110,9 +111,9 @@ Item {
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = stest.allGames ? 8 : 9
+                currentCollectionIndex = settings.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
+                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

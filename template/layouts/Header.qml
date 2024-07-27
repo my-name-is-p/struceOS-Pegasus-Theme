@@ -10,7 +10,7 @@ Item {
     property Item current: collection
 
     height: {
-        switch(stest.headerSize){
+        switch(settings.headerSize){
             case "l":
                 return vpx(96)
             case "s":
@@ -56,7 +56,7 @@ Item {
             anchors.top: parent.top
 
             text: currentCollection.name
-            color: p.white
+            color: settings.color_white
 
             font.family: bold.name
             font.bold: true
@@ -67,7 +67,7 @@ Item {
 
         Rectangle { //game_count
             id: game_count
-            color: p.accent
+            color: settings.color_accent
             width: game_count_text.width + vpx(12) < vpx(24) ? vpx(24) : game_count_text.width + vpx(12)
             height: vpx(24)
             anchors.top: collection_logo.top
@@ -78,7 +78,7 @@ Item {
             Text { //game_count_text
                 id: game_count_text
                 text: games.count
-                color: p.text
+                color: settings.color_text
                 anchors.centerIn: parent
 
                 font.family: bold.name
@@ -94,11 +94,11 @@ Item {
             anchors.bottom: parent.bottom
             anchors.right: game_count.right
             anchors.margins:vpx(-6)
-            color: p.t
+            color: settings.color_t
 
             visible: collection.selected
 
-            border.color: p.border
+            border.color: settings.color_border
             border.width: vpx(6)
             radius: vpx(6)
         }
@@ -182,7 +182,7 @@ Item {
         anchors.right: settings_button.left
 
         icon: images.search_icon
-        icon_color: p.text
+        icon_color: settings.color_text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -192,8 +192,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: vpx(24)
 
-        background: addAlphaToHex(0.3, p.black)
-        hover_color: p.black
+        background: addAlphaToHex(0.3, settings.color_black)
+        hover_color: settings.color_black
 
         onClicked: function(){
             f = header
@@ -222,7 +222,7 @@ Item {
         anchors.right: info_button.left
 
         icon: images.settings_icon
-        icon_color: p.text
+        icon_color: settings.color_text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -232,8 +232,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: vpx(24)
 
-        background: addAlphaToHex(0.3, p.black)
-        hover_color: p.black
+        background: addAlphaToHex(0.3, settings.color_black)
+        hover_color: settings.color_black
 
         onClicked: function(){
             if(f != panel_area || panel_area.current != panel_area.settings_panel){
@@ -270,7 +270,7 @@ Item {
         anchors.rightMargin: vpx(24)
 
         icon: images.info_icon
-        icon_color: p.text
+        icon_color: settings.color_text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -278,8 +278,8 @@ Item {
         selected: f === header && header.current === this
 
 
-        background: addAlphaToHex(0.3, p.black)
-        hover_color: p.black
+        background: addAlphaToHex(0.3, settings.color_black)
+        hover_color: settings.color_black
 
         onClicked: function(){
             if(f != panel_area || panel_area.current != panel_area.info_panel){
@@ -315,9 +315,9 @@ Item {
         selected: header.current === this
 
         property var onAccept: function(){
-            stest.twelvehour = !stest.twelvehour
+            settings.twelvehour = !settings.twelvehour
             clock.clock.set()
-            api.memory.set("struceOS_ui_twelvehour", stest.twelvehour)
+            api.memory.set("struceOS_ui_twelvehour", settings.twelvehour)
         }
 
         property var onLeft: function(){
@@ -348,8 +348,8 @@ Item {
                         if(current.onDown != undefined){
                             current.onDown()
                         }else{
-                            if(games.currentIndex < stest.columns / 2){
-                                games.currentIndex = Math.min(games.count - 1, stest.columns - 1)
+                            if(games.currentIndex < settings.columns / 2){
+                                games.currentIndex = Math.min(games.count - 1, settings.columns - 1)
                             }
                             onCancel()
                         }
@@ -415,9 +415,9 @@ Item {
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = stest.allGames ? 8 : 9
+                currentCollectionIndex = settings.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
+                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

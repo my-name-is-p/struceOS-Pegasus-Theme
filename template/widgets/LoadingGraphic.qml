@@ -11,14 +11,14 @@ Item {
     Rectangle{
         anchors.fill: parent
         radius: 100
-        color: p.t
+        color: settings.color_t
         border.width: vpx(12)
-        border.color: addAlphaToHex(0.3, p.white)
+        border.color: addAlphaToHex(0.3, settings.color_white)
 
     }
 
     Rectangle {
-        color: p.white
+        color: settings.color_white
         height: vpx(12)
         width: height
 

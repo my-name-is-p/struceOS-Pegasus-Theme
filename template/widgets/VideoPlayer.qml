@@ -23,11 +23,11 @@ Item { //viewer
         anchors.fill: parent
         anchors.margins: vpx(-8)
 
-        color: p.t
+        color: settings.color_t
 
         radius: vpx(16)
 
-        border.color: p.border
+        border.color: settings.color_border
         border.width: parent.selected && parent.current === viewer ? vpx(12) : 0
 
     }
@@ -37,7 +37,7 @@ Item { //viewer
         anchors.fill: parent
         radius: vpx(12)
 
-        color: p.accent
+        color: settings.color_accent
     }
 
     Image { //video_default
@@ -54,7 +54,7 @@ Item { //viewer
     Rectangle { //video_frame
         id: video_frame
         anchors.fill: parent
-        color: p.black
+        color: settings.color_black
 
         visible: false
 
@@ -69,8 +69,8 @@ Item { //viewer
             flushMode: VideoOutput.EmptyFrame
             fillMode: VideoOutput.PreserveAspectFit
 
-            muted: stest.videoMute
-            volume: stest.videoVolume
+            muted: settings.videoMute
+            volume: settings.videoVolume
             loops: MediaPlayer.Infinite
 
             onStatusChanged: {
@@ -212,7 +212,7 @@ Item { //viewer
 
             onClicked: function(){
                 video.muted = !video.muted
-                stest.videoMute = video.muted
+                settings.videoMute = video.muted
             }
             property var onAccept: onClicked
 
@@ -295,7 +295,7 @@ Item { //viewer
 
                 height: vpx(6)
                 
-                color: p.slider_base
+                color: settings.color_slider_base
 
                 radius: vpx(6)
             }
@@ -309,7 +309,7 @@ Item { //viewer
 
                 height: vpx(6)
 
-                color: p.slider
+                color: settings.color_slider
 
                 radius: vpx(6)
             }
@@ -320,7 +320,7 @@ Item { //viewer
                 height: width
 
                 anchors.verticalCenter: parent.verticalCenter
-                color: p.slider
+                color: settings.color_slider
                 radius: vpx(12)
 
                 property var selected: viewer.current === this
@@ -367,9 +367,9 @@ Item { //viewer
                     id: video_scrub_handle_select
                     anchors.fill: parent
                     anchors.margins: vpx(-6)
-                    color: p.t
+                    color: settings.color_t
 
-                    border.color: p.border
+                    border.color: settings.color_border
                     border.width: parent.selected ? vpx(6) : 0
 
                     radius: vpx(6)
@@ -394,8 +394,8 @@ Item { //viewer
             Rectangle { //video_scrub_select
                 id: video_scrub_select
                 anchors.fill: parent
-                color: p.t
-                border.color: p.border
+                color: settings.color_t
+                border.color: settings.color_border
                 border.width: parent.selected ? vpx(6) : 0
 
                 radius: vpx(6)
@@ -427,7 +427,7 @@ Item { //viewer
         Item{ //video_time
             id: video_time
             anchors.verticalCenter: mute.verticalCenter
-            anchors.right: loop.left
+            anchors.right: loosettings.color_left
             anchors.rightMargin: vpx(12)
 
             height: video_time_text.height
@@ -439,7 +439,7 @@ Item { //viewer
                 radius: vpx(6)
                 anchors.margins: vpx(-3)
 
-                color: addAlphaToHex(0.3, p.black)
+                color: addAlphaToHex(0.3, settings.color_black)
             }
 
             Text { //video_time_text
@@ -447,7 +447,7 @@ Item { //viewer
 
                 text: getTime(video.position) + "/" + getTime(video.duration)
 
-                color: p.text
+                color: settings.color_text
 
                 horizontalAlignment: Text.AlignRight
 
@@ -478,8 +478,8 @@ Item { //viewer
             anchors.bottomMargin: vpx(3)
 
             property bool show_value: true
-            property var text_color: p.white
-            property var value: stest.videoVolume
+            property var text_color: settings.color_white
+            property var value: settings.videoVolume
 
             property bool selected: viewer.current === this
 
@@ -488,25 +488,25 @@ Item { //viewer
             }
 
             property var onNext: function(){
-                let v = Math.round((stest.videoVolume * 100) % 5)
-                v = (stest.videoVolume * 100) - v + 5
-                stest.videoVolume = v < 100 ? v / 100 : 1
+                let v = Math.round((settings.videoVolume * 100) % 5)
+                v = (settings.videoVolume * 100) - v + 5
+                settings.videoVolume = v < 100 ? v / 100 : 1
             }
             property var onRight: onNext
 
             property var onPrevious: function(){
-                let v = Math.round((stest.videoVolume * 100) % 5)
-                v = v > 0 ? (stest.videoVolume * 100) - v : (stest.videoVolume * 100) -5
-                stest.videoVolume = v > 0 ? v / 100 : 0
+                let v = Math.round((settings.videoVolume * 100) % 5)
+                v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) -5
+                settings.videoVolume = v > 0 ? v / 100 : 0
             }
             property var onLeft: onPrevious
 
             property var onFirst: function(){
-                stest.videoVolume = 0
+                settings.videoVolume = 0
             }
 
             property var onLast: function(){
-                stest.videoVolume = 1
+                settings.videoVolume = 1
             }
 
             property var onAccept: function(){
@@ -516,8 +516,8 @@ Item { //viewer
             Rectangle { //volume_slide_select
                 id: volume_slide_select
                 anchors.fill: parent
-                color: p.t
-                border.color: p.border
+                color: settings.color_t
+                border.color: settings.color_border
                 border.width: parent.selected ? vpx(6) : 0
 
                 radius: vpx(6)
@@ -529,7 +529,7 @@ Item { //viewer
                 radius: vpx(6)
                 anchors.margins: vpx(-3)
 
-                color: addAlphaToHex(0.3, p.black)
+                color: addAlphaToHex(0.3, settings.color_black)
             }
 
             Text { //volume_slide_amount
@@ -556,7 +556,7 @@ Item { //viewer
 
                 width: vpx(6)
                 
-                color: p.slider_base
+                color: settings.color_slider_base
 
                 radius: vpx(6)
             }
@@ -570,7 +570,7 @@ Item { //viewer
 
                 width: vpx(6)
 
-                color: p.slider
+                color: settings.color_slider
 
                 radius: vpx(6)
             }
@@ -579,44 +579,44 @@ Item { //viewer
                 id: volume_slide_handle
                 width: vpx(12)
                 height: width
-                y: volume_slide_background.height * (1 - stest.videoVolume)
+                y: volume_slide_background.height * (1 - settings.videoVolume)
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: p.slider
+                color: settings.color_slider
                 radius: vpx(12)
 
                 property bool selected: viewer.current === this
 
                 property var onNext: function(){
-                    let v = Math.round((stest.videoVolume * 100) % 5)
-                    v = (stest.videoVolume * 100) - v + 5
-                    stest.videoVolume = v < 100 ? v / 100 : 1
+                    let v = Math.round((settings.videoVolume * 100) % 5)
+                    v = (settings.videoVolume * 100) - v + 5
+                    settings.videoVolume = v < 100 ? v / 100 : 1
                 }
                 property var onRight: onNext
 
                 property var onUp: function(){
-                    let v = (stest.videoVolume * 100) + 1
-                    stest.videoVolume = v < 100 ? v / 100 : 1
+                    let v = (settings.videoVolume * 100) + 1
+                    settings.videoVolume = v < 100 ? v / 100 : 1
                 }
                 property var onLeft: onPrevious
 
                 property var onPrevious: function(){
-                    let v = Math.round((stest.videoVolume * 100) % 5)
-                    v = v > 0 ? (stest.videoVolume * 100) - v : (stest.videoVolume * 100) - 5
-                    stest.videoVolume = v > 0 ? v / 100 : 0
+                    let v = Math.round((settings.videoVolume * 100) % 5)
+                    v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) - 5
+                    settings.videoVolume = v > 0 ? v / 100 : 0
                 }
 
                 property var onDown: function(){
-                    let v = (stest.videoVolume * 100) - 1
-                    stest.videoVolume = v > 0 ? v / 100 : 0
+                    let v = (settings.videoVolume * 100) - 1
+                    settings.videoVolume = v > 0 ? v / 100 : 0
                 }
 
                 property var onFirst: function(){
-                    stest.videoVolume = 0
+                    settings.videoVolume = 0
                 }
 
                 property var onLast: function(){
-                    stest.videoVolume = 1
+                    settings.videoVolume = 1
                 }
 
                 property var onAccept: function(){
@@ -628,9 +628,9 @@ Item { //viewer
                     id: volume_slide_handle_select
                     anchors.fill: parent
                     anchors.margins: vpx(-6)
-                    color: p.t
+                    color: settings.color_t
 
-                    border.color: p.border
+                    border.color: settings.color_border
                     border.width: parent.selected ? vpx(6) : 0
 
                     radius: vpx(6)
@@ -654,11 +654,11 @@ Item { //viewer
                 onClicked: {
                     let v = Math.round((1 - (mouseY / volume_slide_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
-                    stest.videoVolume = v
+                    settings.videoVolume = v
                 }
 
                 onPositionChanged: {
-                    stest.videoVolume = Math.round((1 - (volume_slide_handle.y / volume_slide_background.height)) * 100) / 100
+                    settings.videoVolume = Math.round((1 - (volume_slide_handle.y / volume_slide_background.height)) * 100) / 100
                 }
             }
         }

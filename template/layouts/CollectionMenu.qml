@@ -6,7 +6,7 @@ import QtQuick 2.15
 Rectangle {
     id: collections_menu
     height: focus ?  vpx(120) : 0
-    color: addAlphaToHex(0.85, p.accent)
+    color: addAlphaToHex(0.85, settings.color_accent)
     property bool opened: focus
 
     Behavior on height {NumberAnimation {duration: 75}}
@@ -17,7 +17,7 @@ Rectangle {
     clip: true
 
     function positionViewAtCurrentIndex(){
-        collections_list.currentIndex = stest.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
+        collections_list.currentIndex = settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
         collections_list.positionViewAtIndex(collections_list.currentIndex, ListView.Center)
     }
 
@@ -30,7 +30,7 @@ Rectangle {
 
         function populateModel() {
             collections_model.clear() // Clear existing entries
-            if(stest.allGames){
+            if(settings.allGames){
                 append({ name: "All Games", shortName: "allgames" })
             }
             for(var i=0; i<api.collections.count; i++) {
@@ -75,7 +75,7 @@ Rectangle {
         
         height: parent.height
 
-        currentIndex: stest.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
+        currentIndex: settings.allGames ? currentCollectionIndex + 1 : currentCollectionIndex
 
         model: collections_model
         delegate: collectionView_list_item
@@ -117,7 +117,7 @@ Rectangle {
                 text: name
                 anchors.centerIn: parent
 
-                color: p.white
+                color: settings.color_white
                 visible: collectionView_list_logo.status === Image.Error
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -136,11 +136,11 @@ Rectangle {
 
                 property bool selected: (collections_list.currentItem == parent && f === collections_menu) || hover
 
-                color: p.t
+                color: settings.color_t
 
                 property bool hover: false
 
-                border.color: p.border
+                border.color: settings.color_border
                 border.width: selected || hover ? vpx(6) : vpx(0)
                 radius: vpx(6)
 
@@ -162,7 +162,7 @@ Rectangle {
 
                     onClicked: {
                         games.currentIndex = 0
-                        currentCollectionIndex = stest.allGames ? index - 1 : index
+                        currentCollectionIndex = settings.allGames ? index - 1 : index
                         collections_menu.positionViewAtCurrentIndex()
                         background.refresh()
                         audio.stopAll()
@@ -197,7 +197,7 @@ Rectangle {
                         }
                         break
                     case "first":
-                        currentCollectionIndex = stest.allGames ? -1 : 0
+                        currentCollectionIndex = settings.allGames ? -1 : 0
                         positionViewAtCurrentIndex()
                         break
                     case "last":
@@ -226,9 +226,9 @@ Rectangle {
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = stest.allGames ? 8 : 9
+                currentCollectionIndex = settings.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
+                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

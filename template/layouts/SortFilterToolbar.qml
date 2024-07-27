@@ -75,7 +75,7 @@ Item { //sortfilt_toolbar_wrapper
                 font.family: bold.name
                 font.bold: true
                 font.pixelSize: vpx(16)
-                color: p.white
+                color: settings.color_white
             }
 
             Image {
@@ -97,11 +97,11 @@ Item { //sortfilt_toolbar_wrapper
 
             anchors.fill: parent
 
-            border.color: p.border
+            border.color: settings.color_border
             border.width: vpx(6)
             radius: vpx(6)
 
-            color: p.t
+            color: settings.color_t
 
             visible: sortfilt_toolbar_wrapper.selected && sortfilt_toolbar_wrapper.current === sortfilt_label
 
@@ -164,7 +164,7 @@ Item { //sortfilt_toolbar_wrapper
 
             anchors.verticalCenter: parent.verticalCenter
 
-            color: p.accent
+            color: settings.color_accent
             radius: vpx(100)
 
 
@@ -176,7 +176,7 @@ Item { //sortfilt_toolbar_wrapper
                 Text {
                     anchors.centerIn: parent
                     text: "🗙"
-                    color: p.text
+                    color: settings.color_text
                     font.pixelSize: vpx(12)
                 }
             }
@@ -184,7 +184,7 @@ Item { //sortfilt_toolbar_wrapper
             Text {
                 id: sortfilt_filter_item_text
                 text: "favorite"
-                color: p.text
+                color: settings.color_text
                 font.pixelSize: vpx(11)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: sortfilt_filter_item_remove_wrapper.right
@@ -283,9 +283,9 @@ Item { //sortfilt_toolbar_wrapper
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = stest.allGames ? 8 : 9
+                currentCollectionIndex = settings.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
+                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }

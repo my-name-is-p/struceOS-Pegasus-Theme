@@ -7,7 +7,7 @@ import "parts"
 Rectangle { //sortfilt_menu
     id: sortfilt_menu
 
-    color: addAlphaToHex(0.90, p.accent)
+    color: addAlphaToHex(0.90, settings.color_accent)
 
     property Item current: sort_item_title
 
@@ -21,13 +21,10 @@ Rectangle { //sortfilt_menu
         anchors.topMargin: vpx(24)
         color: "transparent"
 
-        height: {
-            var sum = vpx(0);
+        height: { //height
+            let sum = 0
             for (var i = 0; i < children.length; i++) {
-                if(children[i].height != 0)
-                    sum += children[i].height
-                else
-                    sum += children[i].height
+                sum += children[i].height + children[i].anchors.topMargin
             }
             return sum;
         }
@@ -49,7 +46,7 @@ Rectangle { //sortfilt_menu
                 anchors.leftMargin: vpx(24)
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: p.white
+                color: settings.color_white
             }
         }
 
@@ -161,13 +158,10 @@ Rectangle { //sortfilt_menu
         anchors.top: sort_section.bottom
         anchors.topMargin: vpx(12)
 
-        height: {
-            var sum = vpx(0);
+        height: { //height
+            let sum = 0
             for (var i = 0; i < children.length; i++) {
-                if(children[i].height != 0)
-                    sum += children[i].height
-                else
-                    sum += children[i].height
+                sum += children[i].height + children[i].anchors.topMargin
             }
             return sum;
         }
@@ -187,7 +181,7 @@ Rectangle { //sortfilt_menu
                 anchors.leftMargin: vpx(24)
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: p.white
+                color: settings.color_white
             }
         }
 
@@ -293,9 +287,9 @@ Rectangle { //sortfilt_menu
             }
         }else{
             if(key == 0) {
-                currentCollectionIndex = stest.allGames ? 8 : 9
+                currentCollectionIndex = settings.allGames ? 8 : 9
             } else {
-                currentCollectionIndex = stest.allGames ? key - 2 : key - 1
+                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
             }
             s = audio.toggle_down
         }
@@ -306,7 +300,7 @@ Rectangle { //sortfilt_menu
         s = null
     }
 
-    Behavior on anchors.leftMargin {NumberAnimation {duration: 150}}
+    Behavior on anchors.leftMargin {NumberAnimation {duration: 100}}
 
     property FilterItem favorite: filter_item_favorite
     property SortItem title: sort_item_title

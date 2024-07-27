@@ -12,7 +12,7 @@ Item { //devtools
 
     width: parent.width / 3
 
-    visible: stest.enableDevTools
+    visible: settings.enableDevTools
 
     Rectangle { //log_window
         id: log_window
@@ -23,7 +23,7 @@ Item { //devtools
         anchors.right: parent.right
         anchors.margins: vpx(12)
 
-        color: addAlphaToHex(stest.consoleLogBackground,p.black)
+        color: addAlphaToHex(settings.consoleLogBackground, settings.color_black)
 
         radius: vpx(12)
 
@@ -44,10 +44,10 @@ Item { //devtools
                 readOnly: true
                 selectByMouse: true
 
-                color: p.white
+                color: settings.color_white
 
-                selectionColor: p.white
-                selectedTextColor: p.black
+                selectionColor: settings.color_white
+                selectedTextColor: settings.color_black
 
                 wrapMode: TextEdit.WordWrap
 
@@ -106,7 +106,7 @@ Item { //devtools
 
         radius: vpx(48)
 
-        color: hovered ? p.launch : p.launch_hover
+        color: hovered ? settings.color_launch : settings.color_launch_hover
 
         visible: true
 
@@ -132,7 +132,11 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
-                collections_menu.positionViewAtCurrentIndex()
+                Object.keys(settings.theme).sort().forEach(
+                        function(v, i) {
+                            log(v + ": " + settings.theme[v]);
+                        }
+                    )
                 mouse.event = accepted
             }
 
@@ -157,7 +161,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? p.launch : p.launch_hover
+        color: hovered ? settings.color_launch : settings.color_launch_hover
 
         visible: true
 
@@ -168,7 +172,7 @@ Item { //devtools
             anchors.centerIn: parent
             text: "clear memory"
 
-            color: clear_mem.hovered ? p.white : p.black
+            color: clear_mem.hovered ? settings.color_white : settings.color_black
         }
 
         MouseArea { //clear_mem_click
@@ -219,7 +223,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? p.launch : p.launch_hover
+        color: hovered ? settings.color_launch : settings.color_launch_hover
 
         visible: true
 
@@ -230,7 +234,7 @@ Item { //devtools
             anchors.centerIn: parent
             text: "clear log"
 
-            color: clear_log.hovered ? p.white : p.black
+            color: clear_log.hovered ? settings.color_white : settings.color_black
         }
 
         MouseArea { //clear_log_click
@@ -252,14 +256,14 @@ Item { //devtools
             onClicked: {
                 audio.stopAll()
                 audio.select.play()
-                log(stest.details, true, true)
+                log(settings.details, true, true)
                 mouse.event = accepted
             }
 
             onDoubleClicked: {
                 audio.stopAll()
                 audio.select.play()
-                log(stest.details, true, true)
+                log(settings.details, true, true)
                 mouse.event = accepted
             }
         }

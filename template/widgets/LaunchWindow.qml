@@ -10,7 +10,7 @@ Item {
     Rectangle {
         anchors.fill: parent
 
-        color: addAlphaToHex(0.95, p.black)
+        color: addAlphaToHex(0.95, settings.color_black)
     }
     Item {
         id: launch_info
@@ -27,7 +27,7 @@ Item {
         Text {
             id: launch_text
             text: "Launching: " + currentGame.title
-            color: p.white
+            color: settings.color_white
             font.family: regular.name
             font.pixelSize: vpx(24)
 

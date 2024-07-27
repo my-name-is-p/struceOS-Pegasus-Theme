@@ -15,10 +15,34 @@ Item {
         property string noImage: noImage.source
 
         Image {
-            id: overlay
-            source: "../assets/img/backgrounds/" + stest.bgOverlaySource
+            id: overlay_0001
+            source: "../assets/img/backgrounds/0001.jpg"
         }
-        property string overlay: overlay.source
+        property string overlay_0001: overlay_0001.source
+
+        Image {
+            id: overlay_0002
+            source: "../assets/img/backgrounds/0002.jpg"
+        }
+        property string overlay_0002: overlay_0002.source
+
+        Image {
+            id: overlay_0003
+            source: "../assets/img/backgrounds/0003.jpg"
+        }
+        property string overlay_0003: overlay_0003.source
+
+        Image {
+            id: overlay_0004
+            source: "../assets/img/backgrounds/0004.jpg"
+        }
+        property string overlay_0004: overlay_0004.source
+
+        Image {
+            id: overlay_0005
+            source: "../assets/img/backgrounds/0005.jpg"
+        }
+        property string overlay_0005: overlay_0005.source
 
         Image {
             id: current_collection
@@ -57,6 +81,12 @@ Item {
             source: "../assets/img/ui-icons/general/players.svg"
         }    
         property string players: players.source
+
+        Image {
+            id: refresh
+            source: "../assets/img/ui-icons/general/refresh.svg"
+        }    
+        property string refresh: refresh.source
 
         Image {
             id: search_icon
@@ -166,6 +196,12 @@ Item {
         property string dpad: dpad.source
 
         Image {
+            id: dpad_filled
+            source: "../assets/img/ui-icons/controller/dpad_filled.svg"
+        }    
+        property string dpad_filled: dpad_filled.source
+
+        Image {
             id: dpad_up
             source: "../assets/img/ui-icons/controller/dpad_up.svg"
         }    
@@ -194,33 +230,39 @@ Item {
 
         Image {
             id: face_button
-            source: "../assets/img/ui-icons/controller/face_button.svg"
+            source: "../assets/img/ui-icons/controller/face_btn.svg"
         }    
         property string face_button: face_button.source
 
         Image {
             id: face_button_top
-            source: "../assets/img/ui-icons/controller/face_button_top.svg"
+            source: "../assets/img/ui-icons/controller/face_btn_top.svg"
         }    
         property string face_button_top: face_button_top.source
 
         Image {
             id: face_button_bottom
-            source: "../assets/img/ui-icons/controller/face_button_bottom.svg"
+            source: "../assets/img/ui-icons/controller/face_btn_bottom.svg"
         }    
         property string face_button_bottom: face_button_bottom.source
 
         Image {
             id: face_button_left
-            source: "../assets/img/ui-icons/controller/face_button_left.svg"
+            source: "../assets/img/ui-icons/controller/face_btn_left.svg"
         }    
         property string face_button_left: face_button_left.source
 
         Image {
             id: face_button_right
-            source: "../assets/img/ui-icons/controller/face_button_right.svg"
+            source: "../assets/img/ui-icons/controller/face_btn_right.svg"
         }    
         property string face_button_right: face_button_right.source
+
+        Image {
+            id: joystick
+            source: "../assets/img/ui-icons/controller/joystick.svg"
+        }    
+        property string joystick: joystick.source
 
         Image {
             id: leftBumper
@@ -259,6 +301,12 @@ Item {
             source: "../assets/img/ui-icons/keyboard/key_d.svg"
         }    
         property string key_d: key_d.source
+
+        Image {
+            id: wsad
+            source: "../assets/img/ui-icons/keyboard/wsad.svg"
+        }    
+        property string wsad: wsad.source
         
         Image {
             id: key_q
@@ -271,6 +319,18 @@ Item {
             source: "../assets/img/ui-icons/keyboard/key_e.svg"
         }    
         property string key_e: key_e.source
+
+        Image {
+            id: key_i
+            source: "../assets/img/ui-icons/keyboard/key_i.svg"
+        }    
+        property string key_i: key_i.source
+        
+        Image {
+            id: key_f
+            source: "../assets/img/ui-icons/keyboard/key_f.svg"
+        }    
+        property string key_f: key_f.source
         
         Image {
             id: key_space

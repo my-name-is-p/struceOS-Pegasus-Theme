@@ -21,6 +21,10 @@ Item {
         api.memory.get("struceOS_ui_twelvehour") != undefined ?
             api.memory.get("struceOS_ui_twelvehour") : true
 
+    property bool buttonHints:
+        api.memory.get("struceOS_ui_buttonHints") != undefined ?
+            api.memory.get("struceOS_ui_buttonHints") : true
+            
     //audio
         //video
         property bool videoMute:
@@ -58,7 +62,9 @@ Item {
 
     property real bgOverlayOpacity: api.memory.get("struceOS_background_overlayOpacity") || 0.75
 
-    property string bgOverlaySource: "0002.png"
+    property string bgOverlay:
+        api.memory.get("struceOS_background_overlaySource") != undefined ?
+            api.memory.get("struceOS_background_overlaySource") : images.overlay_0002
 
     //devtools
     property bool enableDevTools:
@@ -68,7 +74,7 @@ Item {
 
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.5.0"
+    property string version: "1.5.1"
     property string author: "strucep"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
@@ -76,18 +82,35 @@ Item {
     property bool working: false
 
     //Colors
-    property var theme: {
+    property var theme: 
+        api.memory.get("struceOS_theme_colors") != undefined ?
+            api.memory.get("struceOS_theme_colors") : default_theme
+    
+    property var default_theme: {
             "accent": "#011936",
             "accent_light": "#465362",
+            "black": "#000000",
+            "border": addAlphaToHex(0.6, "#FFFFFF"),
+            "launch": "#1E824C",
+            "launch_hover": "#1BA39C",
             "slider": "#FE3734",
             "slider_base": "#F1C8C7",
-            "launch": "#1E824C",
-            "launch_hover": "#1ba39c",
-            "border": addAlphaToHex(0.6, "#ffffff"),
-            "text": "#ffffff",
+            "t": "transparent",
+            "text": "#FFFFFF",
             "text_invert": "#000000",
-            "black": "#000000",
-            "white": "#ffffff",
-            "t": "transparent"
+            "white": "#FFFFFF",
         }
+
+    property string color_accent: theme.accent
+    property string color_accent_light: theme.accent_light
+    property string color_slider: theme.slider
+    property string color_slider_base: theme.slider_base
+    property string color_launch: theme.launch
+    property string color_launch_hover: theme.launch_hover
+    property string color_border: theme.border
+    property string color_text: theme.text
+    property string color_text_invert: theme.text_invert
+    property string color_black: theme.black
+    property string color_white: theme.white
+    property string color_t: theme.t
 }

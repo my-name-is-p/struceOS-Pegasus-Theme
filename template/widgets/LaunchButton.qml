@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.15
 Rectangle { //launch
     id: launch
     height: vpx(48)
-    color: hovered ? p.white : p.launch
+    color: hovered ? settings.color_white : settings.color_launch
     radius: vpx(100)
 
 
@@ -34,7 +34,7 @@ Rectangle { //launch
         Rectangle {
             id: launch_icon_color
             anchors.fill: parent
-            color: launch.hovered ? p.launch : p.white
+            color: launch.hovered ? settings.color_launch : settings.color_white
 
             visible: false
         }
@@ -51,7 +51,7 @@ Rectangle { //launch
     Text { //launch_text
         id: game_launch_text
         text: "launch"
-        color: launch.hovered ? p.launch : p.white
+        color: launch.hovered ? settings.color_launch : settings.color_white
         font.family: regular.name
         font.pixelSize: vpx(18)
 
@@ -66,10 +66,10 @@ Rectangle { //launch
         anchors.fill: launch
         anchors.margins: vpx(-6)
 
-        color: p.t
+        color: settings.color_t
 
         border.width: vpx(6)
-        border.color: p.border
+        border.color: settings.color_border
 
         radius: vpx(6)
 
@@ -99,7 +99,7 @@ Rectangle { //launch
             audio.stopAll()
             audio.toggle_down.play()
             launch_window.visible = true
-            if(stest.lastPlayed){
+            if(settings.lastPlayed){
                 api.memory.set("collectionIndex", currentCollectionIndex)
                 api.memory.set("gameIndex", games.currentIndex)
             }

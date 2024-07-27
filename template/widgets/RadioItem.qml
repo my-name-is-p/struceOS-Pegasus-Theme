@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, p.white)
+        color: addAlphaToHex(0.6, settings.color_white)
 
         radius: vpx(6)
 
@@ -51,11 +51,11 @@ Item {
         }
 
         height: {
-            let sum = 0
+            let h = 0
             for (var i = 0; i < children.length; i++) {
-                sum = children[i].height > sum ? children[i].height : sum
+                h = children[i].height > h ? children[i].height : h
             }
-            return sum;
+            return h;
         }
 
         Rectangle { //radio_button_outline
@@ -69,10 +69,10 @@ Item {
 
             radius: vpx(3)
 
-            color: p.t
+            color: settings.color_t
 
             border.width: vpx(2)
-            border.color: p.text
+            border.color: settings.color_text
 
             Rectangle { //radio_button_fill
                 id: radio_button_fill
@@ -86,14 +86,14 @@ Item {
 
                 radius: vpx(3)
 
-                color: p.text
+                color: settings.color_text
             }
         }
 
         Text { //text
             id: text
             text: radio_button.text
-            color: p.text
+            color: settings.color_text
 
             anchors.verticalCenter: radio_item.verticalCenter
             anchors.left: radio_button_outline.right

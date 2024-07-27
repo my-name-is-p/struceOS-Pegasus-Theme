@@ -18,14 +18,14 @@ Item {
     //Functions
         property var onCancel: function(){
             current = panel
-            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
             video.video.stop()
             f = game_layout
         }
 
         property var onAccept: function(){
             launch_window.visible = true
-            if(stest.lastPlayed){
+            if(settings.lastPlayed){
                 api.memory.set("collectionIndex", currentCollectionIndex)
                 api.memory.set("gameIndex", games.currentIndex)
             }
@@ -34,25 +34,25 @@ Item {
         }
 
         property var onPrevious: function(){
-            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
             games.moveCurrentIndexLeft()
             video.video.safePlay()
         }
 
         property var onNext: function(){
-            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
             games.moveCurrentIndexRight()
             video.video.safePlay()
         }
 
         property var onFirst: function(){
-            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
             games.currentIndex = 0
             video.video.safePlay()
         }
 
         property var onLast: function(){
-            stest.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
+            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
             games.currentIndex = games.count - 1
             video.video.safePlay()
         }
@@ -60,6 +60,7 @@ Item {
 
     Item {  //header_buttons
         id: header_buttons
+        
         anchors.top: parent.top
         anchors.topMargin: vpx(-12)
         anchors.left: parent.left
@@ -70,7 +71,7 @@ Item {
         CloseButton { //close
             id: close
 
-            icon_color: p.text
+            icon_color: settings.color_text
             selected: panel.current === this
 
             onClicked: function(){
@@ -81,7 +82,6 @@ Item {
                 panel.onCancel()
                 s = audio.toggle_down
             }
-
             
             property var onRight: function(){
                 panel.current = favorite
@@ -92,6 +92,7 @@ Item {
             }
 
             property var onUp: function(){
+                video.video.stop()
                 header.current = header.collection
                 f = header
                 panel.current = panel
@@ -103,7 +104,7 @@ Item {
             anchors.right: parent.right
 
             icon: currentGame.favorite ? images.favorite_icon_filled : images.favorite_icon_empty
-            icon_color: p.text
+            icon_color: settings.color_text
 
             selected: panel.current === this
 
@@ -126,6 +127,7 @@ Item {
             }
 
             property var onUp: function(){
+                video.video.stop()
                 header.current = header.search_button
                 f = header
                 panel.current = panel
@@ -244,7 +246,7 @@ Item {
                             text: "released: " + currentGame.releaseYear
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: p.text
+                            color: settings.color_text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -266,7 +268,7 @@ Item {
                             text: "players:"
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: p.text
+                            color: settings.color_text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -302,7 +304,7 @@ Item {
                             text: "genres: " + currentGame.genre
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: p.text
+                            color: settings.color_text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -334,7 +336,7 @@ Item {
 
                 Text {  //game title backup
                     text: currentGame.title
-                    color: p.text
+                    color: settings.color_text
                     font.family: bold.name
                     font.bold: true
                     font.pixelSize: vpx(24)
@@ -386,7 +388,7 @@ Item {
                 Rectangle { //stars_color
                     id: stars_color
                     anchors.fill: stars
-                    color: p.text
+                    color: settings.color_text
 
                     visible: false
                 }
@@ -406,7 +408,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                color: p.accent_light
+                color: settings.color_accent_light
 
                 height: developer_text.height + vpx(24)
 
@@ -415,7 +417,7 @@ Item {
                     height: parent.height
                     anchors.right: parent.right
                     width: developer_text.contentWidth + vpx(48)
-                    color: p.accent
+                    color: settings.color_accent
                 }
 
                 Rectangle { //developer_decor
@@ -429,10 +431,10 @@ Item {
                     anchors.margins: vpx(2)
                     anchors.rightMargin: vpx(0)
 
-                    color: p.t
+                    color: settings.color_t
 
                     border.width: vpx(4)
-                    border.color: p.accent
+                    border.color: settings.color_accent
                     
                 }
 
@@ -444,7 +446,7 @@ Item {
                     anchors.right: parent.right
                     anchors.margins: vpx(24)
                     anchors.leftMargin: vpx(12)
-                    color: p.text
+                    color: settings.color_text
 
                     font.family: bold.name
                     font.bold: true
@@ -460,10 +462,10 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    color: p.t
+                    color: settings.color_t
 
                     border.width: vpx(4)
-                    border.color: p.accent_light
+                    border.color: settings.color_accent_light
                 }
             }
 
@@ -475,7 +477,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                color: p.accent_light
+                color: settings.color_accent_light
 
                 height: publisher_text.height + vpx(24)
 
@@ -483,7 +485,7 @@ Item {
                     id: publisher_color
                     height: parent.height
                     width: publisher_text.contentWidth + vpx(48)
-                    color: p.accent
+                    color: settings.color_accent
                 }
 
                 Rectangle { //publisher_decor
@@ -497,10 +499,10 @@ Item {
                     anchors.margins: vpx(2)
                     anchors.leftMargin: vpx(0)
 
-                    color: p.t
+                    color: settings.color_t
 
                     border.width: vpx(4)
-                    border.color: p.accent
+                    border.color: settings.color_accent
                     
                 }
 
@@ -512,7 +514,7 @@ Item {
                     anchors.right: parent.right
                     anchors.margins: vpx(24)
                     anchors.rightMargin: vpx(12)
-                    color: p.text
+                    color: settings.color_text
 
                     font.family: bold.name
                     font.bold: true
@@ -526,10 +528,10 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    color: p.t
+                    color: settings.color_t
 
                     border.width: vpx(4)
-                    border.color: p.accent_light
+                    border.color: settings.color_accent_light
                 }
             }
 
@@ -550,7 +552,7 @@ Item {
                 font.family: regular.name
                 font.pixelSize: vpx(14)
                 elide: Text.ElideRight
-                color: p.text
+                color: settings.color_text
             }
         }
     }
@@ -632,7 +634,7 @@ Item {
                         current.onAccept()
                     }else{
                         launch_window.visible = true
-                        if(stest.lastPlayed){
+                        if(settings.lastPlayed){
                             api.memory.set("collectionIndex", currentCollectionIndex)
                             api.memory.set("gameIndex", games.currentIndex)
                         }

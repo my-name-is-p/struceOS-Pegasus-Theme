@@ -18,7 +18,7 @@ import QtQuick 2.0
             anchors.fill: clock
             anchors.margins: vpx(-6)
 
-            color: addAlphaToHex(0.3, p.black)
+            color: addAlphaToHex(0.3, settings.color_black)
 
             radius: vpx(6)
 
@@ -26,11 +26,11 @@ import QtQuick 2.0
             Rectangle {
                 id: hover
                 anchors.fill: parent
-                color: p.black
+                color: settings.color_black
                 opacity: clock_container.hover || clock_container.selected ? 1 : 0
                 radius: vpx(6)
 
-                Behavior on opacity {NumberAnimation {duration: stest.hover_speed}}
+                Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
             }
         }
 
@@ -39,11 +39,11 @@ import QtQuick 2.0
             id: clock
             anchors.centerIn: parent
 
-            font.pixelSize: stest.headerSize != "s" ? vpx(24) : vpx(16)
+            font.pixelSize: settings.headerSize != "s" ? vpx(24) : vpx(16)
             font.family: bold.name
             font.bold: true
 
-            color: p.white
+            color: settings.color_white
             smooth: true
             antialiasing: true
 
@@ -51,7 +51,7 @@ import QtQuick 2.0
 
             function set() {
                 let d = new Date()
-                clock.text = Qt.formatTime(d, stest.twelvehour ? "hh:mm a" : "hh:mm")
+                clock.text = Qt.formatTime(d, settings.twelvehour ? "hh:mm a" : "hh:mm")
                 seconds =  Qt.formatTime(d, "ss")
             }
 
@@ -76,9 +76,9 @@ import QtQuick 2.0
             onClicked: {
                 audio.stopAll()
                 audio.select.play()
-                stest.twelvehour = !stest.twelvehour
+                settings.twelvehour = !settings.twelvehour
                 clock.set()
-                api.memory.set("struceOS_ui_twelvehour", stest.twelvehour)
+                api.memory.set("struceOS_ui_twelvehour", settings.twelvehour)
             }
 
             onEntered: {
@@ -94,9 +94,9 @@ import QtQuick 2.0
             id: select_border
             anchors.fill: clock_color
             anchors.margins: vpx(-6)
-            color: p.t
+            color: settings.color_t
 
-            border.color: p.border
+            border.color: settings.color_border
             border.width: vpx(6)
             radius: vpx(6)
 

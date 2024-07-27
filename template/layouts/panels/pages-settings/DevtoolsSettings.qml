@@ -66,8 +66,8 @@ Item {
 
         Text { //theme_info_author
             id: theme_info_author
-            text: "author: " + stest.author
-            color: p.text
+            text: "author: " + settings.author
+            color: settings.color_text
 
             font.family: regular.name
             font.pixelSize: vpx(10)
@@ -75,8 +75,8 @@ Item {
         
         Text { //theme_info_name
             id: theme_info_name
-            text: "name: " + stest.name
-            color: p.text
+            text: "name: " + settings.name
+            color: settings.color_text
 
             anchors.top: theme_info_author.bottom
 
@@ -86,8 +86,8 @@ Item {
 
         Text { //theme_info_version
             id: theme_info_version
-            text: "version: " + stest.version  + (stest.working ? "-working" : "")
-            color: p.text
+            text: "version: " + settings.version  + (settings.working ? "-working" : "")
+            color: settings.color_text
 
             anchors.top: theme_info_name.bottom
 
@@ -156,7 +156,7 @@ Item {
         Text { //devtools_settings_title
             id: devtools_settings_title
             text: "Devtools"
-            color: p.text
+            color: settings.color_text
 
             font.family: bold.name
             font.bold: true
@@ -175,17 +175,17 @@ Item {
             anchors.right: parent.right
 
             height: { //height
-                let sum = 0
+                let h = 0
                 for (var i = 0; i < children.length; i++) {
-                    sum = children[i].height > sum ? children[i].height : sum
+                    h = children[i].height > h ? children[i].height : h
                 }
-                return sum;
+                return h;
             }
 
             Text { //devtools_settings_opacity_text
                 id: devtools_settings_opacity_text
                 text: "opacity"
-                color: p.text
+                color: settings.color_text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -201,7 +201,7 @@ Item {
                 min: 1
                 max: 100
 
-                value: (stest.consoleLogBackground*100)
+                value: (settings.consoleLogBackground*100)
                 percent: true
                 selected: devtools_settings.selected && devtools_settings.current === this
                 memory: "struceOS_dev_log_opacity"
@@ -223,13 +223,18 @@ Item {
             anchors.topMargin: vpx(12)
 
             selected: devtools_settings.selected && devtools_settings.current === this
-            value: stest.enableDevTools
+            value: settings.enableDevTools
 
             onClicked: function(){
-                stest.enableDevTools = !value
-                api.memory.set("struceOS_dev_enableDevTools", stest.enableDevTools)
-                if(stest.enableDevTools)
-                    log(stest.details, true)
+                settings.enableDevTools = !value
+                api.memory.set("struceOS_dev_enableDevTools", settings.enableDevTools)
+                if(settings.enableDevTools){
+                    if(devtools.log_text.text.indexOf(settings.details) === -1)
+                        devtools.log_text.text = settings.details + devtools.log_text.text
+                    log(" log: open ", true)
+                }else{
+                    log("log: closed", true)
+                }
                 
             }
             property var onAccept: onClicked

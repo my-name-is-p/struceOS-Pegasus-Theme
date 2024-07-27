@@ -9,15 +9,17 @@ Item {
     height: vpx(48)
     width: vpx(48)
 
-    property var hover_color: addAlphaToHex(0.3, p.white)
-    property var background: p.t
+    property var hover_color: addAlphaToHex(0.3, settings.color_white)
+    property var background: settings.color_t
 
     property var icon: images.favorite_icon_empty
-    property string icon_color: p.white
+    property string icon_color: settings.color_white
 
     property var onClicked: function(){}
     property var onEntered: function(){}
     property var onExited: function(){}
+
+    property var onUp: function(){}
 
     property bool selected: false
     property bool hovered: false
@@ -45,7 +47,7 @@ Item {
 
             opacity: selected || hovered ? 1 : 0
 
-            Behavior on opacity {NumberAnimation {duration: stest.hover_speed}}
+            Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
         }
 
         Image { //icon
@@ -80,9 +82,9 @@ Item {
         id: select
         anchors.fill: parent
         anchors.margins: vpx(-3)
-        color: p.t
+        color: settings.color_t
         border.width: vpx(6)
-        border.color: p.border
+        border.color: settings.color_border
 
         radius: vpx(6)
 

@@ -37,10 +37,10 @@ Component {
                 anchors.fill: parent
                 anchors.margins: thumb.active ? vpx(-8) : vpx(0)
 
-                color: addAlphaToHex(0.4, p.black)
+                color: addAlphaToHex(0.4, settings.color_black)
 
                 radius: vpx(10)
-                border.color: p.border
+                border.color: settings.color_border
                 border.width: thumb.active ? vpx(10) : 0
 
                 Behavior on border.width {NumberAnimation {duration: thumb.transition_speed}}
@@ -65,7 +65,7 @@ Component {
                     id: thumb_bg
                     anchors.fill: parent
                     source: {
-                        if(!stest.showThumbs)
+                        if(!settings.showThumbs)
                             return ""
                         else
                             return getAssets(assets).bg != "default" ? getAssets(assets).bg : images.noImage
@@ -124,7 +124,7 @@ Component {
                         verticalOffset: 0
                         radius: 8.0
                         samples: 17
-                        color: addAlphaToHex(0.4, p.black)
+                        color: addAlphaToHex(0.4, settings.color_black)
                         source: icon
 
                         visible: favorite
@@ -156,7 +156,7 @@ Component {
                     Rectangle {
                         width: parent.width
                         height: logo_text.height
-                        color: p.black
+                        color: settings.color_black
 
                         visible: logo.source == ""
 
@@ -165,7 +165,7 @@ Component {
                         Text {
                             id: logo_text
                             text: title
-                            color: p.white
+                            color: settings.color_white
 
                             font.family: bold.name
                             font.bold: true
@@ -181,7 +181,7 @@ Component {
                         verticalOffset: 3
                         radius: 8
                         samples: 16
-                        color: p.black
+                        color: settings.color_black
                         source: logo
 
                         scale: thumb.hovered || thumb.active ? 1.0 : 0.8
@@ -194,7 +194,7 @@ Component {
             OpacityMask {
                 anchors.fill: parent
                 opacity: {
-                    if(stest.showThumbs){
+                    if(settings.showThumbs){
                         if(logo.source != "")
                             return thumb_bg.status === Image.Ready && logo.status === Image.Ready ? 1 : 0
                         else 
@@ -219,7 +219,7 @@ Component {
 
                 width: last_played_text.width + vpx(6)
                 height: last_played_text.height + vpx(6)
-                color: addAlphaToHex(0.8, p.black)
+                color: addAlphaToHex(0.8, settings.color_black)
 
                 radius: vpx(6)
 
@@ -230,7 +230,7 @@ Component {
                     text: "last played: " + (lastPlayed.toLocaleDateString(Locale.LongFormat) != "" ? lastPlayed.toLocaleDateString(Locale.LongFormat) : "never")
                     font.family: regular.name
                     font.pixelSize: vpx(12)
-                    color: p.white
+                    color: settings.color_white
                     anchors.centerIn: parent
                 }
             }
@@ -244,7 +244,7 @@ Component {
 
                 width: play_time_text.width + vpx(6)
                 height: play_time_text.height + vpx(6)
-                color: addAlphaToHex(0.8, p.black)
+                color: addAlphaToHex(0.8, settings.color_black)
 
                 radius: vpx(6)
 
@@ -255,7 +255,7 @@ Component {
                     text: "play time: " + getTime(playTime)
                     font.family: regular.name
                     font.pixelSize: vpx(12)
-                    color: p.white
+                    color: settings.color_white
                     anchors.centerIn: parent
 
                     function getTime(t){
@@ -301,7 +301,7 @@ Component {
                     audio.stopAll()
                     audio.toggle_down.play()
                     launch_window.visible = true
-                    if(stest.lastPlayed){
+                    if(settings.lastPlayed){
                         api.memory.set("collectionIndex", currentCollectionIndex)
                         api.memory.set("gameIndex", games.currentIndex)
                     }
@@ -314,7 +314,7 @@ Component {
         LoadingGraphic {
             anchors.centerIn: parent
             opacity: {
-                if(stest.showThumbs){
+                if(settings.showThumbs){
                     if(logo.source != "")
                         return thumb_bg.status === Image.Ready && logo.status === Image.Ready ? 0 : 0.8
                     else 
