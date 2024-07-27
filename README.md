@@ -34,6 +34,8 @@ If you have any issues, please open a ticket or let me know on [discord](https:/
 <a id="to-come"></a>
 # To come in future updates
 1. Add genre filters
+2. Update all icons to change with color settings
+
 
 <a id="meta-data"></a>
 # Metadata Generation and Asset Scraping
