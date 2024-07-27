@@ -83,7 +83,7 @@ Item { //slider
 
     Rectangle { //base
         id: base
-        color: settings.color_slider_base
+        color: colors.slider_base
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -97,7 +97,7 @@ Item { //slider
 
         Rectangle { //progress
             id: progress
-            color: settings.color_slider
+            color: colors.slider
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -109,7 +109,7 @@ Item { //slider
 
         Rectangle { //handle
             id: handle
-            color: settings.color_slider
+            color: colors.slider
 
             anchors.verticalCenter: parent.verticalCenter
 
@@ -167,12 +167,12 @@ Item { //slider
                 anchors.fill: parent
                 anchors.margins: vpx(-6)
 
-                color: settings.color_t
+                color: colors.t
 
                 radius: vpx(6)
 
                 border.width: vpx(6)
-                border.color: settings.color_border
+                border.color: colors.border
 
                 visible: handle.selected
             }
@@ -187,12 +187,12 @@ Item { //slider
             anchors.right: parent.right
             anchors.margins: vpx(-6)
 
-            color: settings.color_t
+            color: colors.t
 
             radius: vpx(6)
 
             border.width: vpx(6)
-            border.color: settings.color_border
+            border.color: colors.border
 
             visible: slider.selected && !handle.selected
         }
@@ -204,7 +204,7 @@ Item { //slider
         anchors.fill: value
         anchors.margins: vpx(-3)
 
-        color: addAlphaToHex(0.7, settings.color_black)
+        color: addAlphaToHex(0.7, colors.black)
 
         radius: vpx(6)
     }
@@ -212,7 +212,7 @@ Item { //slider
     Text { //value
         id: value
         text: slider.value
-        color: settings.color_text
+        color: colors.text
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right

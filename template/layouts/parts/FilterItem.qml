@@ -24,7 +24,7 @@ Item {
         id: hover
         anchors.fill: parent
         anchors.margins: vpx(6)
-        color: filter_item.selected || filter_item.hovered ? addAlphaToHex(0.2, settings.color_white) : "transparent"
+        color: filter_item.selected || filter_item.hovered ? addAlphaToHex(0.2, colors.white) : "transparent"
         radius: vpx(6)
     }
 
@@ -36,7 +36,7 @@ Item {
         anchors.leftMargin: vpx(24)
         font.family: regular.name
         font.pixelSize: vpx(18)
-        color: settings.color_white
+        color: colors.white
     }
 
     Image {

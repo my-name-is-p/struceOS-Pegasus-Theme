@@ -8,7 +8,7 @@ import "panels"
 Rectangle {
     id: panel_area
 
-    color: addAlphaToHex(0.95, settings.color_accent)
+    color: addAlphaToHex(0.95, colors.accent)
     clip: true
 
     property real topMargin: (parent.height - (header.height + collections_menu.height))

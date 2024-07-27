@@ -23,11 +23,11 @@ Item { //viewer
         anchors.fill: parent
         anchors.margins: vpx(-8)
 
-        color: settings.color_t
+        color: colors.t
 
         radius: vpx(16)
 
-        border.color: settings.color_border
+        border.color: colors.border
         border.width: parent.selected && parent.current === viewer ? vpx(12) : 0
 
     }
@@ -37,7 +37,7 @@ Item { //viewer
         anchors.fill: parent
         radius: vpx(12)
 
-        color: settings.color_accent
+        color: colors.accent
     }
 
     Image { //video_default
@@ -54,7 +54,7 @@ Item { //viewer
     Rectangle { //video_frame
         id: video_frame
         anchors.fill: parent
-        color: settings.color_black
+        color: colors.black
 
         visible: false
 
@@ -295,7 +295,7 @@ Item { //viewer
 
                 height: vpx(6)
                 
-                color: settings.color_slider_base
+                color: colors.slider_base
 
                 radius: vpx(6)
             }
@@ -309,7 +309,7 @@ Item { //viewer
 
                 height: vpx(6)
 
-                color: settings.color_slider
+                color: colors.slider
 
                 radius: vpx(6)
             }
@@ -320,7 +320,7 @@ Item { //viewer
                 height: width
 
                 anchors.verticalCenter: parent.verticalCenter
-                color: settings.color_slider
+                color: colors.slider
                 radius: vpx(12)
 
                 property var selected: viewer.current === this
@@ -367,9 +367,9 @@ Item { //viewer
                     id: video_scrub_handle_select
                     anchors.fill: parent
                     anchors.margins: vpx(-6)
-                    color: settings.color_t
+                    color: colors.t
 
-                    border.color: settings.color_border
+                    border.color: colors.border
                     border.width: parent.selected ? vpx(6) : 0
 
                     radius: vpx(6)
@@ -394,8 +394,8 @@ Item { //viewer
             Rectangle { //video_scrub_select
                 id: video_scrub_select
                 anchors.fill: parent
-                color: settings.color_t
-                border.color: settings.color_border
+                color: colors.t
+                border.color: colors.border
                 border.width: parent.selected ? vpx(6) : 0
 
                 radius: vpx(6)
@@ -427,7 +427,7 @@ Item { //viewer
         Item{ //video_time
             id: video_time
             anchors.verticalCenter: mute.verticalCenter
-            anchors.right: loosettings.color_left
+            anchors.right: loocolors.left
             anchors.rightMargin: vpx(12)
 
             height: video_time_text.height
@@ -439,7 +439,7 @@ Item { //viewer
                 radius: vpx(6)
                 anchors.margins: vpx(-3)
 
-                color: addAlphaToHex(0.3, settings.color_black)
+                color: addAlphaToHex(0.3, colors.black)
             }
 
             Text { //video_time_text
@@ -447,7 +447,7 @@ Item { //viewer
 
                 text: getTime(video.position) + "/" + getTime(video.duration)
 
-                color: settings.color_text
+                color: colors.text
 
                 horizontalAlignment: Text.AlignRight
 
@@ -478,7 +478,7 @@ Item { //viewer
             anchors.bottomMargin: vpx(3)
 
             property bool show_value: true
-            property var text_color: settings.color_white
+            property var text_color: colors.white
             property var value: settings.videoVolume
 
             property bool selected: viewer.current === this
@@ -516,8 +516,8 @@ Item { //viewer
             Rectangle { //volume_slide_select
                 id: volume_slide_select
                 anchors.fill: parent
-                color: settings.color_t
-                border.color: settings.color_border
+                color: colors.t
+                border.color: colors.border
                 border.width: parent.selected ? vpx(6) : 0
 
                 radius: vpx(6)
@@ -529,7 +529,7 @@ Item { //viewer
                 radius: vpx(6)
                 anchors.margins: vpx(-3)
 
-                color: addAlphaToHex(0.3, settings.color_black)
+                color: addAlphaToHex(0.3, colors.black)
             }
 
             Text { //volume_slide_amount
@@ -556,7 +556,7 @@ Item { //viewer
 
                 width: vpx(6)
                 
-                color: settings.color_slider_base
+                color: colors.slider_base
 
                 radius: vpx(6)
             }
@@ -570,7 +570,7 @@ Item { //viewer
 
                 width: vpx(6)
 
-                color: settings.color_slider
+                color: colors.slider
 
                 radius: vpx(6)
             }
@@ -582,7 +582,7 @@ Item { //viewer
                 y: volume_slide_background.height * (1 - settings.videoVolume)
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: settings.color_slider
+                color: colors.slider
                 radius: vpx(12)
 
                 property bool selected: viewer.current === this
@@ -628,9 +628,9 @@ Item { //viewer
                     id: volume_slide_handle_select
                     anchors.fill: parent
                     anchors.margins: vpx(-6)
-                    color: settings.color_t
+                    color: colors.t
 
-                    border.color: settings.color_border
+                    border.color: colors.border
                     border.width: parent.selected ? vpx(6) : 0
 
                     radius: vpx(6)

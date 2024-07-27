@@ -85,7 +85,7 @@ Item {
         Text { //background_settings_title
             id: background_settings_title
             text: "Background"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -134,7 +134,7 @@ Item {
             Text { //background_settings_overlay_opacity_text
                 id: background_settings_overlay_opacity_text
                 text: "overlay opacity"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -190,7 +190,7 @@ Item {
             Text { //background_settings_overlay_style_text
                 id: background_settings_overlay_style_text
                 text: "overlay style"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -282,7 +282,7 @@ Item {
         Text { //color_settings_title
             id: color_settings_title
             text: "Colors"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -297,8 +297,10 @@ Item {
             }
 
             property var onAccept: function(){
-                settings.theme = settings.default_theme
+                settings.theme = JSON.parse(JSON.stringify(settings.default_theme))
                 api.memory.unset("struceOS_theme_colors")
+                colors_loader.sourceComponent = undefined
+                colors_loader.sourceComponent = colors_component
                 color_options.model.populateModel()
             }
 
@@ -313,13 +315,15 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 icon: images.refresh
-                icon_color: settings.color_text
+                icon_color: colors.text
 
                 selected: color_settings_title.selected
 
                 onClicked: function(){
-                    settings.theme = settings.default_theme
+                    settings.theme = JSON.parse(JSON.stringify(settings.default_theme))
                     api.memory.unset("struceOS_theme_colors")
+                    colors_loader.sourceComponent = undefined
+                    colors_loader.sourceComponent = colors_component
                     color_options.model.populateModel()
                 }
             }
@@ -402,9 +406,6 @@ Item {
                 height: color_options.cellHeight
                 width: color_options.cellWidth
 
-                // property string label: "accent"
-                // property var color: settings.color_launch
-
                 property GridView color_options: parent.parent
 
                 property bool selected: false
@@ -420,7 +421,7 @@ Item {
                     anchors.fill: color_option_sizer
                     anchors.margins: vpx(-6)
 
-                    color: addAlphaToHex(0.6, settings.color_white)
+                    color: addAlphaToHex(0.6, colors.white)
 
                     radius: vpx(6)
 
@@ -452,7 +453,7 @@ Item {
 
                         anchors.verticalCenter: parent.verticalCenter
                         
-                        color: settings.color_text
+                        color: colors.text
 
                         font.family: regular.name
                         font.pixelSize: vpx(16)
@@ -481,7 +482,7 @@ Item {
                         Rectangle{
                             id: picker
                             anchors.fill: parent
-                            color: settings.color_white
+                            color: colors.white
 
                             visible: false
 
@@ -497,10 +498,10 @@ Item {
                                     id: swatch_border
                                     anchors.fill: parent
 
-                                    color: settings.color_t
+                                    color: colors.t
 
                                     border.width: vpx(1)
-                                    border.color: settings.color_black
+                                    border.color: colors.black
                                 }
                             }
 
@@ -523,7 +524,7 @@ Item {
                                     font.family: regular.name
                                     font.pixelSize: vpx(12)
 
-                                    color: settings.color_text_invert
+                                    color: colors.text_invert
 
                                     onEditingFinished: {
                                         while(!validateHex(text))
@@ -532,10 +533,9 @@ Item {
                                             text = "#" + text
                                         }
                                         settings.theme[color_name] = text
-                                        settings["color_" + color_name] = text
-                                        swatch.color = text
+                                        colors[color_name] = text
                                         api.memory.set("struceOS_theme_colors", settings.theme)
-                                        // color_options.model.populateModel()
+                                        color_options.model.populateModel()
                                     }
 
                                     Keys.onPressed: {
@@ -549,10 +549,10 @@ Item {
                                 id: picker_border
                                 anchors.fill: picker
 
-                                color: settings.color_t
+                                color: colors.t
 
                                 border.width: vpx(3)
-                                border.color: settings.color_white
+                                border.color: colors.white
 
                                 radius: vpx(6)
                             }

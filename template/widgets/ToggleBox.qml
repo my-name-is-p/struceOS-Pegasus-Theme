@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, settings.color_white)
+        color: addAlphaToHex(0.6, colors.white)
 
         radius: vpx(6)
 
@@ -43,7 +43,7 @@ Item {
     Text { //game_layout_settings_columns_text
         id: toggle_text
         text: toggle.text
-        color: settings.color_text
+        color: colors.text
 
         anchors.verticalCenter: parent.verticalCenter
 
@@ -62,10 +62,10 @@ Item {
         height: vpx(24)
         width: height
 
-        color: settings.color_t
+        color: colors.t
 
         border.width: vpx(3)
-        border.color: settings.color_text
+        border.color: colors.text
 
         radius: vpx(6)
 
@@ -78,7 +78,7 @@ Item {
 
             Behavior on height {NumberAnimation{duration: 100}}
             
-            color: settings.color_text
+            color: colors.text
 
             radius: vpx(6)
 
@@ -89,7 +89,7 @@ Item {
                 anchors.centerIn: parent
                 text: "✓"
 
-                color: settings.color_accent
+                color: colors.accent
             }
         }
     }

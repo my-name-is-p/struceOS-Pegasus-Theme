@@ -67,7 +67,7 @@ Item {
         Text { //theme_info_author
             id: theme_info_author
             text: "author: " + settings.author
-            color: settings.color_text
+            color: colors.text
 
             font.family: regular.name
             font.pixelSize: vpx(10)
@@ -76,7 +76,7 @@ Item {
         Text { //theme_info_name
             id: theme_info_name
             text: "name: " + settings.name
-            color: settings.color_text
+            color: colors.text
 
             anchors.top: theme_info_author.bottom
 
@@ -87,7 +87,7 @@ Item {
         Text { //theme_info_version
             id: theme_info_version
             text: "version: " + settings.version  + (settings.working ? "-working" : "")
-            color: settings.color_text
+            color: colors.text
 
             anchors.top: theme_info_name.bottom
 
@@ -156,7 +156,7 @@ Item {
         Text { //devtools_settings_title
             id: devtools_settings_title
             text: "Devtools"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -185,7 +185,7 @@ Item {
             Text { //devtools_settings_opacity_text
                 id: devtools_settings_opacity_text
                 text: "opacity"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)

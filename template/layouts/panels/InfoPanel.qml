@@ -71,7 +71,7 @@ Item {
         CloseButton { //close
             id: close
 
-            icon_color: settings.color_text
+            icon_color: colors.text
             selected: panel.current === this
 
             onClicked: function(){
@@ -104,7 +104,7 @@ Item {
             anchors.right: parent.right
 
             icon: currentGame.favorite ? images.favorite_icon_filled : images.favorite_icon_empty
-            icon_color: settings.color_text
+            icon_color: colors.text
 
             selected: panel.current === this
 
@@ -246,7 +246,7 @@ Item {
                             text: "released: " + currentGame.releaseYear
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: settings.color_text
+                            color: colors.text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -268,7 +268,7 @@ Item {
                             text: "players:"
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: settings.color_text
+                            color: colors.text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -304,7 +304,7 @@ Item {
                             text: "genres: " + currentGame.genre
                             font.family: regular.name
                             font.pixelSize: vpx(14)
-                            color: settings.color_text
+                            color: colors.text
 
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -336,7 +336,7 @@ Item {
 
                 Text {  //game title backup
                     text: currentGame.title
-                    color: settings.color_text
+                    color: colors.text
                     font.family: bold.name
                     font.bold: true
                     font.pixelSize: vpx(24)
@@ -388,7 +388,7 @@ Item {
                 Rectangle { //stars_color
                     id: stars_color
                     anchors.fill: stars
-                    color: settings.color_text
+                    color: colors.text
 
                     visible: false
                 }
@@ -408,7 +408,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                color: settings.color_accent_light
+                color: colors.accent_light
 
                 height: developer_text.height + vpx(24)
 
@@ -417,7 +417,7 @@ Item {
                     height: parent.height
                     anchors.right: parent.right
                     width: developer_text.contentWidth + vpx(48)
-                    color: settings.color_accent
+                    color: colors.accent
                 }
 
                 Rectangle { //developer_decor
@@ -431,10 +431,10 @@ Item {
                     anchors.margins: vpx(2)
                     anchors.rightMargin: vpx(0)
 
-                    color: settings.color_t
+                    color: colors.t
 
                     border.width: vpx(4)
-                    border.color: settings.color_accent
+                    border.color: colors.accent
                     
                 }
 
@@ -446,7 +446,7 @@ Item {
                     anchors.right: parent.right
                     anchors.margins: vpx(24)
                     anchors.leftMargin: vpx(12)
-                    color: settings.color_text
+                    color: colors.text
 
                     font.family: bold.name
                     font.bold: true
@@ -462,10 +462,10 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    color: settings.color_t
+                    color: colors.t
 
                     border.width: vpx(4)
-                    border.color: settings.color_accent_light
+                    border.color: colors.accent_light
                 }
             }
 
@@ -477,7 +477,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                color: settings.color_accent_light
+                color: colors.accent_light
 
                 height: publisher_text.height + vpx(24)
 
@@ -485,7 +485,7 @@ Item {
                     id: publisher_color
                     height: parent.height
                     width: publisher_text.contentWidth + vpx(48)
-                    color: settings.color_accent
+                    color: colors.accent
                 }
 
                 Rectangle { //publisher_decor
@@ -499,10 +499,10 @@ Item {
                     anchors.margins: vpx(2)
                     anchors.leftMargin: vpx(0)
 
-                    color: settings.color_t
+                    color: colors.t
 
                     border.width: vpx(4)
-                    border.color: settings.color_accent
+                    border.color: colors.accent
                     
                 }
 
@@ -514,7 +514,7 @@ Item {
                     anchors.right: parent.right
                     anchors.margins: vpx(24)
                     anchors.rightMargin: vpx(12)
-                    color: settings.color_text
+                    color: colors.text
 
                     font.family: bold.name
                     font.bold: true
@@ -528,10 +528,10 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    color: settings.color_t
+                    color: colors.t
 
                     border.width: vpx(4)
-                    border.color: settings.color_accent_light
+                    border.color: colors.accent_light
                 }
             }
 
@@ -552,7 +552,7 @@ Item {
                 font.family: regular.name
                 font.pixelSize: vpx(14)
                 elide: Text.ElideRight
-                color: settings.color_text
+                color: colors.text
             }
         }
     }

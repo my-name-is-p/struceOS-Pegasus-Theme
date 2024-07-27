@@ -88,9 +88,8 @@
 //      1. Initial release
 
 // TO DO --------------------------------------------------------------------------------------
-// 1. Add button hints
-// 2. Add genre filters
-// 3. Add on screen keyboard
+// 1. Add genre filters
+// 2. Update all icons to change with color settings
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15
@@ -295,4 +294,15 @@ FocusScope {
         Settings{}
     }
     property Item settings: settings_loader.item
+
+    Loader { //colors_loader
+        id: colors_loader
+        sourceComponent: colors_component
+    }
+
+    Component { //settings_component
+        id: colors_component
+        Colors{}
+    }
+    property Item colors: colors_loader.item
 }

@@ -23,7 +23,7 @@ Item { //devtools
         anchors.right: parent.right
         anchors.margins: vpx(12)
 
-        color: addAlphaToHex(settings.consoleLogBackground, settings.color_black)
+        color: addAlphaToHex(settings.consoleLogBackground, colors.black)
 
         radius: vpx(12)
 
@@ -44,10 +44,10 @@ Item { //devtools
                 readOnly: true
                 selectByMouse: true
 
-                color: settings.color_white
+                color: colors.white
 
-                selectionColor: settings.color_white
-                selectedTextColor: settings.color_black
+                selectionColor: colors.white
+                selectedTextColor: colors.black
 
                 wrapMode: TextEdit.WordWrap
 
@@ -106,7 +106,7 @@ Item { //devtools
 
         radius: vpx(48)
 
-        color: hovered ? settings.color_launch : settings.color_launch_hover
+        color: hovered ? colors.launch : colors.launch_hover
 
         visible: true
 
@@ -161,7 +161,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? settings.color_launch : settings.color_launch_hover
+        color: hovered ? colors.launch : colors.launch_hover
 
         visible: true
 
@@ -172,7 +172,7 @@ Item { //devtools
             anchors.centerIn: parent
             text: "clear memory"
 
-            color: clear_mem.hovered ? settings.color_white : settings.color_black
+            color: clear_mem.hovered ? colors.white : colors.black
         }
 
         MouseArea { //clear_mem_click
@@ -195,17 +195,14 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 clearMemory()
-                settings_loader.sourceComponent = undefined
-                settings_loader.sourceComponent = settings_component
+                colors_loader.sourceComponent = undefined
+                colors_loader.sourceComponent = colors_component
                 mouse.event = accepted
             }
 
             onDoubleClicked: {
                 audio.stopAll()
                 audio.select.play()
-                clearMemory()
-                settings_loader.sourceComponent = undefined
-                settings_loader.sourceComponent = settings_component
                 mouse.event = accepted
             }
         }
@@ -223,7 +220,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? settings.color_launch : settings.color_launch_hover
+        color: hovered ? colors.launch : colors.launch_hover
 
         visible: true
 
@@ -234,7 +231,7 @@ Item { //devtools
             anchors.centerIn: parent
             text: "clear log"
 
-            color: clear_log.hovered ? settings.color_white : settings.color_black
+            color: clear_log.hovered ? colors.white : colors.black
         }
 
         MouseArea { //clear_log_click

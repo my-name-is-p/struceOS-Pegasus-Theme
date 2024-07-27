@@ -84,7 +84,7 @@ Item {
     //Colors
     property var theme: 
         api.memory.get("struceOS_theme_colors") != undefined ?
-            api.memory.get("struceOS_theme_colors") : default_theme
+            api.memory.get("struceOS_theme_colors") : JSON.parse(JSON.stringify(default_theme))
     
     property var default_theme: {
             "accent": "#011936",
@@ -100,17 +100,4 @@ Item {
             "text_invert": "#000000",
             "white": "#FFFFFF",
         }
-
-    property string color_accent: theme.accent
-    property string color_accent_light: theme.accent_light
-    property string color_slider: theme.slider
-    property string color_slider_base: theme.slider_base
-    property string color_launch: theme.launch
-    property string color_launch_hover: theme.launch_hover
-    property string color_border: theme.border
-    property string color_text: theme.text
-    property string color_text_invert: theme.text_invert
-    property string color_black: theme.black
-    property string color_white: theme.white
-    property string color_t: theme.t
 }

@@ -75,7 +75,7 @@ Item { //sortfilt_toolbar_wrapper
                 font.family: bold.name
                 font.bold: true
                 font.pixelSize: vpx(16)
-                color: settings.color_white
+                color: colors.white
             }
 
             Image {
@@ -97,11 +97,11 @@ Item { //sortfilt_toolbar_wrapper
 
             anchors.fill: parent
 
-            border.color: settings.color_border
+            border.color: colors.border
             border.width: vpx(6)
             radius: vpx(6)
 
-            color: settings.color_t
+            color: colors.t
 
             visible: sortfilt_toolbar_wrapper.selected && sortfilt_toolbar_wrapper.current === sortfilt_label
 
@@ -164,7 +164,7 @@ Item { //sortfilt_toolbar_wrapper
 
             anchors.verticalCenter: parent.verticalCenter
 
-            color: settings.color_accent
+            color: colors.accent
             radius: vpx(100)
 
 
@@ -176,7 +176,7 @@ Item { //sortfilt_toolbar_wrapper
                 Text {
                     anchors.centerIn: parent
                     text: "🗙"
-                    color: settings.color_text
+                    color: colors.text
                     font.pixelSize: vpx(12)
                 }
             }
@@ -184,7 +184,7 @@ Item { //sortfilt_toolbar_wrapper
             Text {
                 id: sortfilt_filter_item_text
                 text: "favorite"
-                color: settings.color_text
+                color: colors.text
                 font.pixelSize: vpx(11)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: sortfilt_filter_item_remove_wrapper.right

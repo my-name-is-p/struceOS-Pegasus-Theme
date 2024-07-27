@@ -56,7 +56,7 @@ Item {
             anchors.top: parent.top
 
             text: currentCollection.name
-            color: settings.color_white
+            color: colors.white
 
             font.family: bold.name
             font.bold: true
@@ -67,7 +67,7 @@ Item {
 
         Rectangle { //game_count
             id: game_count
-            color: settings.color_accent
+            color: colors.accent
             width: game_count_text.width + vpx(12) < vpx(24) ? vpx(24) : game_count_text.width + vpx(12)
             height: vpx(24)
             anchors.top: collection_logo.top
@@ -78,7 +78,7 @@ Item {
             Text { //game_count_text
                 id: game_count_text
                 text: games.count
-                color: settings.color_text
+                color: colors.text
                 anchors.centerIn: parent
 
                 font.family: bold.name
@@ -94,11 +94,11 @@ Item {
             anchors.bottom: parent.bottom
             anchors.right: game_count.right
             anchors.margins:vpx(-6)
-            color: settings.color_t
+            color: colors.t
 
             visible: collection.selected
 
-            border.color: settings.color_border
+            border.color: colors.border
             border.width: vpx(6)
             radius: vpx(6)
         }
@@ -182,7 +182,7 @@ Item {
         anchors.right: settings_button.left
 
         icon: images.search_icon
-        icon_color: settings.color_text
+        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -192,8 +192,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: vpx(24)
 
-        background: addAlphaToHex(0.3, settings.color_black)
-        hover_color: settings.color_black
+        background: addAlphaToHex(0.3, colors.black)
+        hover_color: colors.black
 
         onClicked: function(){
             f = header
@@ -222,7 +222,7 @@ Item {
         anchors.right: info_button.left
 
         icon: images.settings_icon
-        icon_color: settings.color_text
+        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -232,8 +232,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: vpx(24)
 
-        background: addAlphaToHex(0.3, settings.color_black)
-        hover_color: settings.color_black
+        background: addAlphaToHex(0.3, colors.black)
+        hover_color: colors.black
 
         onClicked: function(){
             if(f != panel_area || panel_area.current != panel_area.settings_panel){
@@ -270,7 +270,7 @@ Item {
         anchors.rightMargin: vpx(24)
 
         icon: images.info_icon
-        icon_color: settings.color_text
+        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -278,8 +278,8 @@ Item {
         selected: f === header && header.current === this
 
 
-        background: addAlphaToHex(0.3, settings.color_black)
-        hover_color: settings.color_black
+        background: addAlphaToHex(0.3, colors.black)
+        hover_color: colors.black
 
         onClicked: function(){
             if(f != panel_area || panel_area.current != panel_area.info_panel){

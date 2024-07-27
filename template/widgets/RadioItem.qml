@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, settings.color_white)
+        color: addAlphaToHex(0.6, colors.white)
 
         radius: vpx(6)
 
@@ -69,10 +69,10 @@ Item {
 
             radius: vpx(3)
 
-            color: settings.color_t
+            color: colors.t
 
             border.width: vpx(2)
-            border.color: settings.color_text
+            border.color: colors.text
 
             Rectangle { //radio_button_fill
                 id: radio_button_fill
@@ -86,14 +86,14 @@ Item {
 
                 radius: vpx(3)
 
-                color: settings.color_text
+                color: colors.text
             }
         }
 
         Text { //text
             id: text
             text: radio_button.text
-            color: settings.color_text
+            color: colors.text
 
             anchors.verticalCenter: radio_item.verticalCenter
             anchors.left: radio_button_outline.right

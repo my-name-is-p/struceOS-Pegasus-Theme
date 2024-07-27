@@ -16,7 +16,7 @@ Item {
     Rectangle {
         id: mask_color
         anchors.fill: mask
-        color: settings.color_text
+        color: colors.text
         visible: false
     }
 

@@ -20,11 +20,11 @@ import QtQuick 2.15
 
             height: vpx(48)
 
-            color: addAlphaToHex(0.25, settings.color_black)
+            color: addAlphaToHex(0.25, colors.black)
             opacity: search_text.text != "" || search_bar.selected ? 1 : 0
 
             border.width: vpx(3)
-            border.color: settings.color_border
+            border.color: colors.border
             radius: vpx(100)
 
             Behavior on anchors.leftMargin {NumberAnimation{duration: 125}}
@@ -40,7 +40,7 @@ import QtQuick 2.15
 
                 TextInput {
                     id: search_text
-                    color: settings.color_white
+                    color: colors.white
                     text: ""
                     anchors.fill: parent
                     selectByMouse: true

@@ -7,7 +7,7 @@ import "parts"
 Rectangle { //sortfilt_menu
     id: sortfilt_menu
 
-    color: addAlphaToHex(0.90, settings.color_accent)
+    color: addAlphaToHex(0.90, colors.accent)
 
     property Item current: sort_item_title
 
@@ -46,7 +46,7 @@ Rectangle { //sortfilt_menu
                 anchors.leftMargin: vpx(24)
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: settings.color_white
+                color: colors.white
             }
         }
 
@@ -181,7 +181,7 @@ Rectangle { //sortfilt_menu
                 anchors.leftMargin: vpx(24)
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: settings.color_white
+                color: colors.white
             }
         }
 

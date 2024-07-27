@@ -6,7 +6,7 @@ import QtQuick 2.15
 Rectangle {
     id: background
     anchors.fill: parent
-    color: settings.color_black
+    color: colors.black
 
     property int fade_time: 200
 

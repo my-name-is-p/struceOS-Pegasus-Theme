@@ -10,7 +10,7 @@ Rectangle {
 
     height: vpx(72)
 
-    color: addAlphaToHex(0.6, settings.color_accent)
+    color: addAlphaToHex(0.6, colors.accent)
 
     Item {
         id: hints

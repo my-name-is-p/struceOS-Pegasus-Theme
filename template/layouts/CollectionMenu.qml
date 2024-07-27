@@ -6,7 +6,7 @@ import QtQuick 2.15
 Rectangle {
     id: collections_menu
     height: focus ?  vpx(120) : 0
-    color: addAlphaToHex(0.85, settings.color_accent)
+    color: addAlphaToHex(0.85, colors.accent)
     property bool opened: focus
 
     Behavior on height {NumberAnimation {duration: 75}}
@@ -117,7 +117,7 @@ Rectangle {
                 text: name
                 anchors.centerIn: parent
 
-                color: settings.color_white
+                color: colors.white
                 visible: collectionView_list_logo.status === Image.Error
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -136,11 +136,11 @@ Rectangle {
 
                 property bool selected: (collections_list.currentItem == parent && f === collections_menu) || hover
 
-                color: settings.color_t
+                color: colors.t
 
                 property bool hover: false
 
-                border.color: settings.color_border
+                border.color: colors.border
                 border.width: selected || hover ? vpx(6) : vpx(0)
                 radius: vpx(6)
 

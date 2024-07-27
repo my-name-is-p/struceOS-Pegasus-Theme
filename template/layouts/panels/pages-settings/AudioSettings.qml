@@ -72,7 +72,7 @@ Item {
         Text { //ui_audio_settings_title
             id: ui_audio_settings_title
             text: "UI"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -101,7 +101,7 @@ Item {
             Text { //ui_audio_settings_volume_text
                 id: ui_audio_settings_volume_text
                 text: "default volume"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -206,7 +206,7 @@ Item {
         Text { //video_audio_settings_title
             id: video_audio_settings_title
             text: "Video"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -235,7 +235,7 @@ Item {
             Text { //video_audio_settings_volume_text
                 id: video_audio_settings_volume_text
                 text: "default volume"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)

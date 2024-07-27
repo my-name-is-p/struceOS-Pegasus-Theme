@@ -18,7 +18,7 @@ import QtQuick 2.0
             anchors.fill: clock
             anchors.margins: vpx(-6)
 
-            color: addAlphaToHex(0.3, settings.color_black)
+            color: addAlphaToHex(0.3, colors.black)
 
             radius: vpx(6)
 
@@ -26,7 +26,7 @@ import QtQuick 2.0
             Rectangle {
                 id: hover
                 anchors.fill: parent
-                color: settings.color_black
+                color: colors.black
                 opacity: clock_container.hover || clock_container.selected ? 1 : 0
                 radius: vpx(6)
 
@@ -43,7 +43,7 @@ import QtQuick 2.0
             font.family: bold.name
             font.bold: true
 
-            color: settings.color_white
+            color: colors.white
             smooth: true
             antialiasing: true
 
@@ -94,9 +94,9 @@ import QtQuick 2.0
             id: select_border
             anchors.fill: clock_color
             anchors.margins: vpx(-6)
-            color: settings.color_t
+            color: colors.t
 
-            border.color: settings.color_border
+            border.color: colors.border
             border.width: vpx(6)
             radius: vpx(6)
 

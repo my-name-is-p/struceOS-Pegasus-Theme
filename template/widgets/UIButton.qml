@@ -9,11 +9,11 @@ Item {
     height: vpx(48)
     width: vpx(48)
 
-    property var hover_color: addAlphaToHex(0.3, settings.color_white)
-    property var background: settings.color_t
+    property var hover_color: addAlphaToHex(0.3, colors.white)
+    property var background: colors.t
 
     property var icon: images.favorite_icon_empty
-    property string icon_color: settings.color_white
+    property string icon_color: colors.white
 
     property var onClicked: function(){}
     property var onEntered: function(){}
@@ -82,9 +82,9 @@ Item {
         id: select
         anchors.fill: parent
         anchors.margins: vpx(-3)
-        color: settings.color_t
+        color: colors.t
         border.width: vpx(6)
-        border.color: settings.color_border
+        border.color: colors.border
 
         radius: vpx(6)
 

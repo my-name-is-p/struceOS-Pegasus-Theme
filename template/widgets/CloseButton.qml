@@ -11,10 +11,10 @@ Item {
 
     property bool selected: false
     property bool hovered: false
-    property var hover_color: addAlphaToHex(0.3, settings.color_white)
-    property var background: settings.color_t
+    property var hover_color: addAlphaToHex(0.3, colors.white)
+    property var background: colors.t
 
-    property string icon_color: settings.color_white
+    property string icon_color: colors.white
 
     property var onClicked: function(){}
     property var onEntered: function(){}
@@ -76,9 +76,9 @@ Item {
         id: select
         anchors.fill: parent
         anchors.margins: vpx(-3)
-        color: settings.color_t
+        color: colors.t
         border.width: vpx(6)
-        border.color: settings.color_border
+        border.color: colors.border
 
         radius: vpx(6)
 

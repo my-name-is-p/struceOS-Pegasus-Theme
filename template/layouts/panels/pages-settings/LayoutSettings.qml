@@ -46,7 +46,7 @@ Item { //page
         Text { //header_settings_title
             id: header_settings_title
             text: "Header"
-            color: settings.color_text
+            color: colors.text
 
             font.family: bold.name
             font.bold: true
@@ -109,7 +109,7 @@ Item { //page
             Text { //header_settings_size_text
                 id: header_settings_size_text
                 text: "size"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)
@@ -175,7 +175,7 @@ Item { //page
         Text { //game_layout_settings_title
             id: game_layout_settings_title
             text: "Game Layout"
-            color: settings.color_text
+            color: colors.text
 
             anchors.top: parent.top
 
@@ -203,7 +203,7 @@ Item { //page
             Text { //game_layout_settings_columns_text
                 id: game_layout_settings_columns_text
                 text: "columns"
-                color: settings.color_text
+                color: colors.text
 
                 font.family: regular.name
                 font.pixelSize: vpx(16)

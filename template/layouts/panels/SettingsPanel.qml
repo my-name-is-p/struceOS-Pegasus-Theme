@@ -46,7 +46,7 @@ Item {
         CloseButton { //settings_close
             id: settings_close
 
-            icon_color: settings.color_text
+            icon_color: colors.text
 
             selected: panel.current === this
 
@@ -180,7 +180,7 @@ Item {
                     id: page_list_layout
                     anchors.verticalCenter: parent.verticalCenter
                     text: "layout"
-                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
+                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -215,7 +215,7 @@ Item {
                     anchors.left: page_list_layout.right
                     anchors.leftMargin: vpx(12)
                     text: "colors"
-                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
+                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -251,7 +251,7 @@ Item {
                     anchors.left: page_list_colors.right
                     anchors.leftMargin: vpx(12)
                     text: "audio"
-                    color: page_selection.selected && page_list.current === this ? settings.color_text_invert : settings.color_white
+                    color: page_selection.selected && page_list.current === this ? colors.text_invert : colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -286,7 +286,7 @@ Item {
                     anchors.left: page_list_audio.right
                     anchors.leftMargin: vpx(12)
                     text: "devtools"
-                    color: page_selection.selected && parent.current === this ? settings.color_text_invert : settings.color_white
+                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -559,5 +559,5 @@ Item {
         s = null
     }
 
-    property ListModel color_model: color_settings.color_model
+    property ListModel color_model: color_colors.model
 }

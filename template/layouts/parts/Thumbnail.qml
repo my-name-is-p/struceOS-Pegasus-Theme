@@ -37,10 +37,10 @@ Component {
                 anchors.fill: parent
                 anchors.margins: thumb.active ? vpx(-8) : vpx(0)
 
-                color: addAlphaToHex(0.4, settings.color_black)
+                color: addAlphaToHex(0.4, colors.black)
 
                 radius: vpx(10)
-                border.color: settings.color_border
+                border.color: colors.border
                 border.width: thumb.active ? vpx(10) : 0
 
                 Behavior on border.width {NumberAnimation {duration: thumb.transition_speed}}
@@ -124,7 +124,7 @@ Component {
                         verticalOffset: 0
                         radius: 8.0
                         samples: 17
-                        color: addAlphaToHex(0.4, settings.color_black)
+                        color: addAlphaToHex(0.4, colors.black)
                         source: icon
 
                         visible: favorite
@@ -156,7 +156,7 @@ Component {
                     Rectangle {
                         width: parent.width
                         height: logo_text.height
-                        color: settings.color_black
+                        color: colors.black
 
                         visible: logo.source == ""
 
@@ -165,7 +165,7 @@ Component {
                         Text {
                             id: logo_text
                             text: title
-                            color: settings.color_white
+                            color: colors.white
 
                             font.family: bold.name
                             font.bold: true
@@ -181,7 +181,7 @@ Component {
                         verticalOffset: 3
                         radius: 8
                         samples: 16
-                        color: settings.color_black
+                        color: colors.black
                         source: logo
 
                         scale: thumb.hovered || thumb.active ? 1.0 : 0.8
@@ -219,7 +219,7 @@ Component {
 
                 width: last_played_text.width + vpx(6)
                 height: last_played_text.height + vpx(6)
-                color: addAlphaToHex(0.8, settings.color_black)
+                color: addAlphaToHex(0.8, colors.black)
 
                 radius: vpx(6)
 
@@ -230,7 +230,7 @@ Component {
                     text: "last played: " + (lastPlayed.toLocaleDateString(Locale.LongFormat) != "" ? lastPlayed.toLocaleDateString(Locale.LongFormat) : "never")
                     font.family: regular.name
                     font.pixelSize: vpx(12)
-                    color: settings.color_white
+                    color: colors.white
                     anchors.centerIn: parent
                 }
             }
@@ -244,7 +244,7 @@ Component {
 
                 width: play_time_text.width + vpx(6)
                 height: play_time_text.height + vpx(6)
-                color: addAlphaToHex(0.8, settings.color_black)
+                color: addAlphaToHex(0.8, colors.black)
 
                 radius: vpx(6)
 
@@ -255,7 +255,7 @@ Component {
                     text: "play time: " + getTime(playTime)
                     font.family: regular.name
                     font.pixelSize: vpx(12)
-                    color: settings.color_white
+                    color: colors.white
                     anchors.centerIn: parent
 
                     function getTime(t){
