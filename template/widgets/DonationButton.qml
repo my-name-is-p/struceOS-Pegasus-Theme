@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
@@ -11,7 +11,7 @@ Item {
 
     property bool selected: false
     property bool hovered: false
-    property string link: "https://ko-fi.com/strucep"
+    property string link: "https://ko-fi.com/my_name_is_p"
 
     width: image.width + (image.anchors.margins * 2)
 

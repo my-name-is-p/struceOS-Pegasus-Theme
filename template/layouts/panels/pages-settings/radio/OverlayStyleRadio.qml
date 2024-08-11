@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
 import "../../../../widgets"
@@ -59,7 +59,6 @@ Item { //overlay_style_radio
             resetItems()
             settings.bgOverlay = images.overlay_0001
             api.memory.set("struceOS_background_overlaySource", images.overlay_0001)
-            overlay_style_radio.current = this
         }
         property var onAccept: onClicked
 
@@ -85,7 +84,6 @@ Item { //overlay_style_radio
             resetItems()
             settings.bgOverlay = images.overlay_0002
             api.memory.set("struceOS_background_overlaySource", images.overlay_0002)
-            overlay_style_radio.current = this
         }
         property var onAccept: onClicked
 

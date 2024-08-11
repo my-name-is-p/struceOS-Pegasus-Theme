@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 // GetSimpleKeys
 // returns a simplfied control set
@@ -161,6 +161,8 @@ function updateColors(){
 
 function resetFocus(){
     let c = f
+    log(c)
+    log(f)
     f = background
     f = c
 }

@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

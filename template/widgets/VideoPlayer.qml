@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
 import QtMultimedia 5.9
@@ -427,7 +427,7 @@ Item { //viewer
         Item{ //video_time
             id: video_time
             anchors.verticalCenter: mute.verticalCenter
-            anchors.right: loocolors.left
+            anchors.right: loop.left
             anchors.rightMargin: vpx(12)
 
             height: video_time_text.height

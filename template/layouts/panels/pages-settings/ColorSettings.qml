@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
@@ -360,35 +360,33 @@ Item {
             }
 
             property var onDown: function(){
-                currentItem.swatch_text.focus = false
+                currentItem.text.focus = false
                 moveCurrentIndexDown()
                 resetFocus()
             }
             property var onLeft: function(){
-                currentItem.swatch_text.focus = false
+                currentItem.text.focus = false
                 moveCurrentIndexLeft()
                 resetFocus()
             }
             property var onRight: function(){
-                currentItem.swatch_text.focus = false
+                currentItem.text.focus = false
                 moveCurrentIndexRight()
                 resetFocus()
             }
 
             property var onAccept: function(){
-                if(!currentItem.swatch_text.focus)
-                    currentItem.swatch_text.forceActiveFocus()
-                else{
-                    currentItem.swatch_text.focus = false
+                if(!currentItem.text.focus){
+                    currentItem.text.forceActiveFocus()
+                }else{
                     resetFocus()
                 }
             }
 
             property var onCancel: {
-                if(currentItem.swatch_text.focus){
+                if(currentItem.text.focus){
                     return function(){
-                        currentItem.swatch_text.undo()
-                        currentItem.swatch_text.focus = false
+                        currentItem.text.undo()
                         resetFocus()
                     }
                 }
@@ -412,7 +410,7 @@ Item {
                 property bool active: color_options.selected && index === color_options.currentIndex ? true : false
                 property bool hovered: hover.hovered
 
-                property var swatch_text: swatch_text
+                property var text: swatch_text
 
 
                 Rectangle { //color_option_select
@@ -536,6 +534,7 @@ Item {
                                         colors[color_name] = text
                                         api.memory.set("struceOS_theme_colors", settings.theme)
                                         color_options.model.populateModel()
+                                        color_options.currentIndex = index
                                     }
 
                                     Keys.onPressed: {
@@ -572,16 +571,12 @@ Item {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        page.parent.current = page
-                        page.current = color_settings
-                        color_settings.current = color_options
+                        color_options.currentItem.text.focus = false
                         color_options.currentIndex = index
+
                         swatch_text.forceActiveFocus()
                         audio.stopAll()
                         audio.select.play()
-
-                        colors_loader.sourceComponent = undefined
-                        colors_loader.sourceComponent = colors_component
                     }
                 }
             }

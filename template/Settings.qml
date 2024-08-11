@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.0
 
@@ -75,7 +75,7 @@ Item {
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
     property string version: "1.5.1"
-    property string author: "strucep"
+    property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
 

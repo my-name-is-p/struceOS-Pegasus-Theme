@@ -1,5 +1,5 @@
 // struceOS
-// Copyright (C) 2024 strucep
+// Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
 
@@ -132,11 +132,23 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
-                Object.keys(settings.theme).sort().forEach(
-                        function(v, i) {
-                            log(v + ": " + settings.theme[v]);
-                        }
-                    )
+                // Object.keys(settings.theme).sort().forEach(
+                //         function(v, i) {
+                //             log(v + ": " + settings.theme[v]);
+                //         }
+                //     )
+                //gets panel_area
+                log(f)
+                //gets panel current
+                log(f.current)
+                //gets panel current
+                log(f.current.current)
+                log(f.current.current.current)
+                log(f.current.current.current.current)
+                log(f.current.current.current.current.current)
+                //gets color
+                log(f.current.current.current.current.current.currentItem)
+                log(f.current.current.current.current.current.currentItem.text.text)
                 mouse.event = accepted
             }
 
