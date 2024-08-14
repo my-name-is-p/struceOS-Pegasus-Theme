@@ -2,6 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 Rectangle {
     id: collections_menu
@@ -100,32 +101,55 @@ Rectangle {
 
             property bool logoLoaded: collectionView_list_logo.status != Image.Error ? true : false
 
-            Image { //collectionView_list_logo
-                id: collectionView_list_logo
-                source: "../../assets/logos/" + shortName + ".svg"
+
+            Item { //collectionView_logo_mask
+                id: collectionView_logo_mask
                 height: parent.height
 
-                fillMode: Image.PreserveAspectFit
-                horizontalAlignment: Image.center
+                width: collectionView_list_logo.status != Image.Error ? collectionView_list_logo.width : collectionView_list_name.width
 
-                antialiasing: true
-                smooth: true
+                visible: false
+
+                Image { //collectionView_list_logo
+                    id: collectionView_list_logo
+                    source: "../../assets/logos/" + shortName + ".svg"
+                    height: parent.height
+
+                    fillMode: Image.PreserveAspectFit
+                    horizontalAlignment: Image.center
+
+                    antialiasing: true
+                    smooth: true
+                }
+
+                Text { //collectionView_list_name
+                    id: collectionView_list_name
+                    text: name
+                    anchors.centerIn: parent
+
+                    color: colors.white
+                    visible: collectionView_list_logo.status === Image.Error
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+
+                    font.family: bold.name
+                    font.bold: true
+                    font.pixelSize: vpx(36)
+                    fontSizeMode: Text.fit
+                }
             }
 
-            Text { //collectionView_list_name
-                id: collectionView_list_name
-                text: name
-                anchors.centerIn: parent
-
+            Rectangle { //collectionView_logo_color
+                id: collectionView_logo_color
+                anchors.fill: collectionView_logo_mask
+                visible: false
                 color: colors.white
-                visible: collectionView_list_logo.status === Image.Error
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
+            }
 
-                font.family: bold.name
-                font.bold: true
-                font.pixelSize: vpx(36)
-                fontSizeMode: Text.fit
+            OpacityMask {
+                anchors.fill: collectionView_logo_mask
+                source: collectionView_logo_color
+                maskSource: collectionView_logo_mask
             }
 
             Rectangle { //collectionTitle_border

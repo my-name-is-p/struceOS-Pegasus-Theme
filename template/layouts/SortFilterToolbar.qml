@@ -2,6 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 Item { //sortfilt_toolbar_wrapper
     id: sortfilt_toolbar_wrapper
@@ -53,23 +54,41 @@ Item { //sortfilt_toolbar_wrapper
             property var onAccept: onLeft
 
 
-            
-            Image {
-                id: sortfilt_label_icon
-                source: sortfilt_menu.focus || parent.parent.hovered ? images.sortfilt_icon_filled : images.sortfilt_icon_empty
-
+            Item { //sortfilt_label_icon_mask
+                id: sortfilt_label_icon_mask
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: vpx(12)
                 width: vpx(24)
                 height: vpx(24)
 
+
+                Image { //sortfilt_label_icon
+                    id: sortfilt_label_icon
+                    source: sortfilt_menu.focus || sortfilt_toolbar_wrapper.hovered ? images.sortfilt_icon_filled : images.sortfilt_icon_empty
+
+                    anchors.fill: parent
+                    visible: false
+                }
+
+                Rectangle { //sortfilt_label_icon_color
+                    id: sortfilt_label_icon_color
+                    anchors.fill: sortfilt_label_icon
+                    visible: false
+                    color: colors.white
+                }
+
+                OpacityMask {
+                    anchors.fill: sortfilt_label_icon
+                    source: sortfilt_label_icon_color
+                    maskSource: sortfilt_label_icon
+                }
             }
 
             Text {
                 id: sortfilt_label_text
                 text: sortfilt_menu.active_sort.text
-                anchors.left: sortfilt_label_icon.right
+                anchors.left: sortfilt_label_icon_mask.right
                 anchors.leftMargin: vpx(12)
                 anchors.verticalCenter: parent.verticalCenter
                 font.family: bold.name
@@ -78,17 +97,40 @@ Item { //sortfilt_toolbar_wrapper
                 color: colors.white
             }
 
-            Image {
-                id: sortfilt_label_direction
-                source: images.sort_direction_filled
+
+            Item { //sortfilt_label_direction_mask
+                id: sortfilt_label_direction_mask
+
                 anchors.left: sortfilt_label_text.right
                 anchors.leftMargin: vpx(3)
                 anchors.verticalCenter: parent.verticalCenter
 
-                rotation: sortfilt_menu.active_sort.asc ? 0 : 180
-
                 width: vpx(12)
                 height: vpx(12)
+
+                Image { //sortfilt_label_direction
+                    id: sortfilt_label_direction
+                    source: images.sort_direction_filled
+
+                    anchors.fill: parent
+
+                    visible: false
+                }
+
+                Rectangle { //sortfilt_label_direction_color
+                    id: sortfilt_label_direction_color
+                    anchors.fill: sortfilt_label_direction_mask
+                    visible: false
+                    color: colors.white
+                }
+
+                OpacityMask {
+                    anchors.fill: sortfilt_label_direction
+                    source: sortfilt_label_direction_color
+                    maskSource: sortfilt_label_direction
+
+                    rotation: sortfilt_menu.active_sort.asc ? 0 : 180
+                }
             }
         }
 

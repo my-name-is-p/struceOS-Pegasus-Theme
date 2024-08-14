@@ -95,7 +95,7 @@ Item {
                 for (var i = 0; i < children.length; i++) {
                     h = children[i].height > h ? children[i].height : h
                 }
-                return h;
+                return h
             }
 
             Text { //ui_audio_settings_volume_text

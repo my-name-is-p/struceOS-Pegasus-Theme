@@ -46,8 +46,6 @@ Item {
         CloseButton { //settings_close
             id: settings_close
 
-            icon_color: colors.text
-
             selected: panel.current === this
 
             onClicked: function(){
@@ -84,12 +82,7 @@ Item {
 
             anchors.top: parent.top
 
-            Component.onCompleted: {
-                if(width > parent.width)
-                    anchors.horizontalCenter = parent.horizontalCenter
-                else
-                    anchors.left = parent.left
-            }
+            anchors.left: parent.left
 
             height: vpx(48)
 
@@ -106,41 +99,69 @@ Item {
             property var onNext: page_list.current.onNext
             property var onPrevious: page_list.current.onPrevious
             
-            Image { //leftBumper
-                id: leftBumper
-                source: images.leftBumper
+            Item { //left_buttons_mask
+                id: left_buttons_mask
 
-                width: vpx(32)
-                height: vpx(32)
+                anchors.left: parent.left
 
-                anchors.verticalCenter: parent.verticalCenter
+                height: parent.height
+                width: { //width
+                    let sum = 0
+                    for (var i = 0; i < children.length; i++) {
+                        sum += children[i].width + children[i].anchors.leftMargin
+                    }
+                    return sum;
+                }
+
+                Image { //leftBumper
+                    id: leftBumper
+                    source: images.leftBumper
+
+                    width: vpx(32)
+                    height: vpx(32)
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Image { //leftSlash
+                    id: leftSlash
+                    source: images.slash
+
+                    anchors.left: leftBumper.right
+                    anchors.leftMargin: vpx(6)
+
+                    width: vpx(12)
+                    height: vpx(12)
+                    
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Image { //key_q
+                    id: key_q
+                    source: images.key_q
+
+                    anchors.left: leftSlash.right
+                    anchors.leftMargin: vpx(6)
+                    
+                    width: vpx(24)
+                    height: vpx(24)
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
 
-            Image { //leftSlash
-                id: leftSlash
-                source: images.slash
-
-                anchors.left: leftBumper.right
-                anchors.leftMargin: vpx(6)
-
-                width: vpx(12)
-                height: vpx(12)
-                
-
-                anchors.verticalCenter: parent.verticalCenter
+            Rectangle { //left_buttons_color
+                id: left_buttons_color
+                anchors.fill: left_buttons_mask
+                visible: false
+                color: colors.white
             }
 
-            Image { //key_q
-                id: key_q
-                source: images.key_q
-
-                anchors.left: leftSlash.right
-                anchors.leftMargin: vpx(6)
-                
-                width: vpx(24)
-                height: vpx(24)
-
-                anchors.verticalCenter: parent.verticalCenter
+            OpacityMask {
+                anchors.fill: left_buttons_mask
+                source: left_buttons_color
+                maskSource: left_buttons_mask
             }
 
             Item { //page_list
@@ -148,7 +169,7 @@ Item {
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                anchors.left: key_q.right
+                anchors.left: left_buttons_mask.right
                 anchors.leftMargin: vpx(24)
 
                 property Item current: page_list_layout
@@ -174,13 +195,15 @@ Item {
                     anchors.rightMargin: vpx(-6)
 
                     radius: vpx(6)
+
+                    color: colors.white
                 }
 
                 Text { //page_list_layout
                     id: page_list_layout
                     anchors.verticalCenter: parent.verticalCenter
                     text: "layout"
-                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
+                    color: colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -215,7 +238,7 @@ Item {
                     anchors.left: page_list_layout.right
                     anchors.leftMargin: vpx(12)
                     text: "colors"
-                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
+                    color: colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -251,7 +274,7 @@ Item {
                     anchors.left: page_list_colors.right
                     anchors.leftMargin: vpx(12)
                     text: "audio"
-                    color: page_selection.selected && page_list.current === this ? colors.text_invert : colors.white
+                    color: colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -286,7 +309,7 @@ Item {
                     anchors.left: page_list_audio.right
                     anchors.leftMargin: vpx(12)
                     text: "devtools"
-                    color: page_selection.selected && parent.current === this ? colors.text_invert : colors.white
+                    color: colors.white
 
                     font.family: bold.name
                     font.bold: true
@@ -315,45 +338,73 @@ Item {
                 }
             }
 
-            Image { //key_e
-                id: key_e
-                source: images.key_e
-
+            Item { //right_buttons_mask
+                id: right_buttons_mask
                 anchors.left: page_list.right
                 anchors.leftMargin: vpx(24)
-                
-                width: vpx(24)
-                height: vpx(24)
 
-                anchors.verticalCenter: parent.verticalCenter
+                height: parent.height
+                width: { //width
+                    let sum = 0
+                    for (var i = 0; i < children.length; i++) {
+                        sum += children[i].width + children[i].anchors.leftMargin
+                    }
+                    return sum;
+                }
+
+                visible: false
+
+                Image { //key_e
+                    id: key_e
+                    source: images.key_e
+
+                    
+                    width: vpx(24)
+                    height: vpx(24)
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Image { //rightSlash
+                    id: rightSlash
+                    source: images.slash
+
+                    anchors.left: key_e.right
+                    anchors.leftMargin: vpx(6)
+
+                    width: vpx(12)
+                    height: vpx(12)
+                    
+
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Image { //rightBumper
+                    id: rightBumper
+                    source: images.rightBumper
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: rightSlash.right
+                    anchors.leftMargin: vpx(6)
+
+                    width: vpx(32)
+                    height: vpx(32)
+
+
+                }
             }
 
-            Image { //rightSlash
-                id: rightSlash
-                source: images.slash
-
-                anchors.left: key_e.right
-                anchors.leftMargin: vpx(6)
-
-                width: vpx(12)
-                height: vpx(12)
-                
-
-                anchors.verticalCenter: parent.verticalCenter
+            Rectangle { //right_buttons_color
+                id: right_buttons_color
+                anchors.fill: right_buttons_mask
+                visible: false
+                color: colors.white
             }
 
-            Image { //rightBumper
-                id: rightBumper
-                source: images.rightBumper
-
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: rightSlash.right
-                anchors.leftMargin: vpx(6)
-
-                width: vpx(32)
-                height: vpx(32)
-
-
+            OpacityMask {
+                anchors.fill: right_buttons_mask
+                source: right_buttons_color
+                maskSource: right_buttons_mask
             }
         }
 

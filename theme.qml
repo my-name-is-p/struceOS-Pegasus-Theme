@@ -22,6 +22,7 @@
 // #1.5.1
 //      1. Added button hints
 //      2. Added color options to settings
+//      3. Updated icons to change with color settings
 
 // #1.5.0 
 //      1. Moved panel items to new window
@@ -89,7 +90,6 @@
 
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add genre filters
-// 2. Update all icons to change with color settings
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15

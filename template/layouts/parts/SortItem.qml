@@ -2,8 +2,9 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
-Item {
+Item { //sort_item
     id: sort_item
 
     property string text: "undefined"
@@ -19,7 +20,7 @@ Item {
 
     height: text.contentHeight + vpx(18)
 
-    Rectangle {
+    Rectangle { //hover
         id: hover
         anchors.fill: parent
         anchors.margins: vpx(6)
@@ -27,7 +28,7 @@ Item {
         radius: vpx(6)
     }
 
-    Text {
+    Text { //text
         id: text
         text: parent.text
         anchors.verticalCenter: parent.verticalCenter
@@ -38,20 +39,42 @@ Item {
         color: colors.white
     }
 
-    Image {
-        id: arrow
-        source: parent.enabled ? images.sort_direction_filled : images.sort_direction_empty
-        height: vpx(18)
-        width: vpx(18)
 
-        rotation: parent.asc ? 0 : 180
+    Item { //arrow_mask
+        id: arrow_mask
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: vpx(12)
+
+        height: vpx(18)
+        width: vpx(18)
+
+        Image { //arrow
+            id: arrow
+            anchors.fill: parent
+            source: sort_item.enabled ? images.sort_direction_filled : images.sort_direction_empty
+
+            visible: false
+        }
+
+        Rectangle { //arrow_color
+            id: arrow_color
+            anchors.fill: arrow
+            visible: false
+            color: colors.white
+        }
+
+        OpacityMask {
+            anchors.fill: arrow
+            source: arrow_color
+            maskSource: arrow
+
+            rotation: sort_item.asc ? 0 : 180
+        }
     }
 
-    MouseArea {
+    MouseArea { //click
         id: click
 
         anchors.fill: parent
@@ -74,5 +97,4 @@ Item {
             audio.select.play()
         }
     }
-
 }

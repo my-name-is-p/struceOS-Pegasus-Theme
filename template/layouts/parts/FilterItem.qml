@@ -2,6 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 Item {
     id: filter_item
@@ -39,14 +40,36 @@ Item {
         color: colors.white
     }
 
-    Image {
-        id: icon
-        source: parent.icon
-        height: vpx(18)
-        width: vpx(18)
+    Item { //icon_mask
+        id: icon_mask
+
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: vpx(12)
+
+        height: vpx(18)
+        width: vpx(18)
+
+        Image { //icon
+            id: icon
+            source: filter_item.icon
+            anchors.fill: parent
+
+            visible: false
+        }
+
+        Rectangle { //icon_color
+            id: icon_color
+            anchors.fill: icon
+            visible: false
+            color: colors.white
+        }
+
+        OpacityMask {
+            anchors.fill: icon
+            source: icon_color
+            maskSource: icon
+        }
     }
 
     MouseArea {

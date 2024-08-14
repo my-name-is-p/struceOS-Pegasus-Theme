@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, colors.white)
+        color: addAlphaToHex(0.3, colors.white)
 
         radius: vpx(6)
 
@@ -53,7 +53,7 @@ Item {
         width: toggle.showText ? contentWidth : 0
     }
 
-    Rectangle {
+    Rectangle { //toggle_box
         id: toggle_box
 
         anchors.right: toggle.boxAlign === "left" ? toggle_text.right : parent.right

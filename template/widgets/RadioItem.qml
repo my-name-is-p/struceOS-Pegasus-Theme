@@ -32,7 +32,7 @@ Item {
         anchors.fill: parent
         anchors.margins: vpx(-6)
 
-        color: addAlphaToHex(0.6, colors.white)
+        color: addAlphaToHex(0.3, colors.white)
 
         radius: vpx(6)
 

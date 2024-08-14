@@ -10,7 +10,7 @@ Rectangle {
 
     property int fade_time: 200
 
-    Image {
+    Image { //bg_back
         id:bg_back
 
         smooth: true
@@ -60,8 +60,7 @@ Rectangle {
         fade_out.restart()
     }
     
-    //Background Overlay
-    Image {
+    Image { //Background Overlay
         id: backgroundOverlay
         source: settings.bgOverlay
         opacity: {

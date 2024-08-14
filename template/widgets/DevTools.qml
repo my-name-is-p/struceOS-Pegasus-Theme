@@ -106,7 +106,7 @@ Item { //devtools
 
         radius: vpx(48)
 
-        color: hovered ? colors.launch : colors.launch_hover
+        color: hovered ? colors.launch_button : colors.launch_hover
 
         visible: true
 
@@ -132,24 +132,6 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
-                // Object.keys(settings.theme).sort().forEach(
-                //         function(v, i) {
-                //             log(v + ": " + settings.theme[v]);
-                //         }
-                //     )
-                //gets panel_area
-                log(f)
-                //gets panel current
-                log(f.current)
-                //gets panel current
-                log(f.current.current)
-                log(f.current.current.current)
-                log(f.current.current.current.current)
-                log(f.current.current.current.current.current)
-                //gets color
-                log(f.current.current.current.current.current.currentItem)
-                log(f.current.current.current.current.current.currentItem.text.text)
-                mouse.event = accepted
             }
 
             onDoubleClicked: {
@@ -173,7 +155,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? colors.launch : colors.launch_hover
+        color: hovered ? colors.launch_button : colors.launch_hover
 
         visible: true
 
@@ -232,7 +214,7 @@ Item { //devtools
 
         radius: vpx(6)
 
-        color: hovered ? colors.launch : colors.launch_hover
+        color: hovered ? colors.launch_button : colors.launch_hover
 
         visible: true
 

@@ -161,8 +161,6 @@ function updateColors(){
 
 function resetFocus(){
     let c = f
-    log(c)
-    log(f)
     f = background
     f = c
 }

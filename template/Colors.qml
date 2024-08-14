@@ -10,8 +10,9 @@ Item {
     property string accent_light: settings.theme.accent_light
     property string slider: settings.theme.slider
     property string slider_base: settings.theme.slider_base
-    property string launch: settings.theme.launch
+    property string launch_button: settings.theme.launch_button
     property string launch_hover: settings.theme.launch_hover
+    property string launch_text: settings.theme.launch_text
     property string border: settings.theme.border
     property string text: settings.theme.text
     property string text_invert: settings.theme.text_invert

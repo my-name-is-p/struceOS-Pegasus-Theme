@@ -71,7 +71,6 @@ Item {
         CloseButton { //close
             id: close
 
-            icon_color: colors.text
             selected: panel.current === this
 
             onClicked: function(){
@@ -104,7 +103,6 @@ Item {
             anchors.right: parent.right
 
             icon: currentGame.favorite ? images.favorite_icon_filled : images.favorite_icon_empty
-            icon_color: colors.text
 
             selected: panel.current === this
 
@@ -273,19 +271,42 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
-                        Image { //players_icon
-                            id: players_icon
-                            width: 16 * Math.min(currentGame.players, 5)
-                            height: 16
+                        Item {
+                            id: players_icon_mask
 
-                            source: images.players
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: players_label.right
                             anchors.leftMargin: vpx(6)
 
-                            fillMode: Image.PreserveAspectCrop
-                            horizontalAlignment: Image.AlignLeft
+                            width: vpx(16) * Math.min(currentGame.players, 5)
+                            height: vpx(16)
+
+
+                            Image { //players_icon
+                                id: players_icon
+                                anchors.fill: parent
+                                source: images.players
+
+                                fillMode: Image.PreserveAspectCrop
+                                horizontalAlignment: Image.AlignLeft
+
+                                visible: false
+                            }
+
+                            Rectangle { //icon_color
+                                id: players_icon_color
+                                anchors.fill: players_icon
+                                visible: false
+                                color: colors.text
+                            }
+
+                            OpacityMask {
+                                anchors.fill: players_icon
+                                source: players_icon_color
+                                maskSource: players_icon
+                            }
                         }
+
                     }
 
                     Rectangle { //genres_detail

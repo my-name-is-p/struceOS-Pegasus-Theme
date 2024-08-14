@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.15
 Rectangle { //launch
     id: launch
     height: vpx(48)
-    color: hovered ? colors.white : colors.launch
+    color: hovered ? colors.launch_hover : colors.launch_button
     radius: vpx(100)
 
 
@@ -34,7 +34,7 @@ Rectangle { //launch
         Rectangle {
             id: launch_icon_color
             anchors.fill: parent
-            color: launch.hovered ? colors.launch : colors.white
+            color: launch.hovered ? colors.launch_button : colors.launch_hover
 
             visible: false
         }
@@ -51,7 +51,7 @@ Rectangle { //launch
     Text { //launch_text
         id: game_launch_text
         text: "launch"
-        color: launch.hovered ? colors.launch : colors.white
+        color: launch.hovered ? colors.launch_button : colors.launch_text
         font.family: regular.name
         font.pixelSize: vpx(18)
 

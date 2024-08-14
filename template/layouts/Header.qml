@@ -2,6 +2,8 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
+
 import "../widgets"
 
 Item {
@@ -34,35 +36,59 @@ Item {
 
         property bool selected: f === header && header.current === this
 
-        Image { //collection_logo
-            id: collection_logo
-            visible: status != Image.Error
-            source: images.current_collection
-
+        Item { //collectionView_logo_mask
+            id: collection_logo_mask
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: parent.left
 
-            fillMode: Image.PreserveAspectFit
+            width: collection_logo.status != Image.Error ? collection_logo.width : collection_logo_text.width
 
-            antialiasing: true
-            smooth: true
+            visible: false
+
+            Image { //collection_logo
+                id: collection_logo
+                visible: status != Image.Error
+                source: images.current_collection
+
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+
+                fillMode: Image.PreserveAspectFit
+
+                antialiasing: true
+                smooth: true
+            }
+
+            Text {  //collection_logo_text
+                id: collection_logo_text
+
+                anchors.left: parent.left
+                anchors.top: parent.top
+
+                text: currentCollection.name
+                color: colors.white
+
+                font.family: bold.name
+                font.bold: true
+                font.pixelSize: vpx(36)
+
+                visible: collection_logo.status === Image.Error
+            }
         }
 
-        Text {  //collection_logo_text
-            id: collection_logo_text
-
-            anchors.left: parent.left
-            anchors.top: parent.top
-
-            text: currentCollection.name
+        Rectangle { //collection_logo_color
+            id: collection_logo_color
+            anchors.fill: collection_logo_mask
+            visible: false
             color: colors.white
+        }
 
-            font.family: bold.name
-            font.bold: true
-            font.pixelSize: vpx(36)
-
-            visible: collection_logo.status === Image.Error
+        OpacityMask {
+            anchors.fill: collection_logo_mask
+            source: collection_logo_color
+            maskSource: collection_logo_mask
         }
 
         Rectangle { //game_count
@@ -177,12 +203,11 @@ Item {
         property var onCanceled: onDown
     }
 
-    UIButton {
+    UIButton { //search_button
         id: search_button
         anchors.right: settings_button.left
 
         icon: images.search_icon
-        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -222,7 +247,6 @@ Item {
         anchors.right: info_button.left
 
         icon: images.settings_icon
-        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5
@@ -270,7 +294,6 @@ Item {
         anchors.rightMargin: vpx(24)
 
         icon: images.info_icon
-        icon_color: colors.text
 
         height: header.height / 1.5
         width: header.height / 1.5

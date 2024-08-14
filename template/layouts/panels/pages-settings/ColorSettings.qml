@@ -305,6 +305,7 @@ Item {
             }
 
             property var onDown: function(){
+                color_options.currentIndex = 0
                 color_settings.current = color_options
             }
 
@@ -342,7 +343,9 @@ Item {
             cellHeight: vpx(36)
 
             model: ColorsModel{}
-            delegate: color_option_component
+            delegate: ColorsGridItem{}
+
+            flow: GridView.FlowTopToBottom
 
             Component.onCompleted: {
                 model.populateModel()
@@ -351,235 +354,28 @@ Item {
             property bool selected: color_settings.selected && color_settings.current === this
 
             property var onUp: function(){
-                if(currentIndex <= 1)
+                if(currentIndex <= 0)
                     color_settings.current = color_settings_title
                 else{
                     moveCurrentIndexUp()
-                    resetFocus()
+                    // resetFocus()
                 }
             }
 
             property var onDown: function(){
-                currentItem.text.focus = false
                 moveCurrentIndexDown()
-                resetFocus()
+                // resetFocus()
             }
             property var onLeft: function(){
-                currentItem.text.focus = false
                 moveCurrentIndexLeft()
-                resetFocus()
+                // resetFocus()
             }
             property var onRight: function(){
-                currentItem.text.focus = false
                 moveCurrentIndexRight()
-                resetFocus()
+                // resetFocus()
             }
 
-            property var onAccept: function(){
-                if(!currentItem.text.focus){
-                    currentItem.text.forceActiveFocus()
-                }else{
-                    resetFocus()
-                }
-            }
-
-            property var onCancel: {
-                if(currentItem.text.focus){
-                    return function(){
-                        currentItem.text.undo()
-                        resetFocus()
-                    }
-                }
-                else
-                    return undefined
-            }
-        }
-
-        Component {
-            id: color_option_component
-
-            Item { //color_option
-                id: color_option
-
-                height: color_options.cellHeight
-                width: color_options.cellWidth
-
-                property GridView color_options: parent.parent
-
-                property bool selected: false
-                property bool active: color_options.selected && index === color_options.currentIndex ? true : false
-                property bool hovered: hover.hovered
-
-                property var text: swatch_text
-
-
-                Rectangle { //color_option_select
-                    id: color_option_select
-
-                    anchors.fill: color_option_sizer
-                    anchors.margins: vpx(-6)
-
-                    color: addAlphaToHex(0.6, colors.white)
-
-                    radius: vpx(6)
-
-                    visible: color_option.active || color_option.hovered 
-                }
-
-                Item { //color_option_sizer
-                    id: color_option_sizer
-
-                    height: { //height
-                        let h = 0
-                        for (var i = 0; i < children.length; i++) {
-                            h = children[i].height > h ? children[i].height : h
-                        }
-                        return h;
-                    }
-
-                    width: { //width
-                        let sum = 0
-                        for (var i = 0; i < children.length; i++) {
-                            sum += children[i].width + children[i].anchors.leftMargin
-                        }
-                        return sum;
-                    }
-
-                    Text { //label
-                        id: label
-                        text: color_name.replace("_", " ") + ": "
-
-                        anchors.verticalCenter: parent.verticalCenter
-                        
-                        color: colors.text
-
-                        font.family: regular.name
-                        font.pixelSize: vpx(16)
-                    }
-
-
-                    Item {
-                        id: picker_wrapper
-
-                        anchors.left: label.right
-                        anchors.leftMargin: vpx(6)
-
-                        height: parent.height
-
-                        width: vpx(96)
-
-                        Rectangle {
-                            id: picker_mask
-                            anchors.fill: picker
-
-                            radius: vpx(6)
-
-                            visible: false
-                        }
-
-                        Rectangle{
-                            id: picker
-                            anchors.fill: parent
-                            color: colors.white
-
-                            visible: false
-
-                            Rectangle {
-                                id: swatch
-
-                                height: parent.height
-                                width: height
-
-                                color: color_value
-
-                                Rectangle {
-                                    id: swatch_border
-                                    anchors.fill: parent
-
-                                    color: colors.t
-
-                                    border.width: vpx(1)
-                                    border.color: colors.black
-                                }
-                            }
-
-                            Item {
-                                id: swatch_text_wrapper
-
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                anchors.left: swatch.right
-                                anchors.right: parent.right
-
-                                TextInput {
-                                    id: swatch_text
-                                    text: color_value
-                                    anchors.fill: parent
-
-                                    verticalAlignment: TextInput.AlignVCenter
-                                    horizontalAlignment: TextInput.AlignHCenter
-
-                                    font.family: regular.name
-                                    font.pixelSize: vpx(12)
-
-                                    color: colors.text_invert
-
-                                    onEditingFinished: {
-                                        while(!validateHex(text))
-                                            undo()
-                                        if(text.indexOf("#") < 0){
-                                            text = "#" + text
-                                        }
-                                        settings.theme[color_name] = text
-                                        colors[color_name] = text
-                                        api.memory.set("struceOS_theme_colors", settings.theme)
-                                        color_options.model.populateModel()
-                                        color_options.currentIndex = index
-                                    }
-
-                                    Keys.onPressed: {
-                                        audio.stopAll()
-                                        audio.toggle_down.play()
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                id: picker_border
-                                anchors.fill: picker
-
-                                color: colors.t
-
-                                border.width: vpx(3)
-                                border.color: colors.white
-
-                                radius: vpx(6)
-                            }
-
-                        }
-
-                        OpacityMask {
-                            anchors.fill: picker
-                            source: picker
-                            maskSource: picker_mask
-                        }
-                    }
-                }
-
-                MouseArea {
-                    id: color_option_click
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        color_options.currentItem.text.focus = false
-                        color_options.currentIndex = index
-
-                        swatch_text.forceActiveFocus()
-                        audio.stopAll()
-                        audio.select.play()
-                    }
-                }
-            }
+            property var onAccept: currentItem.onAccept
         }
     }
 
