@@ -30,11 +30,11 @@ If you have any issues, please open a ticket or let me know on [discord](https:/
 # Version 1.5.1 Updates
 1. Added button hints
 2. Added color options to settings
+3. Updated icons to change with color settings
 
 <a id="to-come"></a>
 # To come in future updates
 1. Add genre filters
-2. Update all icons to change with color settings
 
 
 <a id="meta-data"></a>
@@ -256,6 +256,7 @@ Download struceOS-Pegasus-Theme-1.5.0.zip from [last releases](https://github.co
 ```
 1. Added button hints
 2. Added color options to settings
+3. Updated icons to change with color settings
 ```
 
 ## 1.5.0 
