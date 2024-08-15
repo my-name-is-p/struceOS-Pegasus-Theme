@@ -205,29 +205,16 @@ The most useful settings are now in a settings panel within the theme. The rest 
     //Colors
     property var theme: 
         api.memory.get("struceOS_theme_colors") != undefined ?
-            api.memory.get("struceOS_theme_colors") : 
-            {
-                "accent": "#011936",
-                "accent_light": "#465362",
-                "black": "#000000",
-                "border": addAlphaToHex(0.6, "#FFFFFF"),
-                "launch": "#1E824C",
-                "launch_hover": "#1BA39C",
-                "slider": "#FE3734",
-                "slider_base": "#F1C8C7",
-                "t": "transparent",
-                "text": "#FFFFFF",
-                "text_invert": "#000000",
-                "white": "#FFFFFF",
-            }
+            api.memory.get("struceOS_theme_colors") : JSON.parse(JSON.stringify(default_theme))
     
     property var default_theme: {
             "accent": "#011936",
             "accent_light": "#465362",
             "black": "#000000",
             "border": addAlphaToHex(0.6, "#FFFFFF"),
-            "launch": "#1E824C",
-            "launch_hover": "#1BA39C",
+            "launch_button": "#1E824C",
+            "launch_hover": "#FFFFFF",
+            "launch_text": "#FFFFFF",
             "slider": "#FE3734",
             "slider_base": "#F1C8C7",
             "t": "transparent",
@@ -244,7 +231,7 @@ Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [Pl
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.5.0.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.5.1.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
