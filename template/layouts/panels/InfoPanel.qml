@@ -149,7 +149,8 @@ Item {
             anchors.right: parent.right
 
             icon: currentGame.favorite ? images.favorite_icon_filled : images.favorite_icon_empty
-
+            sound: audio.toggle_down
+            
             selected: panel.current === this
 
             onClicked: function(){
