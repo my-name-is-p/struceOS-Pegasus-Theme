@@ -362,10 +362,14 @@ FocusScope {
                     case "prev":
                         if(f.onPrevious)
                             f.onPrevious()
+                        else
+                            collectionPrevious()
                         break
                     case "next":
                         if(f.onNext)
                             f.onNext()
+                        else
+                            collectionNext()
                         break
                     case "first":
                         if(f.onFirst)
