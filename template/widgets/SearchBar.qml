@@ -3,79 +3,72 @@
 
 import QtQuick 2.15
 
+Item {  //search_bar
+    id: search_bar
 
-    Item {  //search_bar
-        id: search_bar
+    property bool selected: false
+    property var onClicked: function(){}
 
-        property bool selected: false
+    Rectangle { //search_box
+        id: search_box
 
-        Rectangle {
-            id: search_box
+        anchors.left: parent.left
+        anchors.leftMargin: search_text.text != "" || search_bar.selected ? vpx(24) : parent.width
+        Behavior on anchors.leftMargin {NumberAnimation{duration: 125}}
+        
+        anchors.right: parent.right
+        anchors.rightMargin: vpx(24)
+        anchors.verticalCenter: parent.verticalCenter
 
-            anchors.left: parent.left
-            anchors.leftMargin: search_text.text != "" || search_bar.selected ? vpx(24) : parent.width
-            anchors.right: parent.right
+        height: vpx(48)
+
+        color: addAlphaToHex(0.25, colors.black)
+        opacity: search_text.text != "" || search_bar.selected ? 1 : 0
+        Behavior on opacity {NumberAnimation{duration: 125}}
+
+        border.width: vpx(3)
+        border.color: colors.border
+        radius: vpx(100)
+
+        TextInput { //search_text
+            id: search_text
+
+            anchors.fill: parent
+            anchors.leftMargin: vpx(24)
             anchors.rightMargin: vpx(24)
-            anchors.verticalCenter: parent.verticalCenter
 
-            height: vpx(48)
+            verticalAlignment: TextInput.AlignVCenter
+            wrapMode: TextInput.NoWrap
 
-            color: addAlphaToHex(0.25, colors.black)
-            opacity: search_text.text != "" || search_bar.selected ? 1 : 0
+            selectByMouse: true
 
-            border.width: vpx(3)
-            border.color: colors.border
-            radius: vpx(100)
+            focus: search_bar.selected
+            
+            color: colors.white
+            font.family: regular.name
+            font.pixelSize: vpx(24)
 
-            Behavior on anchors.leftMargin {NumberAnimation{duration: 125}}
-            Behavior on opacity {NumberAnimation{duration: 125}}
+            clip: true
 
+            Keys.onPressed: {
+                s = audio.select
+                audio.stopAll()
+                s.play()
+            }
 
-            Item {
+            MouseArea { //search_click
+                id: search_click
                 anchors.fill: parent
-                anchors.leftMargin: vpx(24)
-                anchors.rightMargin: vpx(24)
-                clip: true
-                enabled: search_bar.selected
 
-                TextInput {
-                    id: search_text
-                    color: colors.white
-                    text: ""
-                    anchors.fill: parent
-                    selectByMouse: true
+                enabled: search_text.focus || search_text.text != ""
 
-                    focus: search_bar.selected
+                cursorShape: Qt.IBeamCursor
 
-                    wrapMode: TextInput.NoWrap
-                    verticalAlignment: TextInput.AlignVCenter
-
-                    font.family: regular.name
-                    font.pixelSize: vpx(24)
-
-                    Keys.onPressed: {
-                        s = audio.select
-                        audio.stopAll()
-                        s.play()
-                    }
+                onClicked: {
+                    search_bar.onClicked()
                 }
             }
         }
-
-        MouseArea {
-            id: search_click
-            anchors.fill: parent
-
-            enabled: !search_text.focus && search_text.text != ""
-
-            onClicked: {
-                f = header
-                header.current = search_bar
-                audio.stopAll()
-                audio.toggle_down.play()
-            }
-        }
-
-
-        property Item search_term: search_text
     }
+    property Item search_term: search_text
+}

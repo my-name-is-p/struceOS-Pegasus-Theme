@@ -57,7 +57,7 @@ Item { //slider
             return position
         }
 
-        property var onAccept: function (){
+        function onAccept (){
             if(current.onAccept){
                 current.onAccept()
             }else{
@@ -68,17 +68,17 @@ Item { //slider
             }
         }
 
-        property var onUp: current.onUp != undefined ? current.onUp : undefined
-        property var onDown: current.onDown != undefined ? current.onDown : undefined
-        property var onLeft: current.onLeft != undefined ? current.onLeft : undefined
-        property var onRight: current.onRight != undefined ? current.onRight : undefined
-        property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
-        property var onNext: current.onNext != undefined ? current.onNext : undefined
-        property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
-        property var onLast: current.onLast != undefined ? current.onLast : undefined
-        property var onDetails: current.onDetails != undefined ? current.onDetails : undefined
-        property var onSort: current.onSort != undefined ? current.onSort : undefined
-        property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onRight: current.onRight
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current.onCancel
     //--
 
     Rectangle { //base
@@ -126,11 +126,11 @@ Item { //slider
                 x = slider.updateX((slider.value - min) * slider.stop, true)
             }
 
-            property var onCancel: function(){
+            function onCancel(){
                 slider.current = base
             }
 
-            property var onLeft: function(){
+            function onLeft(){
                 slider.value = slider.value - slider.increment >= min ? slider.value - slider.increment : slider.value
                 x = slider.updateX((slider.value - min) * slider.stop, true)
                 let v = slider.percent ? slider.value / 100 : slider.value
@@ -138,7 +138,7 @@ Item { //slider
             }
             property var onPrevious: onLeft
 
-            property var onRight: function(){
+            function onRight(){
                 slider.value = slider.value + slider.increment <= max ? slider.value + slider.increment : slider.value
                 x = slider.updateX((slider.value - min) * slider.stop, true)
                 let v = slider.percent ? slider.value / 100 : slider.value
@@ -146,14 +146,14 @@ Item { //slider
             }
             property var onNext: onRight
 
-            property var onUp: function(){
+            function onUp(){
                 x = slider.updateX(base.width, true)
                 let v = slider.percent ? slider.value / 100 : slider.value
                 api.memory.set(slider.memory, v)
             }
             property var onLast: onUp
 
-            property var onDown: function(){
+            function onDown(){
                 x = slider.updateX(0, true)
                 let v = slider.percent ? slider.value / 100 : slider.value
                 v = v <= 0 ? 0 : v

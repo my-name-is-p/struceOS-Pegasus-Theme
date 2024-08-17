@@ -35,7 +35,7 @@ Component {
             visible: color_option.active || color_option.hovered 
         }
 
-        property var onAccept: function(){
+        function onAccept(){
             value.forceActiveFocus()
         }
 
@@ -50,13 +50,7 @@ Component {
                 id: color_select
 
                 height: parent.height
-                width: { //width
-                    let sum = 0
-                    for (var i = 0; i < children.length; i++) {
-                        sum += children[i].width + children[i].anchors.leftMargin + vpx(6)
-                    }
-                    return sum;
-                }
+                width: childrenSize(this, "width", "leftMargin", 6)
 
                 radius: vpx(24)
 
@@ -104,8 +98,6 @@ Component {
                         colors[color_name] = text
                         api.memory.set("struceOS_theme_colors", settings.theme)
                         swatch.color = text
-                        // color_option.parent.parent.model.populateModel()
-                        color_option.parent.parent.currentIndex = index
                     }
 
                     Keys.onPressed: {
@@ -122,14 +114,14 @@ Component {
                                         break
                                     case "accept":
                                         focus = false
-                                        resetFocus()
+                                        resetFocus(panel_area)
                                         event.accepted = true
                                         break
                                     case "cancel":
                                         if(event.key != Qt.Key_Backspace){
                                             undo()
                                             focus = false
-                                            resetFocus()
+                                            resetFocus(panel_area)
                                             event.accepted = true
                                         }
                                         break

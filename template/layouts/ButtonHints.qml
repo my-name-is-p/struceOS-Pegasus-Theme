@@ -14,25 +14,13 @@ Rectangle {
 
     Item {
         id: hints
+
         anchors.centerIn: parent
 
-        property real margins: vpx(36)
+        height: childrenSize(this, "height", "", 0, 0,  true)
+        width: childrenSize(this, "width", "leftMargin")
 
-        height: { //height
-            let h = 0
-            for (var i = 0; i < children.length; i++) {
-                h = children[i].height > h ? children[i].height : h
-            }
-            return h;
-        }
-
-        width: { //width
-            let sum = 0
-            for (var i = 0; i < children.length; i++) {
-                sum += children[i].width + children[i].anchors.leftMargin
-            }
-            return sum;
-        }
+        property real margins: vpx(48)
 
         Navigate {
             id: navigate
@@ -48,7 +36,6 @@ Rectangle {
 
         PrevNext {
             id: prevnext
-
             text: f.current === panel_area.info_panel ? "- game +" : 
                         f.current === panel_area.settings_panel ? 
                             "- page +" : "- collection +"
@@ -59,12 +46,10 @@ Rectangle {
 
         SortFilt {
             id: sortfilt
-
             text: f.current === panel_area.info_panel ? 
                         currentGame.favorite ?
                             "unfavorite" : "favorite":
                     f === sortfilt_menu ? "close sort / filter" : "sort / filter"
-
 
             anchors.left: prevnext.right
             anchors.leftMargin: hints.margins
@@ -72,7 +57,6 @@ Rectangle {
 
         Details {
             id: details
-
             text: f.current === panel_area.info_panel ? "close details" : "details"
 
             anchors.left: sortfilt.right
@@ -80,4 +64,3 @@ Rectangle {
         }
     }
 }
-    //details

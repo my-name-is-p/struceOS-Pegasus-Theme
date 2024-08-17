@@ -1,6 +1,18 @@
 // struceOS
 // Copyright (C) 2024 my_name_is_p
 
+//launchGame
+function launchGame(){
+    log(currentGame)
+    launch_window.visible = true
+    if(settings.lastPlayed){
+        api.memory.set("collectionIndex", currentCollectionIndex)
+        api.memory.set("gameIndex", games.currentIndex)
+    }
+    s = audio.toggle_down
+    currentGame.launch()
+}
+
 // GetSimpleKeys
 // returns a simplfied control set
 function gsk(event) {
@@ -24,7 +36,7 @@ function gsk(event) {
         if(api.keys.isPageDown(event))
             return "last"
         if(api.keys.isFilters(event))
-            return "filter"
+            return "sort"
         if(api.keys.isDetails(event))
             return "details"
         if((api.keys.isAccept(event) || key == Qt.Key_Space) && !event.isAutoRepeat)
@@ -35,6 +47,27 @@ function gsk(event) {
         return parseInt(event.text)
     }
     return undefined
+}
+
+function childrenSize(element, size = "", margin = "", start = 0, i = 0, max = false){
+    let r = vpx(start)
+    if(
+        !(element != undefined) && 
+        !(size === "width" || size === "height") 
+    )
+        return 0
+    for(const [key, child] of Object.entries(element.children)){
+        if(key >= i){
+            if(!max){
+                if(child.anchors[margin])
+                    r = r + child.anchors[margin]
+                r = r + child[size]
+            }else{
+                r = child[size] > r ? child[size] : r
+            }
+        }
+    }
+    return r
 }
 
 //getAssets
@@ -112,7 +145,7 @@ function addAlphaToHex(alpha, hex) {
     return `#${alphaDecToHex(alpha)}${hex}`
 }
 
-//validateHEx
+//validateHex
 function validateHex(hex){
     hex = hex.replace(/^#/, '')
     if (!/^[0-9a-f]{6}$/i.test(hex)) 
@@ -132,7 +165,7 @@ function collectionNext(){
         else
             currentCollectionIndex = 0
     }
-    collections_menu.positionViewAtCurrentIndex()
+    collection_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
 
@@ -151,16 +184,12 @@ function collectionPrevious(){
     }else{
         currentCollectionIndex = api.collections.count - 1
     }
-    collections_menu.positionViewAtCurrentIndex()
+    collection_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
 
-function updateColors(){
-    
-}
-
-function resetFocus(){
-    let c = f
+function resetFocus(c = game_layout){
+    video.reset()
     f = background
     f = c
 }

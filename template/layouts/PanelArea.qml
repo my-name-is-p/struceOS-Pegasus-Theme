@@ -5,29 +5,53 @@ import QtQuick 2.15
 import QtMultimedia 5.9
 import "panels"
 
-Rectangle {
+Rectangle { //panel_area
     id: panel_area
 
     color: addAlphaToHex(0.95, colors.accent)
     clip: true
 
-    property real topMargin: (parent.height - (header.height + collections_menu.height))
-
-    height: f === this ? 
-                settings.buttonHints ? 
-                    topMargin - vpx(72) : 
-                    topMargin * 0.95  : 
-                0
-
+    height: { //height
+        let h = parent.parent.height - (header.height)
+        return settings.buttonHints ? h - vpx(72) : h * 0.95
+    }
     Behavior on height {NumberAnimation {duration: 125}}
 
-    property Item current: info_panel
+    property Item current: panel_area
+    property string current_s: "info"
 
     //Functions--
-        property var fullReset: current.fullReset != undefined ? current.fullReset : undefined
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onRight: current.onRight
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current.onCancel
+        property var onAccept: current.onAccept
+    
+        function open(panel = "info"){
+            info_panel.closePanel()
+            resetFocus(panel_area)
+            switch(panel){
+                case "settings":
+                    current_s = "settings"
+                    current = settings_panel
+                    break
+                default:
+                    current_s = "info"
+                    current = info_panel
+                    video.reset()
+                    break
+            }
+        }
     //--
 
-    InfoPanel {
+    InfoPanel { //clean
         id: info_panel
         visible: panel_area.current === this
     }
@@ -37,8 +61,9 @@ Rectangle {
         visible: panel_area.current === this
     }
 
-    Keys.forwardTo: current
+    Keys.onPressed: { //Keys
+        s = s != null ? s : audio.toggle_down
+    }
 
-   property InfoPanel info_panel: info_panel
-   property SettingsPanel settings_panel: settings_panel
+    property Video video: info_panel.video
 }

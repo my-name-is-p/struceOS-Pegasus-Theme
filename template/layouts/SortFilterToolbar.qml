@@ -5,111 +5,131 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
 Item { //sortfilt_toolbar_wrapper
-    id: sortfilt_toolbar_wrapper
+    id: toolbar_wrapper
 
-
-    height: sortfilt_label_wrapper.height
+    height: label_wrapper.height
     
     property bool selected: focus
-    property Item current: sortfilt_label
+    property Item current: label
 
-    Item {  //sortfilt_label_wrapper
-        id: sortfilt_label_wrapper
+    //Functions--
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onRight: current.onRight
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current.onCancel
+        property var onAccept: current.onAccept
+    //--
+
+    Item {  //label_wrapper
+        id: label_wrapper
 
         anchors.left: parent.left
-        anchors.leftMargin: vpx(24) //vpx(12) when open
-        height: sortfilt_label_text.contentHeight + vpx(24)
-        width: {
-            var sum = vpx(24);
-            for (var i = 0; i < sortfilt_label.children.length; i++) {
-                if (i > 0)
-                    sum += sortfilt_label.children[i].anchors.leftMargin
-                if(sortfilt_label.children[i].width != 0)
-                    sum += sortfilt_label.children[i].width
-                else
-                    sum += sortfilt_label.children[i].contentWidth
-            }
-            return sum;
-        }
+        anchors.leftMargin: vpx(24)
+
+        height: label.height + vpx(24)
+        width: label.width
 
         property bool hovered: false
 
         Item {  //sortfilt_label
-            id: sortfilt_label
+            id: label
 
             anchors.verticalCenter: parent.verticalCenter
 
+            height: childrenSize(this, "height", "", 0, 0, true)
+            width: childrenSize(this, "width", "leftMargin")
+
             property bool selected: sortfilt_toolbar_wrapper.current === this
 
-            property var onDown: function(){
-                games.currentIndex = 0
-                f = game_layout
-            }
-            property var onCancel: onDown
+            //Functions--
+                function onDown(){
+                    games.currentIndex = 0
+                    resetFocus()
+                }
+                property var onCancel: onDown
 
-            property var onLeft: function(){
-                s = audio.toggle_down
-                f = sortfilt_menu
-            }
-            property var onAccept: onLeft
+                function onUp(){
+                    header.current = header.collection
+                    resetFocus(header)
+                }
 
+                function onLeft(){
+                    s = audio.toggle_down
+                    f = sortfilt_menu
+                }
+                property var onAccept: onLeft
+            //--
 
-            Item { //sortfilt_label_icon_mask
-                id: sortfilt_label_icon_mask
-                anchors.verticalCenter: parent.verticalCenter
+            Item { //icon_mask
+                id: icon_mask
+
                 anchors.left: parent.left
-                anchors.leftMargin: vpx(12)
+                anchors.verticalCenter: parent.verticalCenter
+
                 width: vpx(24)
                 height: vpx(24)
 
-
-                Image { //sortfilt_label_icon
-                    id: sortfilt_label_icon
-                    source: sortfilt_menu.focus || sortfilt_toolbar_wrapper.hovered ? images.sortfilt_icon_filled : images.sortfilt_icon_empty
+                Image { //icon
+                    id: icon
+                    source: sortfilt_menu.focus || label_wrapper.hovered ? images.sortfilt_icon_filled : images.sortfilt_icon_empty
 
                     anchors.fill: parent
+
                     visible: false
                 }
 
-                Rectangle { //sortfilt_label_icon_color
-                    id: sortfilt_label_icon_color
-                    anchors.fill: sortfilt_label_icon
-                    visible: false
+                Rectangle { //color
+                    id: icon_color
+
+                    anchors.fill: icon
+
                     color: colors.white
+
+                    visible: false
                 }
 
-                OpacityMask {
-                    anchors.fill: sortfilt_label_icon
-                    source: sortfilt_label_icon_color
-                    maskSource: sortfilt_label_icon
+                OpacityMask { //icon_out
+                    id: icon_out
+                    anchors.fill: icon
+                    source: icon_color
+                    maskSource: icon
                 }
             }
 
-            Text {
-                id: sortfilt_label_text
+            Text { //label_text
+                id: label_text
                 text: sortfilt_menu.active_sort.text
-                anchors.left: sortfilt_label_icon_mask.right
+
+                anchors.left: icon_mask.right
                 anchors.leftMargin: vpx(12)
                 anchors.verticalCenter: parent.verticalCenter
+
+                color: colors.white
+
                 font.family: bold.name
                 font.bold: true
                 font.pixelSize: vpx(16)
-                color: colors.white
             }
 
+            Item { //direction_mask
+                id: direction_mask
 
-            Item { //sortfilt_label_direction_mask
-                id: sortfilt_label_direction_mask
-
-                anchors.left: sortfilt_label_text.right
+                anchors.left: label_text.right
                 anchors.leftMargin: vpx(3)
                 anchors.verticalCenter: parent.verticalCenter
 
                 width: vpx(12)
                 height: vpx(12)
 
-                Image { //sortfilt_label_direction
-                    id: sortfilt_label_direction
+                Image { //direction
+                    id: direction
                     source: images.sort_direction_filled
 
                     anchors.fill: parent
@@ -117,36 +137,41 @@ Item { //sortfilt_toolbar_wrapper
                     visible: false
                 }
 
-                Rectangle { //sortfilt_label_direction_color
-                    id: sortfilt_label_direction_color
-                    anchors.fill: sortfilt_label_direction_mask
-                    visible: false
+                Rectangle { //direction_color
+                    id: direction_color
+                    
+                    anchors.fill: direction_mask
+
                     color: colors.white
+
+                    visible: false
                 }
 
-                OpacityMask {
-                    anchors.fill: sortfilt_label_direction
-                    source: sortfilt_label_direction_color
-                    maskSource: sortfilt_label_direction
+                OpacityMask { //direction_out
+                    id: direction_out
+                    anchors.fill: direction
+                    source: direction_color
+                    maskSource: direction
 
                     rotation: sortfilt_menu.active_sort.asc ? 0 : 180
                 }
             }
         }
 
-        Rectangle { //sortfilt_label_select
-            id: sortfilt_label_select
+        Rectangle { //label_select
+            id: label_select
 
             anchors.fill: parent
+            anchors.margins: vpx(-6)
+            anchors.topMargin: vpx(-3)
+            anchors.bottomMargin: vpx(-3)
 
+            color: colors.t
             border.color: colors.border
             border.width: vpx(6)
             radius: vpx(6)
 
-            color: colors.t
-
-            visible: sortfilt_toolbar_wrapper.selected && sortfilt_toolbar_wrapper.current === sortfilt_label
-
+            visible: toolbar_wrapper.selected && toolbar_wrapper.current === label ? true : false
         }
 
         MouseArea { //sortfilt_label_click
@@ -167,77 +192,66 @@ Item { //sortfilt_toolbar_wrapper
 
             onClicked: {
                 if(!sortfilt_menu.focus)
-                    f = sortfilt_menu
+                    resetFocus(sortfilt_menu)
                 else
-                    f = game_layout
+                    resetFocus()
                 audio.stopAll()
                 audio.toggle_down.play()
             }
         }
     }
 
-    Item {  //sortfilt_active_filters
-        id: sortfilt_active_filters
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: sortfilt_label_wrapper.right
-        anchors.right: parent.right
+    Item { //active_filters
+        id: active_filters
+
+        anchors.top: toolbar_wrapper.top
+        anchors.bottom: toolbar_wrapper.bottom
+        anchors.left: label_wrapper.right
+        anchors.leftMargin: vpx(12)
+        anchors.right: toolbar_wrapper.right
 
         clip: true
 
-        Rectangle {
-            id: sortfilt_filter_item
-            height: sortfilt_filter_item_text.contentHeight + vpx(12)
+        Rectangle { //filter_item
+            id: filter_item
 
-            visible: sortfilt_menu.favorite.enabled
-            
-            width: {
-                var sum = vpx(12);
-                for (var i = 0; i < children.length; i++) {
-                    if (i > 0)
-                        sum += children[i].anchors.leftMargin
-                    if(children[i].width != 0)
-                        sum += children[i].width
-                    else
-                        sum += children[i].contentWidth
-                }
-                return sum;
-            }
+            anchors.verticalCenter: active_filters.verticalCenter
 
-            anchors.verticalCenter: parent.verticalCenter
+            height: filter_item_text.height + vpx(12)
+            width: childrenSize(this, "width",  "leftMargin", 12)
 
             color: colors.accent
             radius: vpx(100)
 
+            visible: sortfilt_menu.favorite.enabled
 
-            Item {
-                id: sortfilt_filter_item_remove_wrapper
-                height: parent.height
-                width: parent.height
+            Item { //filter_item_remove
+                id: filter_item_remove
+                height: filter_item.height
+                width: filter_item.height
 
                 Text {
-                    anchors.centerIn: parent
+                    anchors.centerIn: filter_item_remove
                     text: "🗙"
                     color: colors.text
                     font.pixelSize: vpx(12)
                 }
             }
             
-            Text {
-                id: sortfilt_filter_item_text
+            Text { //filter_item_text
+                id: filter_item_text
                 text: "favorite"
                 color: colors.text
                 font.pixelSize: vpx(11)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: sortfilt_filter_item_remove_wrapper.right
-
+                anchors.verticalCenter: filter_item.verticalCenter
+                anchors.left: filter_item_remove.right
             }
         }
 
-        MouseArea {
-            id: favorite_click
+        MouseArea { //favorite_remove
+            id: favorite_remove
 
-            anchors.fill: sortfilt_filter_item
+            anchors.fill: filter_item
             cursorShape: sortfilt_menu.favorite.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
 
             enabled: sortfilt_menu.favorite.enabled
@@ -251,90 +265,6 @@ Item { //sortfilt_toolbar_wrapper
     }
 
     Keys.onPressed: {
-        let key = gsk(event)
-        if(isNaN(key)){
-            if(key != undefined){
-                switch(key){
-                    case "up":
-                        if(current.onUp != undefined)
-                            current.onUp()
-                        else
-                            f = header
-                            s = audio.toggle_down
-                        break
-                    case "down":
-                        if(current.onDown != undefined)
-                            current.onDown()
-                        else
-                            f = game_layout
-                        break
-                    case "left":
-                        if(current.onLeft != undefined)
-                            current.onLeft()
-                        else
-                            f = sortfilt_menu
-                        break
-                    case "right":
-                        if(current.onRight != undefined)
-                            current.onRight()
-                        break
-                    case "prev":
-                        if(current.onPrevious != undefined)
-                            current.onPrevious()
-                        else
-                            collectionPrevious()
-                        break
-                    case "next":
-                        if(current.onNext != undefined)
-                            current.onNext()
-                        else
-                            collectionNext()
-                        break
-                    case "first":
-                        if(current.onFirst != undefined)
-                            current.onFirst()
-                        break
-                    case "last":
-                        if(current.onLast != undefined)
-                            current.onLast()
-                        break
-                    case "details":
-                        panel_area.current = panel_area.info_panel
-                        f = panel_area
-                        panel_area.info_panel.video.safePlay()
-                        s = audio.toggle_down
-                        break
-                    case "filter":
-                        f = sortfilt_menu
-                        break
-                    case "cancel":
-                        if(current.onCancel != undefined)
-                            current.onCancel()
-                        else
-                            f = game_layout
-                        s = audio.toggle_down
-                        break
-                    case "accept":
-                        current.onAccept()
-                        break
-                    default:
-                        break
-                }
-                event.accepted = true
-                s = s != null ? s : audio.select
-            }
-        }else{
-            if(key == 0) {
-                currentCollectionIndex = settings.allGames ? 8 : 9
-            } else {
-                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
-            }
-            s = audio.toggle_down
-        }
-        if(s != null){
-            audio.stopAll()
-            s.play()
-        }
-        s = null
+        s = s != null ? s : audio.toggle_down
     }
 }

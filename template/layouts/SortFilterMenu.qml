@@ -14,6 +14,24 @@ Rectangle { //sortfilt_menu
     width: vpx(300)
     anchors.leftMargin: focus ? 0 : -width
 
+    //Functions--
+        function onCancel(){
+            resetFocus()
+        }
+        property var onRight: onCancel
+
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onAccept: current.onAccept
+    //--
+
     Rectangle {
         id: sort_section
         width: parent.width
@@ -21,13 +39,7 @@ Rectangle { //sortfilt_menu
         anchors.topMargin: vpx(24)
         color: "transparent"
 
-        height: { //height
-            let sum = 0
-            for (var i = 0; i < children.length; i++) {
-                sum += children[i].height + children[i].anchors.topMargin
-            }
-            return sum;
-        }
+        height: childrenSize(this, "height", "topMargin")
 
         Item { //sort_section_title
             id: sort_section_title
@@ -61,20 +73,20 @@ Rectangle { //sortfilt_menu
 
             enabled: true
 
-            onClicked: function(){
-                parent.resetSort(this)
+            function onAccept(){
+                sort_section.resetSort(sort_item_title)
             }
-            property var onAccept: onClicked
+            onClicked: onAccept
 
             onEntered: function(){
                 sortfilt_menu.current = this
             }
 
-            property var onUp: function(){
+            function onUp(){
                 f = header
             }
 
-            property var onDown: function(){
+            function onDown(){
                 sortfilt_menu.current = sort_item_last_played
             }
         }
@@ -88,20 +100,20 @@ Rectangle { //sortfilt_menu
 
             selected: sortfilt_menu.current === this
 
-            onClicked: function(){
-                parent.resetSort(this)
+            function onAccept(){
+                sort_section.resetSort(sort_item_last_played)
             }
-            property var onAccept: onClicked
+            onClicked: onAccept
 
             onEntered: function(){
                 sortfilt_menu.current = this
             }
 
-            property var onUp: function(){
+            function onUp(){
                 sortfilt_menu.current = sort_item_title
             }
 
-            property var onDown: function(){
+            function onDown(){
                 sortfilt_menu.current = sort_item_play_time
             }
         }
@@ -119,20 +131,20 @@ Rectangle { //sortfilt_menu
 
             enabled: false
 
-            onClicked: function(){
-                parent.resetSort(this)
+            function onAccept(){
+                sort_section.resetSort(sort_item_play_time)
             }
-            property var onAccept: onClicked
+            onClicked: onAccept
 
             onEntered: function(){
                 sortfilt_menu.current = this
             }
 
-            property var onUp: function(){
+            function onUp(){
                 sortfilt_menu.current = sort_item_last_played
             }
 
-            property var onDown: function(){
+            function onDown(){
                 sortfilt_menu.current = filter_item_favorite
             }
         }
@@ -158,13 +170,7 @@ Rectangle { //sortfilt_menu
         anchors.top: sort_section.bottom
         anchors.topMargin: vpx(12)
 
-        height: { //height
-            let sum = 0
-            for (var i = 0; i < children.length; i++) {
-                sum += children[i].height + children[i].anchors.topMargin
-            }
-            return sum;
-        }
+        height: childrenSize(this, "height", "topMargin")
 
         Item { //sort_section_title
             id: filter_section_title
@@ -197,7 +203,7 @@ Rectangle { //sortfilt_menu
 
             icon: enabled ? images.favorite_icon_filled : images.favorite_icon_empty
 
-            property var onUp: function(){
+            function onUp(){
                 sortfilt_menu.current = sort_item_play_time
             }
             
@@ -216,91 +222,10 @@ Rectangle { //sortfilt_menu
 
 
     Keys.onPressed: {
-        let key = gsk(event)
-        if(isNaN(key)){
-            if(key != undefined){
-                switch(key){
-                    case "up":
-                        if(current.onUp != undefined)
-                            current.onUp()
-                        break
-                    case "down":
-                        if(current.onDown != undefined)
-                            current.onDown()
-                        break
-                    case "left":
-                        if(current.onLeft != undefined)
-                            current.onLeft()
-                        else
-                            s = audio.toggle_down
-                            f = sortfilt_toolbar
-                        break
-                    case "right":
-                        if(current.onRight != undefined)
-                            current.onRight()
-                        else
-                            s = audio.toggle_down
-                            f = sortfilt_toolbar
-                        break
-                    case "prev":
-                        if(current.onPrevious != undefined)
-                            current.onPrevious()
-                        else
-                            collectionPrevious()
-                        break
-                    case "next":
-                        if(current.onNext != undefined)
-                            current.onNext()
-                        else
-                            collectionNext()
-                        break
-                    case "first":
-                        if(current.onFirst != undefined)
-                            current.onFirst()
-                        break
-                    case "last":
-                        if(current.onLast != undefined)
-                            current.onLast()
-                        break
-                    case "details":
-                        panel_area.current = panel_area.info_panel
-                        f = panel_area
-                        panel_area.info_panel.video.safePlay()
-                        s = audio.toggle_down
-                        break
-                    case "filter":
-                    case "cancel":
-                        if(current.onCancel != undefined)
-                            current.onCancel()
-                        else
-                            f = sortfilt_toolbar
-                        s = audio.toggle_down
-                        break
-                    case "accept":
-                        current.onAccept()
-                        break
-                    default:
-                        break
-                }
-                event.accepted = true
-                s = s != null ? s : audio.select
-            }
-        }else{
-            if(key == 0) {
-                currentCollectionIndex = settings.allGames ? 8 : 9
-            } else {
-                currentCollectionIndex = settings.allGames ? key - 2 : key - 1
-            }
-            s = audio.toggle_down
-        }
-        if(s != null){
-            audio.stopAll()
-            s.play()
-        }
-        s = null
+        s = s != null ? s : audio.toggle_down
     }
 
-    Behavior on anchors.leftMargin {NumberAnimation {duration: 100}}
+    Behavior on anchors.leftMargin {NumberAnimation {duration: settings.hover_speed}}
 
     property FilterItem favorite: filter_item_favorite
     property SortItem title: sort_item_title

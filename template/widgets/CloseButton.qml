@@ -4,77 +4,85 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
-Item {
+Item { //button_wrapper
     id: button_wrapper
+
     height: vpx(48)
     width: vpx(48)
 
-    property bool selected: false
-    property bool hovered: false
     property var hover_color: addAlphaToHex(0.3, colors.white)
     property var background: colors.t
 
     property string icon_color: colors.white
 
+    property var sound: null
+
     property var onClicked: function(){}
     property var onEntered: function(){}
     property var onExited: function(){}
 
-    Item {
+    property bool selected: false
+    property bool hovered: false
+
+    Item { //icon_wrapper
         id: icon_wrapper
-        height: parent.height - vpx(6)
+
+        anchors.centerIn: button_wrapper
+
+        height: button_wrapper.height - vpx(6)
         width: height
 
-        anchors.centerIn: parent
-
-        Rectangle {
+        Rectangle { //background
             id: background
-            anchors.fill: parent
+
+            anchors.fill: icon_wrapper
+
             color: button_wrapper.background
             radius: vpx(100)
         }
 
-        Rectangle {
+        Rectangle { //hover
             id: hover
-            anchors.fill: parent
+            anchors.fill: icon_wrapper
+
             color: button_wrapper.hover_color
-            radius: vpx(100)
-
             opacity: selected || hovered ? 1 : 0
-
             Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
+
+            radius: vpx(100)
         }
 
-        Image { 
+        Image { //icon
             id: icon
             source: images.cross
-            anchors.fill: parent
 
+            anchors.fill: icon_wrapper
             anchors.margins: vpx(12)
 
             visible: false
         }
 
-        Rectangle {
+        Rectangle { //icon_color
             id: icon_color
+
             anchors.fill: icon
+
             color: button_wrapper.icon_color
 
             visible: false
         }
 
-        OpacityMask {
+        OpacityMask { //icon_out
+            id: icon_out
             anchors.fill: icon
             source: icon_color
             maskSource: icon
         }
-
-
     }
 
     Rectangle {
         id: select
-        anchors.fill: parent
+        anchors.fill: button_wrapper
         anchors.margins: vpx(-3)
         color: colors.t
         border.width: vpx(6)
@@ -82,32 +90,31 @@ Item {
 
         radius: vpx(6)
 
-        visible: parent.selected
+        visible: button_wrapper.selected
     }
 
     MouseArea{
         id: click
 
-        anchors.fill: parent
+        anchors.fill: button_wrapper
 
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
 
         onEntered: {
-            parent.onEntered()
-            parent.hovered = true
+            button_wrapper.onEntered()
+            button_wrapper.hovered = true
         }
 
         onExited: {
-            parent.onExited()
-            parent.hovered = false
+            button_wrapper.onExited()
+            button_wrapper.hovered = false
         }
 
         onClicked: {
-            parent.onClicked()
-            audio.stopAll()
-            audio.toggle_down.play()
-            mouse.event = accept
+            button_wrapper.onClicked()
+            if(button_wrapper.sound != null)
+                button_wrapper.sound.play()
         }
     }
 }

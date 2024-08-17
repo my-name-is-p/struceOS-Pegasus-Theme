@@ -16,29 +16,17 @@ Item {
     Rectangle {
         id: mask_color
         anchors.fill: mask
-        color: colors.text
+        color: colors.white
         visible: false
     }
 
     Item{
         id: mask
+
+        height: childrenSize(this, "height", "", 0, 0, true)
+        width: childrenSize(this, "width", "leftMargin")
+
         visible: false
-
-        height: { //height
-            let h = 0
-            for (var i = 0; i < children.length; i++) {
-                h = children[i].height > h ? children[i].height : h
-            }
-            return h;
-        }
-
-        width: { //width
-            let sum = 0
-            for (var i = 0; i < children.length; i++) {
-                sum += children[i].width + children[i].anchors.leftMargin
-            }
-            return sum;
-        }
 
         Image {
             id: key_q

@@ -41,22 +41,9 @@ Item {
     
     Item { //radio_item
         id: radio_item
-        
-        width: {
-            let sum = 0
-            for (var i = 0; i < children.length; i++) {
-                sum += children[i].width + children[i].anchors.leftMargin
-            }
-            return sum;
-        }
 
-        height: {
-            let h = 0
-            for (var i = 0; i < children.length; i++) {
-                h = children[i].height > h ? children[i].height : h
-            }
-            return h;
-        }
+        height: childrenSize(this, "height", "", 0, 0, true)
+        width: childrenSize(this, "width", "leftMargin")
 
         Rectangle { //radio_button_outline
             id: radio_button_outline

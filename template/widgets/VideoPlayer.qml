@@ -11,62 +11,68 @@ Item { //viewer
     width: parent.width
     height: width / 1.778
 
-    property bool hovered: video_hover.hovered || selected ? true : false
+    property bool hovered: hover.hovered || selected ? true : false
     property bool selected: false
     property Item current: viewer
 
     property Item enter: play_pause
 
-    Rectangle { //video_select
-        id: video_select
+    //Functions--
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onRight: current.onRight
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current.onCancel
+        function onAccept(){
+            if(current != viewer)
+                current.onAccept()
+            else
+                current = play_pause
+        }
+    //--
 
-        anchors.fill: parent
+    Rectangle { //select
+        id: select
+
+        anchors.fill: viewer
         anchors.margins: vpx(-8)
 
         color: colors.t
-
-        radius: vpx(16)
-
         border.color: colors.border
-        border.width: parent.selected && parent.current === viewer ? vpx(12) : 0
-
+        border.width: viewer.selected && viewer.current === viewer ? vpx(12) : 0
+        radius: vpx(16)
     }
 
-    Rectangle { //viewer_mask
-        id: viewer_mask
-        anchors.fill: parent
-        radius: vpx(12)
+    Rectangle { //player_mask
+        id: player_mask
+
+        anchors.fill: viewer
 
         color: colors.accent
+        radius: vpx(12)
     }
 
-    Image { //video_default
-        id: video_default
-        anchors.fill: parent
+    Rectangle { //player
+        id: player
 
-        source: getAssets(currentGame.assets).bg != "default" ? getAssets(currentGame.assets).bg : images.noImage
+        anchors.fill: viewer
 
-        visible: false
-        fillMode: Image.PreserveAspectCrop
-    }
-
-
-    Rectangle { //video_frame
-        id: video_frame
-        anchors.fill: parent
         color: colors.black
-
-        visible: false
-
         radius: vpx(12)
 
-
+        visible: false
+        
         Video { //video
             id: video
             source: currentGame.assets.video
-            anchors.fill: parent
+            anchors.fill: player
 
-            flushMode: VideoOutput.EmptyFrame
             fillMode: VideoOutput.PreserveAspectFit
 
             muted: settings.videoMute
@@ -78,26 +84,49 @@ Item { //viewer
                     video.seek(0)
             }
 
-            function safePlay(){
-                muted = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-                play()
-            }
-
+            //Functions--
+                function reset(){
+                    stop()
+                    source = ""
+                    source = currentGame.assets.video
+                    muted = settings.videoMute = 
+                        api.memory.get("struceOS_video_videoMute") != undefined ? 
+                            api.memory.get("struceOS_video_videoMute") : true
+                    volume = settings.videoVolume = api.memory.get("struceOS_video_volume") || 0.40
+                }
+            //--
         }
 
+        Image { //frame
+            id: frame
+            anchors.fill: player
+
+            source: getAssets(currentGame.assets).bg != "default" ? getAssets(currentGame.assets).bg : images.noImage
+
+            fillMode: Image.PreserveAspectCrop
+
+            opacity: video.status === MediaPlayer.NoMedia ? 
+                1 : video.playbackState != MediaPlayer.StoppedState ? 
+                    0 : 0.3
+            Behavior on opacity{NumberAnimation{ duration: settings.hover_speed}}
+        }
     }
 
-    OpacityMask {
-        anchors.fill: parent
-        source: video.status != MediaPlayer.NoMedia ? video_frame : video_default
-        maskSource: viewer_mask
+    OpacityMask { //player_out
+        id: player_out
+        anchors.fill: viewer
+        source: player
+        maskSource: player_mask
     }
 
     MouseArea { //video_pause
         id: video_pause
-        anchors.fill: video_frame
 
-        cursorShape: Qt.PointingHandCursor
+        anchors.fill: viewer
+
+        cursorShape: video.status != MediaPlayer.NoMedia ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+        enabled: video.status != MediaPlayer.NoMedia
 
         onClicked: {
             if(video.playbackState != MediaPlayer.PlayingState)
@@ -110,19 +139,28 @@ Item { //viewer
     Item { //video_controls
         id: video_controls
         
-        anchors.fill: parent
+        anchors.fill: viewer
 
-        visible: (viewer.hovered || video.selected) && video.status != MediaPlayer.NoMedia? true : false
+        visible: video.status === MediaPlayer.NoMedia ? 
+            false :
+            (
+                viewer.hovered || 
+                video.selected || 
+                video.playbackState != MediaPlayer.PlayingState
+            ) 
+                ?
+                    true : 
+                    false
 
         UIButton { //play_pause
             id: play_pause
-
             icon: video.playbackState != MediaPlayer.PlayingState ? images.play : images.pause
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
+
+            anchors.bottom: video_controls.bottom
+            anchors.left: video_controls.left
             anchors.margins: vpx(12)
 
-            selected: viewer.current === this
+            selected: viewer.selected && viewer.current === this
 
             onClicked: function(){
                 if(video.playbackState != MediaPlayer.PlayingState)
@@ -130,35 +168,18 @@ Item { //viewer
                 else
                     video.pause()
             }
-
             property var onAccept: onClicked
 
-            property var onRight: function(){
-                viewer.current = video_scrub_bar
+            function onRight(){
+                viewer.current = scrub_bar
             }
-
-            property var onPrevious: function(){
-                video.seek(video.position - 5000)
-            }
-
-            property var onNext: function(){
-                video.seek(video.position + 5000)
-            }
-            property var onFirst: onPrevious
-            property var onLast: onNext
-
-            property var onUp: function(){
-                viewer.onCancel()
-            }
-            property var onDown: onUp
-
         }
 
         UIButton { //loop
             id: loop
-
             icon: video.loops != MediaPlayer.Infinite ? images.no_loop : images.loop
-            anchors.bottom: parent.bottom
+
+            anchors.bottom: video_controls.bottom
             anchors.right: mute.left
             anchors.margins: vpx(12)
             anchors.rightMargin: vpx(6)
@@ -171,41 +192,23 @@ Item { //viewer
                 else
                     video.loops = 1
             }
-
             property var onAccept: onClicked
 
-            property var onLeft: function(){
-                viewer.current = video_scrub_bar
+            function onLeft(){
+                viewer.current = scrub_bar
             }
 
-            property var onRight: function(){
+            function onRight(){
                 viewer.current = mute
             }
-
-            property var onPrevious: function(){
-                if(video.position - 5000 > 0)
-                    video.seek(video.position - 5000)
-                else
-                    video.seek(0)
-            }
-
-            property var onNext: function(){
-                if(video.position + 5000 < video.duration)
-                    video.seek(video.position + 5000)
-                else
-                    video.seek(video.duration - 1)
-            }
-
-            property var onFirst: onPrevious
-            property var onLast: onNext
         }
 
         UIButton { //mute
             id: mute
-
             icon: video.muted ? images.mute : images.sound
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
+
+            anchors.bottom: video_controls.bottom
+            anchors.right: video_controls.right
             anchors.margins: vpx(12)
 
             selected: viewer.current === this
@@ -216,240 +219,226 @@ Item { //viewer
             }
             property var onAccept: onClicked
 
-            property var onLeft: function(){
+            function onLeft(){
                 viewer.current = loop
             }
 
-            property var onUp: function(){
-                viewer.current = volume_slide
+            function onUp(){
+                viewer.current = volume_scrub
             }
-
-            property var onPrevious: function(){
-                if(video.position - 5000 > 0)
-                    video.seek(video.position - 5000)
-                else
-                    video.seek(0)
-            }
-
-            property var onNext: function(){
-                if(video.position + 5000 < video.duration)
-                    video.seek(video.position + 5000)
-                else
-                    video.seek(video.duration - 1)
-            }
-
-            property var onFirst: onPrevious
-            property var onLast: onNext
         }
 
-        Item { //video_scrub_bar
-            id: video_scrub_bar
-
-            height: vpx(24)
+        Item { //scrub_bar
+            id: scrub_bar
 
             anchors.verticalCenter: play_pause.verticalCenter
             anchors.left: play_pause.right
-            anchors.right: video_time.left
+            anchors.right: time.left
             anchors.margins: vpx(12)
+
+            height: vpx(24)
 
             property bool selected: viewer.current === this
 
-            property var onAccept: function(){
-                viewer.current = video_scrub_handle
-            }
+            //Functions--
+                function onAccept(){
+                    viewer.current = scrub_handle
+                }
 
-            property var onLeft: function(){
-                viewer.current = play_pause
-            }
-            
-            property var onRight: function(){
-                viewer.current = loop
-            }
-
-            property var onPrevious: function(){
-                if(video.position - 5000 > 0)
-                    video.seek(video.position - 5000)
-                else
-                    video.seek(0)
-            }
-
-            property var onNext: function(){
-                if(video.position + 5000 < video.duration)
-                    video.seek(video.position + 5000)
-                else
-                    video.seek(video.duration - 1)
-            }
-
-            property var onFirst: onPrevious
-            property var onUp: onNext
-            property var onDown: onPrevious
-            property var onLast: onNext
-
-
-            Rectangle { //video_scrub_background
-                id: video_scrub_background
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.margins: video_scrub_handle.width / 2
-
-                height: vpx(6)
+                function onLeft(){
+                    viewer.current = play_pause
+                }
                 
-                color: colors.slider_base
-
-                radius: vpx(6)
-            }
-
-            Rectangle { //video_scrub_progress
-                id: video_scrub_progress
-                anchors.right: video_scrub_handle.right
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.margins: video_scrub_handle.width / 2
-
-                height: vpx(6)
-
-                color: colors.slider
-
-                radius: vpx(6)
-            }
-
-            Rectangle { //video_scrub_handle
-                id: video_scrub_handle
-                width: vpx(12)
-                height: width
-
-                anchors.verticalCenter: parent.verticalCenter
-                color: colors.slider
-                radius: vpx(12)
-
-                property var selected: viewer.current === this
-
-                property var onAccept: function(){
-                    viewer.current = video_scrub_bar
-                }
-                property var onCancel: onAccept
-
-                property var onLeft: function(){
-                    if(video.position - 500 > 0)
-                        video.seek(video.position - 500)
-                    else
-                        video.seek(0)
+                function onRight(){
+                    viewer.current = loop
                 }
 
-                property var onRight: function(){
-                    if(video.position + 500 < video.duration)
-                        video.seek(video.position + 500)
-                    else
-                        video.seek(video.duration - 1)
-                }
-
-                property var onPrevious: function(){
+                function onPrevious(){
                     if(video.position - 5000 > 0)
                         video.seek(video.position - 5000)
                     else
                         video.seek(0)
                 }
+                property var onFirst: onPrevious
+                property var onDown: onPrevious
 
-                property var onNext: function(){
+                function onNext(){
                     if(video.position + 5000 < video.duration)
                         video.seek(video.position + 5000)
                     else
                         video.seek(video.duration - 1)
                 }
-
-                property var onFirst: onPrevious
                 property var onUp: onNext
-                property var onDown: onPrevious
                 property var onLast: onNext
+            //--
 
-                Rectangle { //video_scrub_handle_select
-                    id: video_scrub_handle_select
-                    anchors.fill: parent
+            Rectangle { //scrub_background
+                id: scrub_background
+
+                anchors.left: scrub_bar.left
+                anchors.right: scrub_bar.right
+                anchors.verticalCenter: scrub_bar.verticalCenter
+                anchors.margins: scrub_handle.width / 2
+
+                height: vpx(6)
+                
+                color: colors.slider_base
+                radius: vpx(6)
+            }
+
+            Rectangle { //scrub_progress
+                id: scrub_progress
+
+                anchors.right: scrub_handle.right
+                anchors.left: scrub_bar.left
+                anchors.verticalCenter: scrub_bar.verticalCenter
+                anchors.margins: scrub_handle.width / 2
+
+                height: vpx(6)
+
+                color: colors.slider
+                radius: vpx(6)
+            }
+
+            Rectangle { //scrub_handle
+                id: scrub_handle
+
+                anchors.verticalCenter: scrub_bar.verticalCenter
+
+                width: vpx(12)
+                height: width
+
+                color: colors.slider
+                radius: vpx(12)
+
+                property var selected: viewer.current === this
+
+                //Functions--
+                    function onAccept(){
+                        viewer.current = scrub_bar
+                    }
+                    property var onCancel: onAccept
+
+                    function onLeft(){
+                        if(video.position - 500 > 0)
+                            video.seek(video.position - 500)
+                        else
+                            video.seek(0)
+                    }
+
+                    function onRight(){
+                        if(video.position + 500 < video.duration)
+                            video.seek(video.position + 500)
+                        else
+                            video.seek(video.duration - 1)
+                    }
+
+                    function onPrevious(){
+                        if(video.position - 5000 > 0)
+                            video.seek(video.position - 5000)
+                        else
+                            video.seek(0)
+                    }
+                    property var onFirst: onPrevious
+                    property var onDown: onPrevious
+
+                    function onNext(){
+                        if(video.position + 5000 < video.duration)
+                            video.seek(video.position + 5000)
+                        else
+                            video.seek(video.duration - 1)
+                    }
+                    property var onUp: onNext
+                    property var onLast: onNext
+                //--
+
+                Rectangle { //scrub_handle_select
+                    id: scrub_handle_select
+
+                    anchors.fill: scrub_handle
                     anchors.margins: vpx(-6)
+
                     color: colors.t
-
                     border.color: colors.border
-                    border.width: parent.selected ? vpx(6) : 0
-
+                    border.width: scrub_handle.selected ? vpx(6) : 0
                     radius: vpx(6)
                 }
 
-                Timer {
+                Timer { //update_position
                     id: update_position
                     interval: 10
                     onTriggered: {
-                        video_scrub_handle.updatePosition()
+                        scrub_handle.updatePosition()
                     }
                     repeat: true
                     running: true
                 }
 
-                function updatePosition(){
-                    x = video_scrub_background.width * (video.position/video.duration)
+                function updatePosition(){ //updatePosition
+                    x = scrub_background.width * (video.position/video.duration)
                 }
-
             }
 
-            Rectangle { //video_scrub_select
-                id: video_scrub_select
-                anchors.fill: parent
+            Rectangle { //scrub_select
+                id: scrub_select
+
+                anchors.fill: scrub_bar
+
                 color: colors.t
                 border.color: colors.border
-                border.width: parent.selected ? vpx(6) : 0
-
+                border.width: scrub_bar.selected ? vpx(6) : 0
                 radius: vpx(6)
             }
 
-            MouseArea { //video_scrub_click
-                id: video_scrub_click
+            MouseArea { //scrub_click
+                id: scrub_click
 
-                anchors.fill: parent
+                anchors.fill: scrub_bar
 
                 cursorShape: Qt.PointingHandCursor
 
-                drag.target: video_scrub_handle
+                drag.target: scrub_handle
                 drag.axis: Drag.XAxis
                 drag.minimumX: 0
-                drag.maximumX: parent.width - video_scrub_handle.width
-
+                drag.maximumX: scrub_bar.width - scrub_handle.width
 
                 onClicked: {
-                    video.seek(mouseX/video_scrub_background.width * video.duration)
+                    video.seek(mouseX/scrub_background.width * video.duration)
                 }
 
                 onPositionChanged: {
-                    video.seek(video_scrub_handle.x/video_scrub_background.width * video.duration)
+                    video.seek(scrub_handle.x/scrub_background.width * video.duration)
                 }
             }
         }
 
-        Item{ //video_time
-            id: video_time
+        Item{ //time
+            id: time
+
             anchors.verticalCenter: mute.verticalCenter
             anchors.right: loop.left
             anchors.rightMargin: vpx(12)
 
-            height: video_time_text.height
-            width: video_time_text.width
+            height: time_text.height
+            width: time_text.width
 
-            Rectangle { //video_time_text_background
-                id: video_time_text_background
-                anchors.fill: video_time_text
-                radius: vpx(6)
+            Rectangle { //time_text_background
+                id: time_text_background
+
+                anchors.fill: time_text
                 anchors.margins: vpx(-3)
 
                 color: addAlphaToHex(0.3, colors.black)
+                radius: vpx(6)
             }
 
-            Text { //video_time_text
-                id: video_time_text
+            Text { //time_text
+                id: time_text
 
                 text: getTime(video.position) + "/" + getTime(video.duration)
+                horizontalAlignment: Text.AlignRight
 
                 color: colors.text
-
-                horizontalAlignment: Text.AlignRight
 
                 function getTime(t){
                     let h = Math.floor((t / (1000 * 60 * 60)) % 24)
@@ -466,275 +455,210 @@ Item { //viewer
             }
         }
 
-        Item { //volume_slide
-            id: volume_slide
+        Item { //volume_scrub
+            id: volume_scrub
 
-            width:vpx(24)
-        
-            anchors.horizontalCenter: mute.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: parent.height / 2
+            anchors.top: video_controls.top
+            anchors.topMargin: video_controls.height / 2
             anchors.bottom: mute.top
             anchors.bottomMargin: vpx(3)
+            anchors.horizontalCenter: mute.horizontalCenter
 
-            property bool show_value: true
-            property var text_color: colors.white
-            property var value: settings.videoVolume
+            width: vpx(24)
 
             property bool selected: viewer.current === this
 
-            property var onDown: function(){
-                viewer.current = mute
-            }
+            //Functions--
+                function onDown(){
+                    viewer.current = mute
+                }
 
-            property var onNext: function(){
-                let v = Math.round((settings.videoVolume * 100) % 5)
-                v = (settings.videoVolume * 100) - v + 5
-                settings.videoVolume = v < 100 ? v / 100 : 1
-            }
-            property var onRight: onNext
-
-            property var onPrevious: function(){
-                let v = Math.round((settings.videoVolume * 100) % 5)
-                v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) -5
-                settings.videoVolume = v > 0 ? v / 100 : 0
-            }
-            property var onLeft: onPrevious
-
-            property var onFirst: function(){
-                settings.videoVolume = 0
-            }
-
-            property var onLast: function(){
-                settings.videoVolume = 1
-            }
-
-            property var onAccept: function(){
-                viewer.current = volume_slide_handle
-            }
-
-            Rectangle { //volume_slide_select
-                id: volume_slide_select
-                anchors.fill: parent
-                color: colors.t
-                border.color: colors.border
-                border.width: parent.selected ? vpx(6) : 0
-
-                radius: vpx(6)
-            }
-
-            Rectangle { //volume_slide_amount_background
-                id: volume_slide_amount_background
-                anchors.fill: volume_slide_amount
-                radius: vpx(6)
-                anchors.margins: vpx(-3)
-
-                color: addAlphaToHex(0.3, colors.black)
-            }
-
-            Text { //volume_slide_amount
-                id: volume_slide_amount
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.top
-                anchors.bottomMargin: vpx(6)
-
-                horizontalAlignment: Text.AlignHCenter
-
-                color: parent.text_color
-
-                text: Math.round(parent.value * 100)
-
-                visible: parent.show_value
-            }
-
-            Rectangle { //volume_slide_background
-                id: volume_slide_background
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.margins: volume_slide_handle.height / 2
-
-                width: vpx(6)
-                
-                color: colors.slider_base
-
-                radius: vpx(6)
-            }
-
-            Rectangle { //volume_slide_progress
-                id: volume_slide_progress
-                anchors.top: volume_slide_handle.top
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.margins: volume_slide_handle.height / 2
-
-                width: vpx(6)
-
-                color: colors.slider
-
-                radius: vpx(6)
-            }
-
-            Rectangle { //volume_slide_handle
-                id: volume_slide_handle
-                width: vpx(12)
-                height: width
-                y: volume_slide_background.height * (1 - settings.videoVolume)
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: colors.slider
-                radius: vpx(12)
-
-                property bool selected: viewer.current === this
-
-                property var onNext: function(){
+                function onNext(){
                     let v = Math.round((settings.videoVolume * 100) % 5)
                     v = (settings.videoVolume * 100) - v + 5
                     settings.videoVolume = v < 100 ? v / 100 : 1
                 }
                 property var onRight: onNext
 
-                property var onUp: function(){
-                    let v = (settings.videoVolume * 100) + 1
-                    settings.videoVolume = v < 100 ? v / 100 : 1
+                function onPrevious(){
+                    let v = Math.round((settings.videoVolume * 100) % 5)
+                    v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) -5
+                    settings.videoVolume = v > 0 ? v / 100 : 0
                 }
                 property var onLeft: onPrevious
 
-                property var onPrevious: function(){
-                    let v = Math.round((settings.videoVolume * 100) % 5)
-                    v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) - 5
-                    settings.videoVolume = v > 0 ? v / 100 : 0
-                }
-
-                property var onDown: function(){
-                    let v = (settings.videoVolume * 100) - 1
-                    settings.videoVolume = v > 0 ? v / 100 : 0
-                }
-
-                property var onFirst: function(){
+                function onFirst(){
                     settings.videoVolume = 0
                 }
 
-                property var onLast: function(){
+                function onLast(){
                     settings.videoVolume = 1
                 }
 
-                property var onAccept: function(){
-                    viewer.current = volume_slide
+                function onAccept(){
+                    viewer.current = volume_handle
                 }
-                property var onCancel: onAccept
+            //--
 
-                Rectangle {
-                    id: volume_slide_handle_select
-                    anchors.fill: parent
+            Rectangle { //volume_select
+                id: volume_select
+
+                anchors.fill: volume_scrub
+
+                color: colors.t
+                border.color: colors.border
+                border.width: volume_scrub.selected ? vpx(6) : 0
+                radius: vpx(6)
+            }
+
+            Rectangle { //volume_amount_background
+                id: volume_amount_background
+
+                anchors.fill: volume_amount
+                anchors.margins: vpx(-3)
+
+                color: addAlphaToHex(0.3, colors.black)
+                radius: vpx(6)
+            }
+
+            Text { //volume_amount
+                id: volume_amount
+
+                anchors.horizontalCenter: volume_scrub.horizontalCenter
+                anchors.bottom: volume_scrub.top
+                anchors.bottomMargin: vpx(6)
+
+                text: Math.round(settings.videoVolume * 100)
+                horizontalAlignment: Text.AlignHCenter
+
+                color: colors.white
+            }
+
+            Rectangle { //volume_background
+                id: volume_background
+
+                anchors.top: volume_scrub.top
+                anchors.bottom: volume_scrub.bottom
+                anchors.margins: volume_handle.height / 2
+                anchors.horizontalCenter: volume_scrub.horizontalCenter
+
+                width: vpx(6)
+                
+                color: colors.slider_base
+                radius: vpx(6)
+            }
+
+            Rectangle { //volume_progress
+                id: volume_progress
+
+                anchors.top: volume_handle.top
+                anchors.bottom: volume_scrub.bottom
+                anchors.horizontalCenter: volume_scrub.horizontalCenter
+                anchors.margins: volume_handle.height / 2
+
+                width: vpx(6)
+
+                color: colors.slider
+                radius: vpx(6)
+            }
+
+            Rectangle { //volume_handle
+                id: volume_handle
+
+                anchors.horizontalCenter: volume_scrub.horizontalCenter
+
+                width: vpx(12)
+                height: width
+
+                color: colors.slider
+                radius: vpx(12)
+
+                y: volume_background.height * (1 - settings.videoVolume)
+
+                property bool selected: viewer.current === this
+
+                //Functions--
+                    function onUp(){
+                        let v = (settings.videoVolume * 100) + 1
+                        video.volume = settings.videoVolume = v < 100 ? v / 100 : 1
+                    }
+
+                    function onDown(){
+                        let v = (settings.videoVolume * 100) - 1
+                        video.volume = video.volume = settings.videoVolume = v > 0 ? v / 100 : 0
+                    }
+
+                    function onNext(){
+                        let v = Math.round((settings.videoVolume * 100) % 5)
+                        v = (settings.videoVolume * 100) - v + 5
+                        video.volume = settings.videoVolume = v < 100 ? v / 100 : 1
+                    }
+                    property var onRight: onNext
+
+                    function onPrevious(){
+                        let v = Math.round((settings.videoVolume * 100) % 5)
+                        v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) - 5
+                        video.volume = settings.videoVolume = v > 0 ? v / 100 : 0
+                    }
+                    property var onLeft: onPrevious
+
+                    function onFirst(){
+                        video.volume = settings.videoVolume = 0
+                    }
+
+                    function onLast(){
+                        video.volume = settings.videoVolume = 1
+                    }
+
+                    function onAccept(){
+                        viewer.current = volume_scrub
+                    }
+                    property var onCancel: onAccept
+                //--
+
+                Rectangle { //volume_handle_select
+                    id: volume_handle_select
+
+                    anchors.fill: volume_handle
                     anchors.margins: vpx(-6)
+
                     color: colors.t
-
                     border.color: colors.border
-                    border.width: parent.selected ? vpx(6) : 0
-
+                    border.width: volume_handle.selected ? vpx(6) : 0
                     radius: vpx(6)
                 }
-
             }
 
             MouseArea { //volume_click
                 id: volume_click
 
-                anchors.fill: parent
+                anchors.fill: volume_scrub
 
                 cursorShape: Qt.PointingHandCursor
 
-                drag.target: volume_slide_handle
+                drag.target: volume_handle
                 drag.axis: Drag.YAxis
                 drag.minimumY: 0
-                drag.maximumY: parent.height - volume_slide_handle.height
-
+                drag.maximumY: volume_scrub.height - volume_handle.height
 
                 onClicked: {
-                    let v = Math.round((1 - (mouseY / volume_slide_background.height)) * 100) / 100
+                    let v = Math.round((1 - (mouseY / volume_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
-                    settings.videoVolume = v
+                    video.volume = settings.videoVolume = v
                 }
 
                 onPositionChanged: {
-                    settings.videoVolume = Math.round((1 - (volume_slide_handle.y / volume_slide_background.height)) * 100) / 100
+                    let v = Math.round((1 - (volume_handle.y / volume_background.height)) * 100) / 100
+                    v = v < 0 ? 0 : v
+                    video.volume = settings.videoVolume = v
                 }
             }
         }
     }
 
-    HoverHandler { //video_hover
-        id: video_hover
-        cursorShape: Qt.PointingHandCursor
-    }
-
-
-    Keys.onPressed: { //Keys
-        let key = gsk(event)
-        if(key != undefined){
-            switch(key){
-                case "up":
-                    if(current.onUp != undefined)
-                        current.onUp()
-                    break
-                case "down":
-                    if(current.onDown != undefined)
-                        current.onDown()
-                    break
-                case "left":
-                    if(current.onLeft != undefined)
-                        current.onLeft()
-                    break
-                case "right":
-                    if(current.onRight != undefined)
-                        current.onRight()
-                    break
-                case "prev":
-                    if(current.onPrevious != undefined)
-                        current.onPrevious()
-                    break
-                case "next":
-                    if(current.onNext != undefined)
-                        current.onNext()
-                    break
-                case "first":
-                    if(current.onFirst != undefined)
-                        current.onFirst()
-                    break
-                case "last":
-                    if(current.onLast != undefined)
-                        current.onLast()
-                    break
-                case "details":
-                    onCancel()
-                    panel_area.activePanel = panel_area.info_panel
-                    f = game_layout
-                    s = audio.toggle_down
-                    break
-                case "cancel":
-                    if(current.onCancel != undefined)
-                        current.onCancel()
-                    else
-                        onCancel()
-                    s = audio.toggle_down
-                    break
-                case "accept":
-                    current.onAccept()
-                    break
-                default:
-                    break
-            }
-            event.accepted = true
-            s = s != null ? s : audio.select
-        }
-        if(s != null){
-            audio.stopAll()
-            s.play()
-        }
-        s = null
+    HoverHandler { //hover
+        id: hover
     }
 
     property Video video: video
-    property Image image: video_default
 }

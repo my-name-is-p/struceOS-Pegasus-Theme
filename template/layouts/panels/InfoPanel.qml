@@ -5,7 +5,7 @@ import QtQuick 2.15
 import QtMultimedia 5.9
 import QtGraphicalEffects 1.15
 
-
+import "parts-info"
 import "../../widgets"
 
 Item {
@@ -16,46 +16,102 @@ Item {
     property Item current: panel
 
     //Functions
-        property var onCancel: function(){
-            current = panel
-            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-            video.video.stop()
-            f = game_layout
+        function activate(){
+            if(current === panel)
+                current = launch
         }
 
-        property var onAccept: function(){
-            launch_window.visible = true
-            if(settings.lastPlayed){
-                api.memory.set("collectionIndex", currentCollectionIndex)
-                api.memory.set("gameIndex", games.currentIndex)
+        function closePanel(){
+                current = panel
+                video.reset()
+                resetFocus()
+        }
+
+        property var onUp: current != panel ? current.onUp : activate
+        property var onDown: current != panel ? current.onDown : activate
+        property var onLeft: current != panel ? current.onLeft : activate
+        property var onRight: current != panel ? current.onRight : activate
+
+        function onPrevious(){
+            if(current != panel){
+                if(!current.onPrevious){
+                    games.moveCurrentIndexLeft()
+                    video.reset()
+                    if(video.status === MediaPlayer.NoMedia && current === video_player){
+                        video_player.current = video_player
+                        current = launch
+                    }
+                }else{
+                    current.onPrevious()
+                }
+            }else{
+                games.moveCurrentIndexLeft()
+                video.reset()
             }
-            s = audio.toggle_down
-            currentGame.launch()
         }
 
-        property var onPrevious: function(){
-            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-            games.moveCurrentIndexLeft()
-            video.video.safePlay()
+        function onNext(){
+            if(current != panel){
+                if(current != panel && !current.onNext){
+                    games.moveCurrentIndexRight()
+                    video.reset()
+                    if(video.status === MediaPlayer.NoMedia && current === video_player){
+                        video_player.current = video_player
+                        current = launch
+                    }
+                }else{
+                    current.onNext()
+                }
+            }else{
+                games.moveCurrentIndexRight()
+                video.reset()
+            }
         }
 
-        property var onNext: function(){
-            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-            games.moveCurrentIndexRight()
-            video.video.safePlay()
+        function onFirst(){
+            if(current != panel){
+                if(!current.onFirst){
+                    games.currentIndex = 0
+                    video.reset()
+                    if(video.status === MediaPlayer.NoMedia && current === video_player){
+                        video_player.current = video_player
+                        current = launch
+                    }
+                }else{
+                    current.onFirst()
+                }
+            }else{
+                games.currentIndex = 0
+                video.reset()
+            }
         }
 
-        property var onFirst: function(){
-            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-            games.currentIndex = 0
-            video.video.safePlay()
+        function onLast(){
+            if(current != panel){
+                if(!current.onLast){
+                    games.currentIndex = games.count - 1
+                    video.reset()
+                    if(video.status === MediaPlayer.NoMedia && current === video_player){
+                        video_player.current = video_player
+                        current = launch
+                    }
+                }else{
+                    current.onLast()
+                }
+            }else{
+                games.currentIndex = games.count - 1
+                video.reset()
+            }
         }
 
-        property var onLast: function(){
-            settings.videoMute = api.memory.get("struceOS_video_videoMute") != undefined ? api.memory.get("struceOS_video_videoMute") : true
-            games.currentIndex = games.count - 1
-            video.video.safePlay()
+        function onSort(){
+            currentGame.favorite = !currentGame.favorite
+            search.populateModel()
         }
+
+        property var onCancel: current != panel && current.onCancel ? current.onCancel : closePanel
+        property var onDetails: closePanel
+        property var onAccept: current.onAccept ? current.onAccept : launchGame
     //--
 
     Item {  //header_buttons
@@ -71,30 +127,20 @@ Item {
         CloseButton { //close
             id: close
 
+            sound: audio.toggle_down
             selected: panel.current === this
 
-            onClicked: function(){
+            function onAccept(){
                 panel.onCancel()
             }
+            onClicked: panel.closePanel
 
-            property var onAccept: function(){
-                panel.onCancel()
-                s = audio.toggle_down
-            }
-            
-            property var onRight: function(){
+            function onRight(){
                 panel.current = favorite
             }
 
-            property var onDown: function(){
-                panel.current = video
-            }
-
-            property var onUp: function(){
-                video.video.stop()
-                header.current = header.collection
-                f = header
-                panel.current = panel
+            function onDown(){
+                panel.current = video.status != MediaPlayer.NoMedia ? video_player : launch
             }
         }
 
@@ -111,24 +157,17 @@ Item {
                 search.populateModel()
             }
 
-            property var onAccept: function(){
+            function onAccept(){
                 onClicked()
                 s = audio.toggle_down
             }
 
-            property var onLeft: function(){
+            function onLeft(){
                 panel.current = close
             }
 
-            property var onDown: function(){
-                panel.current = video
-            }
-
-            property var onUp: function(){
-                video.video.stop()
-                header.current = header.search_button
-                f = header
-                panel.current = panel
+            function onDown(){
+                panel.current = video_player
             }
         }
     }
@@ -142,8 +181,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        Item { //gallery_wrapper
-            id: gallery_wrapper
+        Item { //left_panel
+            id: left_panel
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.width * (9 / 16)
@@ -151,19 +190,18 @@ Item {
             Item { //gallery
                 id: gallery
 
-                width: parent.width
-                height: video.height + launch.height + launch.anchors.topMargin
-
                 anchors.centerIn: parent
 
-                VideoPlayer { //video
-                    id: video
+                width: parent.width
+                height: video_player.height + launch.height + launch.anchors.topMargin
+
+                VideoPlayer { //video_player
+                    id: video_player
 
                     width: gallery.width
-
-                    height: {
-                        if(gallery.height > gallery_wrapper.height){
-                            let r = gallery_wrapper.height - launch.height - launch.anchors.topMargin
+                    height: { //height
+                        if(gallery.height > left_panel.height){
+                            let r = left_panel.height - launch.height - launch.anchors.topMargin
                             return r
                         }else{
                             return width / 1.778
@@ -171,389 +209,139 @@ Item {
                     }
 
                     selected: panel.current === this
-                    
-                    property var onAccept: function(){
-                        video.current = enter
-                        panel.Keys.forwardTo = this
+
+                    function onCancel(){
+                        if(video_player.current != video_player && current.onCancel)
+                            current.onCancel()
+                        else if(video_player.current != video_player)
+                            video_player.current = video_player
+                        else
+                            panel.closePanel()
                     }
 
-                    property var onCancel: function(){
-                        if(video.current != this){
-                            video.current = this
-                            panel.Keys.forwardTo = panel
-                        }else{
-                            panel.onCancel()
-                        }
+                    function onUp(){
+                        if(video_player.current != video_player && current.onUp)
+                            current.onUp()
+                        else if(video_player.current != video_player)
+                            video_player.current = video_player
+                        else
+                            panel.current = close
                     }
 
-                    property var onUp: function(){
-                        panel.current = close
+                    function onDown(){
+                        if(video_player.current != video_player && current.onDown)
+                            current.onDown()
+                        else if(video_player.current != video_player)
+                            video_player.current = video_player
+                        else
+                            panel.current = launch
                     }
 
-                    property var onDown: function(){
-                        panel.current = launch
+                    function onLeft(){
+                        if(video_player.current != video_player && current.onLeft)
+                            current.onLeft() 
                     }
 
-                    property var onRight: function(){
-                        panel.current = favorite
+                    function onRight(){
+                        if(video_player.current != video_player && current.onRight)
+                            current.onRight() 
+                        else if(video_player.current === video_player)
+                            panel.current = favorite
                     }
                 }
 
                 LaunchButton { //launch
                     id: launch
 
-                    anchors.top: video.bottom
+                    anchors.top: video_player.bottom
                     anchors.topMargin: vpx(24)
 
                     selected: panel.current === this
 
-                    property var onRight: function(){
+                    function onRight(){
                         panel.current = favorite
                     }
 
-                    property var onUp: function(){
-                        panel.current = video
+                    function onUp(){
+                        panel.current = video.status != MediaPlayer.NoMedia ? video_player : close
                     }
 
-                    property var onDown: function(){
+                    function onDown(){
                         panel.onCancel()
                         s = audio.toggle_down 
                     }
                 }
 
-                Item { //details
+                Details { //details
                     id: details
-                    height: launch.height
+
                     anchors.top: launch.top
                     anchors.left: launch.right
                     anchors.right: parent.right
                     anchors.leftMargin: vpx(12)
 
-                    clip: true
-
-                    Rectangle { //released_detail
-                        id: released_detail
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        visible: currentGame.releaseYear != 0
-                        width: visible ? released_label.contentWidth : 0
-
-                        Text { //released_label
-                            id: released_label
-                            text: "released: " + currentGame.releaseYear
-                            font.family: regular.name
-                            font.pixelSize: vpx(14)
-                            color: colors.text
-
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                    }
-
-                    Rectangle { //players_detail
-                        id: players_detail
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        anchors.left: released_detail.right
-                        anchors.leftMargin: vpx(12)
-
-                        visible: currentGame.players > 0
-                        width: !visible ? 0 : players_label.contentWidth + players_icon.width + players_icon.anchors.leftMargin
-
-                        Text { //players_label
-                            id: players_label
-                            text: "players:"
-                            font.family: regular.name
-                            font.pixelSize: vpx(14)
-                            color: colors.text
-
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Item {
-                            id: players_icon_mask
-
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: players_label.right
-                            anchors.leftMargin: vpx(6)
-
-                            width: vpx(16) * Math.min(currentGame.players, 5)
-                            height: vpx(16)
-
-
-                            Image { //players_icon
-                                id: players_icon
-                                anchors.fill: parent
-                                source: images.players
-
-                                fillMode: Image.PreserveAspectCrop
-                                horizontalAlignment: Image.AlignLeft
-
-                                visible: false
-                            }
-
-                            Rectangle { //icon_color
-                                id: players_icon_color
-                                anchors.fill: players_icon
-                                visible: false
-                                color: colors.text
-                            }
-
-                            OpacityMask {
-                                anchors.fill: players_icon
-                                source: players_icon_color
-                                maskSource: players_icon
-                            }
-                        }
-
-                    }
-
-                    Rectangle { //genres_detail
-                        id: genres_detail
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        anchors.left: players_detail.right
-                        anchors.leftMargin: vpx(12)
-
-                        visible: currentGame.genre != ""
-                        width: visible ? genres_label.contentWidth : 0
-
-                        Text {
-                            id: genres_label
-                            text: "genres: " + currentGame.genre
-                            font.family: regular.name
-                            font.pixelSize: vpx(14)
-                            color: colors.text
-
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                    }
+                    height: launch.height
                 }
             }
 
         }
 
-        Item { //text
-            id: text
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: gallery_wrapper.right
+        Item { //right_panel
+            id: right_panel
+            anchors.top: content.top
+            anchors.bottom: content.bottom
+            anchors.left: left_panel.right
             anchors.leftMargin: vpx(24)
-            anchors.right: parent.right
+            anchors.right: content.right
 
             Image { //logo
                 id: logo
                 source: getAssets(currentGame.assets).logo
+
+                anchors.top: right_panel.top
+                anchors.left: right_panel.left
+
+                width: right_panel.width
+                height: right_panel.width / 4
+
                 fillMode: Image.PreserveAspectFit
-
-                width: parent.width
-                height: parent.width / 4
-
-                anchors.top: parent.top
-                anchors.left: parent.left
 
                 Text {  //game title backup
                     text: currentGame.title
+
+                    anchors.centerIn: logo
+
+                    width: logo.width
+
                     color: colors.text
                     font.family: bold.name
                     font.bold: true
                     font.pixelSize: vpx(24)
-                    anchors.centerIn: parent
-                    elide: Text.ElideRight
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
 
                     wrapMode: Text.WordWrap
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
 
                     visible: logo.status != Image.Ready
                 }
             }
 
-            Item { //raiting
+            Rating { //rating
                 id: rating
+
                 anchors.top: logo.bottom
                 anchors.topMargin: vpx(6)
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: vpx(24)
-
-                Item { //stars
-                    id: stars
-                    width: vpx(144)
-                    height: vpx(24)
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    visible: false
-
-                    Image { //empty
-                        id: empty
-                        source: images.stars_empty
-                        fillMode: Image.PreserveAspectFit
-                        
-                        anchors.fill: parent
-                    }
-
-                    Image { //filled
-                        id: filled
-                        anchors.fill: empty
-                        anchors.rightMargin: stars.width - (stars.width * currentGame.rating)
-                        source: images.stars_filled
-                        fillMode: Image.PreserveAspectCrop
-                        horizontalAlignment: Image.AlignLeft
-                    }
-                }
-
-                Rectangle { //stars_color
-                    id: stars_color
-                    anchors.fill: stars
-                    color: colors.text
-
-                    visible: false
-                }
-
-                OpacityMask {
-                    anchors.fill: stars
-                    source: stars_color
-                    maskSource: stars
-                }
+                anchors.left: right_panel.left
+                anchors.right: right_panel.right
             }
 
-            Rectangle { //developer
-                id: developer
+            DeveloperPublisher { //developer_publisher
+                id: developer_publisher
 
                 anchors.top: rating.bottom
                 anchors.topMargin: vpx(12)
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                color: colors.accent_light
-
-                height: developer_text.height + vpx(24)
-
-                Rectangle { //developer_color
-                    id: developer_color
-                    height: parent.height
-                    anchors.right: parent.right
-                    width: developer_text.contentWidth + vpx(48)
-                    color: colors.accent
-                }
-
-                Rectangle { //developer_decor
-                    id: developer_decor
-
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: developer_color.left
-                    anchors.left: parent.left
-
-                    anchors.margins: vpx(2)
-                    anchors.rightMargin: vpx(0)
-
-                    color: colors.t
-
-                    border.width: vpx(4)
-                    border.color: colors.accent
-                    
-                }
-
-                Text { //developer_text
-                    id: developer_text
-                    text: currentGame.developer
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.margins: vpx(24)
-                    anchors.leftMargin: vpx(12)
-                    color: colors.text
-
-                    font.family: bold.name
-                    font.bold: true
-                    font.pixelSize: vpx(16)
-
-                    elide: Text.ElideRight
-
-                    horizontalAlignment: Text.AlignRight
-                }
-
-                Rectangle { //developer_border
-                    id: developer_border
-                    height: parent.height
-                    width: parent.width
-
-                    color: colors.t
-
-                    border.width: vpx(4)
-                    border.color: colors.accent_light
-                }
-            }
-
-            Rectangle { //publisher
-                id: publisher
-
-                anchors.top: developer.bottom
-                anchors.topMargin: vpx(-3)
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                color: colors.accent_light
-
-                height: publisher_text.height + vpx(24)
-
-                Rectangle {
-                    id: publisher_color
-                    height: parent.height
-                    width: publisher_text.contentWidth + vpx(48)
-                    color: colors.accent
-                }
-
-                Rectangle { //publisher_decor
-                    id: publisher_decor
-
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.left: publisher_color.right
-                    anchors.right: parent.right
-
-                    anchors.margins: vpx(2)
-                    anchors.leftMargin: vpx(0)
-
-                    color: colors.t
-
-                    border.width: vpx(4)
-                    border.color: colors.accent
-                    
-                }
-
-                Text { //publisher_text
-                    id: publisher_text
-                    text: currentGame.publisher
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.margins: vpx(24)
-                    anchors.rightMargin: vpx(12)
-                    color: colors.text
-
-                    font.family: bold.name
-                    font.bold: true
-                    font.pixelSize: vpx(16)
-
-                    elide: Text.ElideRight
-                }
-
-                Rectangle { //publish_border
-                    id: publisher_border
-                    height: parent.height
-                    width: parent.width
-
-                    color: colors.t
-
-                    border.width: vpx(4)
-                    border.color: colors.accent_light
-                }
+                anchors.left: right_panel.left
+                anchors.right: right_panel.right
             }
 
             Text { //summary
@@ -563,119 +351,23 @@ Item {
                         currentGame.description != "" ? 
                             currentGame.description : 
                             "No description..."
-                wrapMode: Text.WordWrap
-                anchors.top: publisher.bottom
+
+                anchors.top: developer_publisher.bottom
                 anchors.topMargin: vpx(12)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
 
+                color: colors.text
+
                 font.family: regular.name
                 font.pixelSize: vpx(14)
+
+                wrapMode: Text.WordWrap
                 elide: Text.ElideRight
-                color: colors.text
             }
         }
     }
 
-    Keys.onPressed: { //Keys
-        let key = gsk(event)
-        if(key != undefined){
-            switch (key){
-                case "up":
-                    if(current.onUp != undefined)
-                        current.onUp()
-                    else
-                        current = launch
-                    break
-                case "down":
-                    if(current.onDown != undefined)
-                        current.onDown()
-                    else
-                        current = launch
-                    break
-                case "left":
-                    if(current.onLeft != undefined)
-                        current.onLeft()
-                    else
-                        current = launch
-                    break
-                case "right":
-                    if(current.onRight != undefined)
-                        current.onRight()
-                    else
-                        current = launch
-                    break
-                case "prev":
-                    if(games.currentIndex === 0)
-                        s = audio.toggle_down
-                    if(current.onPrevious != undefined)
-                        current.onPrevious()
-                    else
-                        onPrevious()
-                    break
-                case "next":
-                    if(games.currentIndex === games.count - 1)
-                        s = audio.toggle_down
-                    if(current.onNext != undefined)
-                        current.onNext()
-                    else
-                        onNext()
-                    break
-                case "first":
-                    if(current.onFirst != undefined)
-                        current.onFirst()
-                    else
-                        onFirst()
-                    break
-                case "last":
-                    if(current.onLast != undefined)
-                        current.onLast()
-                    else
-                        onLast()
-                    break
-                case "details":
-                    s = audio.toggle_down
-                    onCancel()
-                    break
-                case "filter":
-                    currentGame.favorite = !currentGame.favorite
-                    search.populateModel()
-                    break
-                case "cancel":
-                    if(current.onCancel != undefined)
-                        current.onCancel()
-                    else
-                        onCancel()
-                    s = audio.toggle_down
-                    event.accepted = true
-                    break
-                case "accept":
-                    if(current.onAccept != undefined){
-                        current.onAccept()
-                    }else{
-                        launch_window.visible = true
-                        if(settings.lastPlayed){
-                            api.memory.set("collectionIndex", currentCollectionIndex)
-                            api.memory.set("gameIndex", games.currentIndex)
-                        }
-                        s = audio.toggle_down
-                        currentGame.launch()
-                    }
-                    event.accepted = true
-                    break
-                default:
-                    break
-            }
-            s = s != null ? s : audio.select
-        }
-        if(s != null){
-            audio.stopAll()
-            s.play()
-        }
-        s = null
-    }
-
-    property Video video: video.video
-    property Image image: video.image
+    property Video video: video_player.video
 }

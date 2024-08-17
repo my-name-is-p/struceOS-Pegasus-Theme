@@ -4,7 +4,7 @@
 import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
-Item {
+Item { //search
     id: search
     property alias model: gamesFiltered
     property string firstWordIgnoreList
@@ -14,18 +14,19 @@ Item {
     }
 
     function populateModel(){
-        gamesFiltered.clear() // Clear existing entries
+        gamesFiltered.clear()
     }
 
-    SortFilterProxyModel {
+    SortFilterProxyModel { //gamesFiltered
         id: gamesFiltered
         sourceModel: currentCollection.games
+
         filters: [
             RegExpFilter { 
                 roleName: "title"; 
-                pattern: header.search_term.text 
+                pattern: search_term.text 
                 caseSensitivity: Qt.CaseInsensitive;
-                enabled: header.search_term.text != ""
+                enabled: search_term.text != ""
             },
 
             ValueFilter { 
@@ -34,6 +35,7 @@ Item {
                 enabled: sortfilt_menu.favorite.enabled
             }
         ]
+
         sorters: [
             RoleSorter { 
                 roleName: "sortBy" 

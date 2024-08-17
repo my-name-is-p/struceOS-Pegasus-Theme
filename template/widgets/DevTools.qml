@@ -132,6 +132,7 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
+                log(video.duration)
             }
 
             onDoubleClicked: {

@@ -19,6 +19,9 @@
 // for easy to read code
 
 // Changelogs
+// #1.5.2
+//      1. Code cleanup and refactoring
+
 // #1.5.1
 //      1. Added button hints
 //      2. Added color options to settings
@@ -90,6 +93,7 @@
 
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add genre filters
+// 2. Add onscreen keyboard
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15
@@ -103,6 +107,8 @@ import "utils.js" as U
 
 FocusScope {
     id: root
+
+    property string test: settings.enableDevTools ? "test" : undefined
 
     property int currentCollectionIndex: 0
     property var currentCollection: {
@@ -118,19 +124,21 @@ FocusScope {
     }
     property GridView games: game_layout.games
     property var currentGame: search.currentGame(games.currentIndex)
+    // property bool allGames: settings.allGames
 
-    property Item f: game_layout
     property string bg: getAssets(currentGame.assets).bg
     property string bgOverlay: images.overlay_0002    
-    property var palette: settings.theme
     property var s: null
+
+    property Item f: game_layout
     
-    // property var c_test: settings.theme.accent.toString()
-
-
-    //--FUNCTIONS--//
+    //--Functions
+        //launchGame
+        property var launchGame: U.launchGame
         //GetSimpleKeys
         property var gsk: U.gsk
+        //childrenSize
+        property var childrenSize: U.childrenSize
         //Log
         property var log: U.log
         //getAssets
@@ -156,25 +164,24 @@ FocusScope {
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
 
-
-    Search {
+    Search { //clean
         id: search
     }
 
-    Audio {
+    Audio { //clean
         id: audio
     }
 
-    Images {
+    Images { //clean
         id: images
     }
 
-    Background {
+    Background { //clean
         id: background
         fade_time: 200
     }
     
-    Header {
+    Header { //clean
         id: header
 
         anchors.top: parent.top
@@ -183,44 +190,73 @@ FocusScope {
 
         focus: f === this
     }
+    property TextInput search_term: header.search_term
 
-    CollectionMenu {
-        id: collections_menu
+    Rectangle{ //dropdown //clean
+        id: dropdown
 
         anchors.top: header.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-        focus: f === this
+        color: colors.accent
+
+        clip: true
+
+        height: {
+            for(const [key, child] of Object.entries(children)){
+                if(f === child)
+                    return child.height
+            }
+            return 0
+        }
+        Behavior on height {NumberAnimation {duration: settings.hover_speed}}
+
+        PanelArea { //clean
+            id: panel_area
+
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+
+            focus: f === this
+            visible: f === this
+        }
+        property Video video: panel_area.video
+
+        CollectionMenu { //clean
+            id: collection_menu
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            focus: f === this
+            visible: f === this
+        }
+        property CollectionMenu collection_menu: collection_menu
+        property PanelArea panel_area: panel_area
     }
-
-    PanelArea {
-        id: panel_area
-
-        anchors.right: parent.right
-        anchors.left: sortfilt_menu.right
-        anchors.top: collections_menu.bottom
-
-        focus: f === this
-    }
-
-    SortFilterToolbar{
-        id: sortfilt_toolbar
-
-        anchors.left: sortfilt_menu.right
-        anchors.right: parent.right
-        anchors.top: panel_area.bottom
-
-        focus: f === this
-
-    }
+    property Video video: dropdown.video
+    property PanelArea panel_area: dropdown.panel_area
+    property CollectionMenu collection_menu: dropdown.collection_menu
 
     SortFilterMenu {
         id: sortfilt_menu
 
-        anchors.left: parent.left
-        anchors.top: collections_menu.bottom
+        anchors.top: dropdown.bottom
         anchors.bottom: parent.bottom
+        anchors.left: parent.left
+
+        focus: f === this
+    }
+
+    SortFilterToolbar{ //clean
+        id: sortfilt_toolbar
+
+        anchors.top: dropdown.bottom
+        anchors.left: sortfilt_menu.right
+        anchors.right: parent.right
 
         focus: f === this
     }
@@ -229,30 +265,29 @@ FocusScope {
         id: game_layout
 
         anchors.top: sortfilt_toolbar.bottom
-        anchors.left: sortfilt_menu.right
         anchors.bottom: parent.bottom
+        anchors.left: sortfilt_menu.right
 
         width: parent.width
 
         focus: f === this
     }
 
-    ButtonHints {
+    ButtonHints { //clean
         id: button_hints
 
         anchors.bottom: parent.bottom
         anchors.bottomMargin: settings.buttonHints ? 0 : -(parent.height - parent.height * 0.95)
+        Behavior on anchors.bottomMargin {NumberAnimation{duration: 125}}
+        
         anchors.left: sortfilt_menu.right
         anchors.right: parent.right
 
-        Behavior on anchors.bottomMargin {NumberAnimation{duration: 125}}
-
         opacity: settings.buttonHints ? 1 : 0
-
         Behavior on opacity {NumberAnimation{duration: 125}}
     }
 
-    LaunchWindow {
+    LaunchWindow { //clean
         id:launch_window
 
         anchors.fill: parent
@@ -276,13 +311,10 @@ FocusScope {
         if(settings.enableDevTools)
             log(settings.details)
 
+        resetFocus(game_layout)
         audio.stopAll()
         audio.home.play()
     }
-
-    property string test: settings.enableDevTools ? "test" : undefined
-
-    focus: true
 
     Loader { //settings_loader
         id: settings_loader
@@ -305,4 +337,102 @@ FocusScope {
         Colors{}
     }
     property Item colors: colors_loader.item
+
+    Keys.onPressed: { //Keys
+        let key = gsk(event)
+        if(isNaN(key)){
+            if(key != undefined){
+                switch (key){
+                    case "up":
+                        if(f.onUp)
+                            f.onUp()
+                        break
+                    case "down":
+                        if(f.onDown)
+                            f.onDown()
+                        break
+                    case "left":
+                        if(f.onLeft)
+                            f.onLeft()
+                        break
+                    case "right":
+                        if(f.onRight)
+                            f.onRight()
+                        break
+                    case "prev":
+                        if(f.onPrevious)
+                            f.onPrevious()
+                        break
+                    case "next":
+                        if(f.onNext)
+                            f.onNext()
+                        break
+                    case "first":
+                        if(f.onFirst)
+                            f.onFirst()
+                        break
+                    case "last":
+                        if(f.onLast)
+                            f.onLast()
+                        break
+                    case "details":
+                        s = audio.toggle_down
+                        if(f.onDetails){
+                            f.onDetails()
+                        }else{
+                            if(!panel_area.focus){
+                                panel_area.open()
+                                resetFocus(panel_area)
+                            }
+                        }
+                        break
+                    case "sort":
+                        s = audio.toggle_down
+                        if(f != sortfilt_menu)
+                            resetFocus(sortfilt_menu)
+                        else
+                            resetFocus()
+                        break
+                    case "cancel":
+                        s = audio.toggle_down
+                        if(f.onCancel){
+                            f.onCancel()
+                            event.accepted = true
+                        }else{
+                            log("THEME CANCEL")
+                        }
+                        break
+                    case "accept":
+                        if(f.onAccept)
+                            f.onAccept()
+                        else
+                            launchGame()
+                        break
+                    default:
+                        break
+                }
+            }
+        }else{
+            if(
+                header.focus ||
+                collection_menu.focus ||
+                game_layout.focus
+            ){
+                if(key == 0) {
+                    currentCollectionIndex = settings.allGames ? 8 : 9
+                } else {
+                    currentCollectionIndex = settings.allGames ? key - 2 : key - 1
+                }
+                collections_menu.positionViewAtCurrentIndex()
+                s = audio.toggle_down
+            }
+        }
+        if(s != null){
+            audio.stopAll()
+            s.play()
+        }
+        s = null
+    }
+
+    focus: true
 }

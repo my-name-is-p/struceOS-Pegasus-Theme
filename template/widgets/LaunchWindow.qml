@@ -12,11 +12,15 @@ Item {
 
         color: addAlphaToHex(0.95, colors.black)
     }
+
     Item {
         id: launch_info
+
+        anchors.centerIn: parent
+
         width: launch_image.width + launch_text.width
         height: launch_image.height
-        anchors.centerIn: parent
+
         Image {
             id: launch_image
             source: getAssets(currentGame.assets).logo
@@ -27,13 +31,13 @@ Item {
         Text {
             id: launch_text
             text: "Launching: " + currentGame.title
+
+            anchors.left: launch_image.right
+            anchors.verticalCenter: launch_image.verticalCenter
+
             color: colors.white
             font.family: regular.name
             font.pixelSize: vpx(24)
-
-            anchors.left: launch_image.right
-
-            anchors.verticalCenter: launch_image.verticalCenter
         }
     }
 

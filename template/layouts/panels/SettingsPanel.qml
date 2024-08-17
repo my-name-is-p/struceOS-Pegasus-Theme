@@ -6,7 +6,7 @@ import QtMultimedia 5.9
 import QtGraphicalEffects 1.15
 
 
-import "pages-settings"
+import "parts-settings"
 import "../../widgets"
 
 Item {
@@ -20,31 +20,59 @@ Item {
     property string name: "panel"
 
     //Functions
-        property var onCancel: function(){
-            current = panel
-            f = game_layout
+        function activate(){
+            if(current === panel)
+                current = close
         }
 
-        function fullReset(){
-            if(pages.current.reset)
-                pages.current.reset()
-            panel.current = panel
-            panel.Keys.forwardTo = panel
+        function closePanel(){
+                reset()
+                current = panel
+                resetFocus()
+        }
+    
+        property var onUp: current != panel ? current.onUp : activate
+        property var onDown: current != panel ? current.onDown : activate
+        property var onLeft: current != panel ? current.onLeft : activate
+        property var onRight: current != panel ? current.onRight : activate
+
+        property var onPrevious: current != panel && current.onPrevious ? current.onPrevious : page_selection.onPrevious
+        property var onNext: current != panel && current.onNext ? current.onNext : page_selection.onNext
+
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current != panel && current.onCancel ? current.onCancel : closePanel
+        
+        function onAccept(){
+            if(current.onAccept)
+                current.onAccept()
+        }
+    
+        function reset(){
+            let c = pages.children
+            for(var i = 0; i < c.length; i++){
+                if(c[i].reset)
+                    c[i].reset()
+            }
         }
     //--
 
     Item { //header_buttons
         id: header_buttons
 
-        anchors.top: parent.top
+        anchors.top: panel.top
         anchors.topMargin: vpx(-12)
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.left: panel.left
+        anchors.right: panel.right
 
         height: vpx(48)
 
-        CloseButton { //settings_close
-            id: settings_close
+        CloseButton { //close
+            id: close
+
+            sound: audio.toggle_down
 
             selected: panel.current === this
 
@@ -53,15 +81,8 @@ Item {
             }
             property var onAccept: onClicked
 
-            property var onUp: function(){
-                panel.current = panel
-                header.current = header.collection
-                f = header
-            }
-
-            property var onDown: function(){
+            function onDown(){
                 panel.current = pages
-                panel.Keys.forwardTo = pages
             }
             property var onRight: onDown
         }
@@ -71,11 +92,11 @@ Item {
         id: page_margins
 
         anchors.top: header_buttons.bottom
-        anchors.left: parent.left
+        anchors.bottom: panel.bottom
+        anchors.left: panel.left
         anchors.leftMargin: panel.width * 0.25
-        anchors.right: parent.right
+        anchors.right: panel.right
         anchors.rightMargin: panel.width * 0.25
-        anchors.bottom: parent.bottom
 
         Item { //page_selection
             id:page_selection
@@ -86,18 +107,18 @@ Item {
 
             height: vpx(48)
 
-            width: { //width
-                let sum = 0
-                for (var i = 0; i < children.length; i++) {
-                    sum += children[i].width + children[i].anchors.leftMargin
-                }
-                return sum;
-            }
+            width: childrenSize(this, "width", "leftMargin")
 
             property bool selected: false
 
-            property var onNext: page_list.current.onNext
-            property var onPrevious: page_list.current.onPrevious
+            function onNext(){
+                panel.reset()
+                page_list.current.onNext()
+            }
+            function onPrevious(){
+                panel.reset()
+                page_list.current.onPrevious()
+            }
             
             Item { //left_buttons_mask
                 id: left_buttons_mask
@@ -105,13 +126,7 @@ Item {
                 anchors.left: parent.left
 
                 height: parent.height
-                width: { //width
-                    let sum = 0
-                    for (var i = 0; i < children.length; i++) {
-                        sum += children[i].width + children[i].anchors.leftMargin
-                    }
-                    return sum;
-                }
+                width: childrenSize(this, "width", "leftMargin")
 
                 Image { //leftBumper
                     id: leftBumper
@@ -153,12 +168,16 @@ Item {
 
             Rectangle { //left_buttons_color
                 id: left_buttons_color
+
                 anchors.fill: left_buttons_mask
-                visible: false
+
                 color: colors.white
+
+                visible: false
             }
 
-            OpacityMask {
+            OpacityMask { //left_buttons_out
+                id: left_buttons_out
                 anchors.fill: left_buttons_mask
                 source: left_buttons_color
                 maskSource: left_buttons_mask
@@ -174,13 +193,7 @@ Item {
 
                 property Item current: page_list_layout
 
-                width: { //width
-                    let sum = 0
-                    for (var i = 1; i < children.length; i++) {
-                        sum += children[i].width + children[i].anchors.leftMargin
-                    }
-                    return sum;
-                }
+                width: childrenSize(this, "width", "leftMargin", 0, 1)
 
                 Rectangle { //page_list_select
                     id: page_list_select
@@ -209,12 +222,12 @@ Item {
                     font.bold: true
                     font.pixelSize: vpx(20)
 
-                    property var onNext: function(){
+                    function onNext(){
                         page_list.current = page_list_colors
                         pages.current = color_settings
                     }
 
-                    property var onPrevious: function(){
+                    function onPrevious(){
                         page_list.current = this
                     }
 
@@ -244,12 +257,12 @@ Item {
                     font.bold: true
                     font.pixelSize: vpx(20)
 
-                    property var onNext: function(){
+                    function onNext(){
                         page_list.current = page_list_audio
                         pages.current = audio_settings
                     }
 
-                    property var onPrevious: function(){
+                    function onPrevious(){
                         page_list.current = page_list_layout
                         pages.current = layout_settings
                     }
@@ -280,12 +293,12 @@ Item {
                     font.bold: true
                     font.pixelSize: vpx(20)
 
-                    property var onNext: function(){
+                    function onNext(){
                         page_list.current = page_list_devtools
                         pages.current = devtools_settings
                     }
 
-                    property var onPrevious: function(){
+                    function onPrevious(){
                         page_list.current = page_list_colors
                         pages.current = color_settings
                     }
@@ -315,11 +328,11 @@ Item {
                     font.bold: true
                     font.pixelSize: vpx(20)
 
-                    property var onNext: function(){
+                    function onNext(){
                         page_list.current = this
                     }
 
-                    property var onPrevious: function(){
+                    function onPrevious(){
                         page_list.current = page_list_audio
                         pages.current = audio_settings
                     }
@@ -344,13 +357,7 @@ Item {
                 anchors.leftMargin: vpx(24)
 
                 height: parent.height
-                width: { //width
-                    let sum = 0
-                    for (var i = 0; i < children.length; i++) {
-                        sum += children[i].width + children[i].anchors.leftMargin
-                    }
-                    return sum;
-                }
+                width: childrenSize(this, "width", "leftMargin")
 
                 visible: false
 
@@ -396,12 +403,16 @@ Item {
 
             Rectangle { //right_buttons_color
                 id: right_buttons_color
+
                 anchors.fill: right_buttons_mask
-                visible: false
+
                 color: colors.white
+
+                visible: false
             }
 
-            OpacityMask {
+            OpacityMask { //right_buttons_out
+                id: right_buttons_out
                 anchors.fill: right_buttons_mask
                 source: right_buttons_color
                 maskSource: right_buttons_mask
@@ -412,68 +423,62 @@ Item {
             id: pages
 
             anchors.top: page_selection.bottom
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.bottom: page_margins.bottom
+            anchors.left: page_margins.left
+            anchors.right: page_margins.right
 
             property bool selected: panel.current === this
             property var current: layout_settings
 
 
             //Functions--
-                property var onUp: current.onUp != undefined ? current.onUp : undefined
-                property var onDown: current.onDown != undefined ? current.onDown : undefined
-                property var onLeft: current.onLeft != undefined ? current.onLeft : undefined
-                property var onRight: current.onRight != undefined ? current.onRight : undefined
-                property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
-                property var onNext: current.onNext != undefined ? current.onNext : undefined
-                property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
-                property var onLast: current.onLast != undefined ? current.onLast : undefined
-                property var onDetails: current.onDetails != undefined ? current.onDetails : undefined
-                property var onSort: current.onSort != undefined ? current.onSort : undefined
-                property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
-                property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
+                property var onUp: current.onUp
+                property var onDown: current.onDown
+                property var onLeft: current.onLeft
+                property var onRight: current.onRight
+                property var onPrevious: current.onPrevious
+                property var onNext: current.onNext
+                property var onFirst: current.onFirst
+                property var onLast: current.onLast
+                property var onDetails: current.onDetails
+                property var onSort: current.onSort
+                property var onCancel: current.onCancel
+                property var onAccept: current.onAccept
             //--
 
-            LayoutSettings { //layout_settings
+            LayoutSettings { //clean
                 id: layout_settings
 
                 anchors.fill: parent
 
-                property string name: "layout_settings"
-
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
 
-                exitMenu: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
+                onUp: function(){
+                    if(current.onUp)
+                        current.onUp()
+                    else
+                        panel.current = close
                 }
             }
 
-            ColorSettings {
+            ColorSettings { //clean
                 id: color_settings
+
                 anchors.fill: parent
                 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
 
-                exitMenu: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                }
-
-                onCancel: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                    panel.onCancel()
+                onUp: function(){
+                    if(current.onUp)
+                        current.onUp()
+                    else
+                        panel.current = close
                 }
             }
 
-            AudioSettings {
+            AudioSettings { //clean
                 id: audio_settings
 
                 anchors.fill: parent
@@ -481,21 +486,15 @@ Item {
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
 
-                exitMenu: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                }
-
-                onCancel: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                    panel.onCancel()
+                onUp: function(){
+                    if(current.onUp)
+                        current.onUp()
+                    else
+                        panel.current = close
                 }
             }
 
-            DevtoolsSettings {
+            DevtoolsSettings { //clean
                 id: devtools_settings
 
                 anchors.fill: parent
@@ -503,112 +502,13 @@ Item {
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
 
-                exitMenu: function(){
-                    reset()
-                    panel.current = settings_close
-                    panel.Keys.forwardTo = panel
-                }
-            }
-
-            Keys.forwardTo: current
-        }
-    }
-    //TO DO--
-        //Background
-            //overlay source
-                //5 default
-                //custom file path
-        //Colors
-            //accent
-            //accent_light
-            //scrub_bar
-            //launch
-            //launch_hover
-            //border
-            //text
-            //text_invert
-            //black
-            //white
-    //--
-
-    Keys.onPressed: {
-        let key = gsk(event)
-        if(key != undefined){
-            switch (key){
-                case "up":
-                    if(current.onUp != undefined)
+                onUp: function(){
+                    if(current.onUp)
                         current.onUp()
                     else
-                        current = settings_close
-                    break
-                case "down":
-                    if(current.onDown != undefined)
-                        current.onDown()
-                    else
-                        current = settings_close
-                    break
-                case "left":
-                    if(current.onLeft != undefined)
-                        current.onLeft()
-                    else
-                        current = settings_close
-                    break
-                case "right":
-                    if(current.onRight != undefined)
-                        current.onRight()
-                    else
-                        current = settings_close
-                    break
-                case "prev":
-                    if(current.onPrevious != undefined)
-                        current.onPrevious()
-                    else
-                        page_selection.onPrevious()
-                    break
-                case "next":
-                    if(current.onNext != undefined)
-                        current.onNext()
-                    else
-                        page_selection.onNext()
-                    break
-                case "first":
-                    if(current.onFirst != undefined)
-                        current.onFirst()
-                    break
-                case "last":
-                    if(current.onLast != undefined)
-                        current.onLast()
-                    break
-                case "details":
-                    panel_area.current = panel_area.info_panel
-                    panel_area.info_panel.video.safePlay()
-                    break
-                case "filter":
-                    f = sortfilt_menu
-                    current = panel
-                    break
-                case "cancel":
-                    if(current.onCancel != undefined)
-                        current.onCancel()
-                    onCancel()
-                    event.accepted = true
-                    break
-                case "accept":
-                    if(current.onAccept != undefined)
-                        current.onAccept()
-                    event.accepted = true
-                    break
-                default:
-                    break
+                        panel.current = close
+                }
             }
-            s = s != null ? s : audio.toggle_down
         }
-        if(s != null){
-            audio.stopAll()
-            s.play()
-        }
-        s = null
     }
-
-    property ListModel color_model: color_colors.model
 }

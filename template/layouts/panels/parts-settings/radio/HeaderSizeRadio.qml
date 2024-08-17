@@ -11,35 +11,22 @@ Item { //header_settings_size_radio
     property var current: header_settings_size_small
 
     //Functions--
-        property var onUp: current.onUp != undefined ? current.onUp : undefined
-        property var onDown: current.onDown != undefined ? current.onDown : undefined
-        property var onLeft: current.onLeft != undefined ? current.onLeft : undefined
-        property var onRight: current.onRight != undefined ? current.onRight : undefined
-        property var onPrevious: current.onPrevious != undefined ? current.onPrevious : undefined
-        property var onNext: current.onNext != undefined ? current.onNext : undefined
-        property var onFirst: current.onFirst != undefined ? current.onFirst : undefined
-        property var onLast: current.onLast != undefined ? current.onLast : undefined
-        property var onDetails: current.onDetails != undefined ? current.onDetails : undefined
-        property var onSort: current.onSort != undefined ? current.onSort : undefined
-        property var onCancel: current.onCancel != undefined ? current.onCancel : undefined
-        property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
+        property var onUp: current.onUp
+        property var onDown: current.onDown
+        property var onLeft: current.onLeft
+        property var onRight: current.onRight
+        property var onPrevious: current.onPrevious
+        property var onNext: current.onNext
+        property var onFirst: current.onFirst
+        property var onLast: current.onLast
+        property var onDetails: current.onDetails
+        property var onSort: current.onSort
+        property var onCancel: current.onCancel
+        property var onAccept: current.onAccept
     //--
 
-    height: { //height
-        let h = 0
-        for (var i = 0; i < children.length; i++) {
-            h = children[i].height > h ? children[i].height : h
-        }
-        return h;
-    }
-
-    width: { //width
-        let sum = 0
-        for (var i = 0; i < children.length; i++) {
-            sum += children[i].width + children[i].anchors.rightMargin
-        }
-        return sum;
-    }
+    height: childrenSize(this, "height", "", 0, 0, true)
+    width: childrenSize(this, "width", "rightMargin")
 
     RadioItem { //header_settings_size_small
         id: header_settings_size_small

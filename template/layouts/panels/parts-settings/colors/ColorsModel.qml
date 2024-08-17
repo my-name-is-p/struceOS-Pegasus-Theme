@@ -17,7 +17,6 @@ ListModel {
                 append(createListElement(key, settings.theme[key]))
             }
         }
-        resetFocus()
     }
     
     function createListElement(key, value) {

@@ -26,21 +26,8 @@ Item { //overlay_style_radio
         property var onAccept: current.onAccept != undefined ? current.onAccept : undefined
     //--
     
-    height: { //height
-        let h = 0
-        for (var i = 0; i < children.length; i++) {
-            h = children[i].height > h ? children[i].height : h
-        }
-        return h;
-    }
-
-    width: { //width
-        let sum = 0
-        for (var i = 0; i < children.length; i++) {
-            sum += children[i].width + children[i].anchors.rightMargin
-        }
-        return sum;
-    }
+    height: childrenSize(this, "height", "", 0, 0, true)
+    width: childrenSize(this, "width", "rightMargin")
 
     RadioItem { //overlay_style_0001
         id: overlay_style_0001
