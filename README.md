@@ -34,7 +34,6 @@ If you have any issues, please open a ticket or let me know on [discord](https:/
 # To come in future updates
 1. Add genre filters
 
-
 <a id="meta-data"></a>
 # Metadata Generation and Asset Scraping
 I recommend using [muldjord's skyscraper](https://github.com/muldjord/skyscraper) for metadata generation. Simply follow the directions for your installation type. Example commands below (tested in PowerShell on Windows 11):
