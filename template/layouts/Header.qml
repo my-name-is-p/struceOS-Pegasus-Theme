@@ -140,9 +140,8 @@ Item { //header
 
         //Functions--
             function onAccept(){
-                if(header.current != search_bar)
-                    resetFocus(header)
                 header.current = search_bar
+                resetFocus(header)
             }
             onClicked: onAccept
 

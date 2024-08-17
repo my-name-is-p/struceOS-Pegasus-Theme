@@ -398,12 +398,9 @@ FocusScope {
                             resetFocus()
                         break
                     case "cancel":
-                        s = audio.toggle_down
                         if(f.onCancel){
                             f.onCancel()
                             event.accepted = true
-                        }else{
-                            log("THEME CANCEL")
                         }
                         break
                     case "accept":

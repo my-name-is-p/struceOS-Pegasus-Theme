@@ -288,9 +288,7 @@ Component {
                 }
 
                 onClicked: {
-                    f = header
-                    f = game_layout
-                    header.current = header.collection
+                    resetFocus()
                     games.currentIndex = index
                     audio.stopAll()
                     audio.select.play()

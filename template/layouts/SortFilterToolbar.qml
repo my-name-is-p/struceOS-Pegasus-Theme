@@ -53,7 +53,6 @@ Item { //sortfilt_toolbar_wrapper
                     games.currentIndex = 0
                     resetFocus()
                 }
-                property var onCancel: onDown
 
                 function onUp(){
                     header.current = header.collection
