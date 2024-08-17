@@ -221,7 +221,7 @@ function logFocus(){
     log("images: " + images.focus)
     log("background: " + background.focus)
     log("header: " + header.focus)
-    log("collections_menu: " + collections_menu.focus)
+    log("collection_menu: " + collection_menu.focus)
     log("panel_area: " + panel_area.focus)
     log("sortfilt_toolbar: " + sortfilt_toolbar.focus)
     log("sortfilt_menu: " + sortfilt_menu.focus)

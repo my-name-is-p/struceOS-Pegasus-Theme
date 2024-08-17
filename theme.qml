@@ -424,7 +424,7 @@ FocusScope {
                 } else {
                     currentCollectionIndex = settings.allGames ? key - 2 : key - 1
                 }
-                collections_menu.positionViewAtCurrentIndex()
+                collection_menu.positionViewAtCurrentIndex()
                 s = audio.toggle_down
             }
         }

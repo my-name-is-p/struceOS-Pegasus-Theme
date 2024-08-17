@@ -110,6 +110,5 @@ Item {
 
         font.family: regular.name
         font.pixelSize: vpx(12)
-
     }
 }

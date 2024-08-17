@@ -220,7 +220,6 @@ Rectangle { //sortfilt_menu
         }
     }
 
-
     Keys.onPressed: {
         s = s != null ? s : audio.toggle_down
     }

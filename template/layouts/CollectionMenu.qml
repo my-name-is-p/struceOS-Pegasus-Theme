@@ -6,7 +6,7 @@ import QtGraphicalEffects 1.15
 import "parts/collections"
 
 Rectangle {
-    id: collections_menu
+    id: collection_menu
     height: vpx(120)
     color: addAlphaToHex(0.85, colors.accent)
     property bool opened: focus
@@ -63,7 +63,7 @@ Rectangle {
         id: collections_list_scroll
         anchors.fill: collections_list
 
-        enabled: collections_menu.focus
+        enabled: collection_menu.focus
 
         onWheel: {
             if(wheel.angleDelta.y < 0){

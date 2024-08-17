@@ -75,7 +75,7 @@ Component { //collectionView_list_item
             anchors.fill: parent
             anchors.margins: vpx(-6)
 
-            property bool selected: (collections_list.currentItem == parent && f === collections_menu) || hover
+            property bool selected: (collections_list.currentItem == parent && f === collection_menu) || hover
 
             color: colors.t
 
@@ -89,9 +89,9 @@ Component { //collectionView_list_item
                 id: collectionTitle_click
                 anchors.fill: parent
                 hoverEnabled: true
-                cursorShape: f != collections_menu ? Qt.ArrowCursor : Qt.PointingHandCursor
+                cursorShape: f != collection_menu ? Qt.ArrowCursor : Qt.PointingHandCursor
 
-                enabled: collections_menu.focus
+                enabled: collection_menu.focus
 
                 onEntered: {
                     parent.hover = true
@@ -104,7 +104,7 @@ Component { //collectionView_list_item
                 onClicked: {
                     games.currentIndex = 0
                     currentCollectionIndex = settings.allGames ? index - 1 : index
-                    collections_menu.positionViewAtCurrentIndex()
+                    collection_menu.positionViewAtCurrentIndex()
                     background.refresh()
                     audio.stopAll()
                     audio.toggle_down.play()

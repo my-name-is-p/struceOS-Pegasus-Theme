@@ -324,9 +324,6 @@ Component {
                         return 0
                 }
             }
-            
-            // thumb_bg.status != Image.Ready || (logo.status != Image.Ready && logo.source != "") ? 0.8 : 0
-            
         }
     }
 }
