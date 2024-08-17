@@ -74,7 +74,7 @@ Item {
 
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.5.1"
+    property string version: "1.5.2"
     property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")

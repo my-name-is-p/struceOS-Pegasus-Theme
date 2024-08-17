@@ -27,10 +27,8 @@ A simple theme for easy navigation.
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
 <a id="current-version"></a>
-# Version 1.5.1 Updates
-1. Added button hints
-2. Added color options to settings
-3. Updated icons to change with color settings
+# Version 1.5.2 Updates
+1. Code cleanup and refactoring
 
 <a id="to-come"></a>
 # To come in future updates
@@ -195,7 +193,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
 
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.5.1"
+    property string version: "1.5.2"
     property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
@@ -231,7 +229,7 @@ Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [Pl
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.5.1.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.5.2.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
@@ -239,7 +237,14 @@ Download struceOS-Pegasus-Theme-1.5.1.zip from [last releases](https://github.co
 <details>
     <summary>Changelogs</summary>
 
+## 1.5.2
+
+```
+1. Code cleanup and refactoring
+```
+
 ## 1.5.1
+
 ```
 1. Added button hints
 2. Added color options to settings
