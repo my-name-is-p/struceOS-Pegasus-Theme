@@ -27,7 +27,7 @@ A simple theme for easy navigation.
 - customizable settings
 - info panel with video player
 - search
-- onscreen keyboard
+- onscreen keyboard (turn on under Settings > Tools > General)
 - sort and filter
 - screensaver
 
