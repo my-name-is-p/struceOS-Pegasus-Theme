@@ -26,7 +26,7 @@ Rectangle {
         opacity: 1
         Behavior on opacity {NumberAnimation {duration: 1000}}
 
-        Image {
+        Image { //image
             id: image
             source: getAssets(currentGame.assets).bg
 
@@ -69,14 +69,14 @@ Rectangle {
             }
         }
 
-        Image {
+        Image { //logo
             id: logo
             source: getAssets(currentGame.assets).logo
 
             anchors.top: image_wrapper.top
             anchors.left: image_wrapper.left
-
             anchors.margins: vpx(48)
+
             height: vpx(200)
             width: vpx(400)
 
@@ -89,6 +89,19 @@ Rectangle {
             antialiasing: true
 
             visible: false
+
+            function resetPosition(){
+                anchors.top = undefined
+                anchors.bottom = undefined
+                anchors.left = undefined
+                anchors.right = undefined
+
+                let verticalMargin = Math.random() < 0.5 ? "top" : "bottom"
+                let horizontalMargin = Math.random() < 0.5 ? "left" : "right"
+
+                anchors[verticalMargin] = parent[verticalMargin]
+                anchors[horizontalMargin] = parent[horizontalMargin]
+            }
         }
 
         DropShadow { //logo_shadow
@@ -109,14 +122,19 @@ Rectangle {
             interval: 1000
             onTriggered: {
                 let r = Math.floor(Math.random() * api.allGames.count)
+
                 image.source = getAssets(api.allGames.get(r).assets).bg
+
                 while(image.source === "default"){
                     r = Math.floor(Math.random() * api.allGames.count)
                     image.source = getAssets(api.allGames.get(r).assets).bg
                 }
+
                 logo.source = getAssets(api.allGames.get(r).assets).logo
-                image_wrapper.opacity = 1
+
                 image.resetOffset()
+                logo.resetPosition()
+                image_wrapper.opacity = 1
             }
         }
 
