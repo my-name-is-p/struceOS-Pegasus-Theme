@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.15
 
 
 import "parts-settings"
-import "../../widgets"
+import "../../../widgets"
 
 Item {
     id: panel
@@ -57,6 +57,8 @@ Item {
                     c[i].reset()
             }
         }
+
+        Component.onCompleted: reset
     //--
 
     Item { //header_buttons
@@ -106,7 +108,6 @@ Item {
             anchors.left: parent.left
 
             height: vpx(48)
-
             width: childrenSize(this, "width", "leftMargin")
 
             property bool selected: false
@@ -236,6 +237,7 @@ Item {
                         anchors.fill: parent
 
                         onClicked: {
+                            panel.reset()
                             page_list.current = page_list_layout
                             pages.current = layout_settings
                             audio.stopAll()
@@ -272,6 +274,7 @@ Item {
                         anchors.fill: parent
 
                         onClicked: {
+                            panel.reset()
                             page_list.current = page_list_colors
                             pages.current = color_settings
                             audio.stopAll()
@@ -294,8 +297,8 @@ Item {
                     font.pixelSize: vpx(20)
 
                     function onNext(){
-                        page_list.current = page_list_devtools
-                        pages.current = devtools_settings
+                        page_list.current = page_list_tools
+                        pages.current = tools_settings
                     }
 
                     function onPrevious(){
@@ -308,6 +311,7 @@ Item {
                         anchors.fill: parent
 
                         onClicked: {
+                            panel.reset()
                             page_list.current = page_list_audio
                             pages.current = audio_settings
                             audio.stopAll()
@@ -316,12 +320,12 @@ Item {
                     }
                 }
 
-                Text { //page_list_devtools
-                    id: page_list_devtools
+                Text { //page_list_tools
+                    id: page_list_tools
                     anchors.verticalCenter: page_list.verticalCenter
                     anchors.left: page_list_audio.right
                     anchors.leftMargin: vpx(12)
-                    text: "devtools"
+                    text: "tools"
                     color: colors.white
 
                     font.family: bold.name
@@ -342,8 +346,9 @@ Item {
                         anchors.fill: parent
 
                         onClicked: {
-                            page_list.current = page_list_devtools
-                            pages.current = devtools_settings
+                            panel.reset()
+                            page_list.current = page_list_tools
+                            pages.current = tools_settings
                             audio.stopAll()
                             audio.toggle_down.play()
                         }
@@ -432,7 +437,13 @@ Item {
 
 
             //Functions--
-                property var onUp: current.onUp
+                function onUp(){
+                    if(current.onUp)
+                        current.onUp()
+                    else
+                        panel.current = close
+                }
+
                 property var onDown: current.onDown
                 property var onLeft: current.onLeft
                 property var onRight: current.onRight
@@ -449,65 +460,37 @@ Item {
             LayoutSettings { //clean
                 id: layout_settings
 
-                anchors.fill: parent
+                anchors.fill: pages
 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
-
-                onUp: function(){
-                    if(current.onUp)
-                        current.onUp()
-                    else
-                        panel.current = close
-                }
             }
 
             ColorSettings { //clean
                 id: color_settings
 
-                anchors.fill: parent
+                anchors.fill: pages
                 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
-
-                onUp: function(){
-                    if(current.onUp)
-                        current.onUp()
-                    else
-                        panel.current = close
-                }
             }
 
             AudioSettings { //clean
                 id: audio_settings
 
-                anchors.fill: parent
+                anchors.fill: pages
                 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
-
-                onUp: function(){
-                    if(current.onUp)
-                        current.onUp()
-                    else
-                        panel.current = close
-                }
             }
 
-            DevtoolsSettings { //clean
-                id: devtools_settings
+            ToolsSettings { //clean
+                id: tools_settings
 
-                anchors.fill: parent
+                anchors.fill: pages
 
                 selected: pages.selected && pages.current === this
                 visible: pages.current === this
-
-                onUp: function(){
-                    if(current.onUp)
-                        current.onUp()
-                    else
-                        panel.current = close
-                }
             }
         }
     }

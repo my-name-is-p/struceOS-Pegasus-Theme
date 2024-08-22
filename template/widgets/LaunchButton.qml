@@ -82,7 +82,12 @@ Rectangle { //launch
         anchors.fill: parent
 
         cursorShape: Qt.PointingHandCursor
+
         hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
 
         onEntered: {
             parent.onEntered()

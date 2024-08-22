@@ -3,7 +3,7 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
-import "../../../widgets"
+import "../../../../widgets"
 
 Item {
     id: page
@@ -79,7 +79,7 @@ Item {
 
             //Functions--
                 function onDown(){
-                    page.current = devtools_settings_opacity_slider
+                    page.current = general_tools_settings_osk
                 }
                 selected: page.selected && page.current === this
 
@@ -90,10 +90,61 @@ Item {
         }
     }
 
+    Item { //general_tools_settings
+        id: general_tools_settings
+
+        anchors.top: theme_info.bottom
+        anchors.left: page.left
+        anchors.right: page.right
+        anchors.margins: vpx(12)
+
+        height: childrenSize(this, "height", "topMargin")
+
+        Text { //general_tools_settings_title
+            id: general_tools_settings_title
+            text: "General"
+
+            anchors.top: general_tools_settings.top
+            
+            color: colors.text
+
+            font.family: bold.name
+            font.bold: true
+            font.pixelSize: vpx(24)
+        }
+
+        ToggleBox { //general_tools_settings_osk
+            id: general_tools_settings_osk
+            text: "onscreen keyboard"
+
+            anchors.top: general_tools_settings_title.bottom
+            anchors.topMargin: vpx(12)
+
+            selected: page.selected && page.current === this
+            value: settings.osk
+
+            //Functions--
+                onClicked: function(){
+                    settings.osk = !value
+                    api.memory.set("struceOS_ui_osk", settings.osk)
+                }
+                property var onAccept: onClicked
+
+                function onUp(){
+                    page.current = theme_info_donation_link
+                }
+
+                function onDown(){
+                    page.current = devtools_settings_opacity_slider
+                }
+            //--
+        }
+    }
+
     Item { //devtools_settings
         id: devtools_settings
 
-        anchors.top: theme_info.bottom
+        anchors.top: general_tools_settings.bottom
         anchors.left: page.left
         anchors.right: page.right
         anchors.margins: vpx(12)
@@ -154,7 +205,7 @@ Item {
                         if(current.onUp)
                             current.onUp()
                         else
-                            page.current = theme_info_donation_link
+                            page.current = general_tools_settings_osk
                     }
 
                     function onDown(){

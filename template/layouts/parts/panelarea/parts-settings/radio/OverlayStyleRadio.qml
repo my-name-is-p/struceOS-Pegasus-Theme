@@ -2,7 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
-import "../../../../widgets"
+import "../../../../../widgets"
 
 Item { //overlay_style_radio
     id: overlay_style_radio

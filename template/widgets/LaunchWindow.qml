@@ -4,15 +4,13 @@
 import QtQuick 2.15
 import "../widgets"
 
-Item {
+Rectangle {
     id: launcher
 
-    Rectangle {
-        anchors.fill: parent
+    color: addAlphaToHex(0.95, colors.black)
 
-        color: addAlphaToHex(0.95, colors.black)
-    }
-
+    visible: false
+    
     Item {
         id: launch_info
 

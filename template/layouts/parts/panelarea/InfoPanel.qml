@@ -6,7 +6,7 @@ import QtMultimedia 5.9
 import QtGraphicalEffects 1.15
 
 import "parts-info"
-import "../../widgets"
+import "../../../widgets"
 
 Item {
     id: panel
@@ -106,7 +106,7 @@ Item {
 
         function onSort(){
             currentGame.favorite = !currentGame.favorite
-            search.populateModel()
+            search.model.clear()
         }
 
         property var onCancel: current != panel && current.onCancel ? current.onCancel : closePanel
@@ -155,7 +155,7 @@ Item {
 
             onClicked: function(){
                 currentGame.favorite = !currentGame.favorite
-                search.populateModel()
+                search.model.clear()
             }
 
             function onAccept(){

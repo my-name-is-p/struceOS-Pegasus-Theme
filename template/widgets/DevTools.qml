@@ -6,21 +6,17 @@ import QtQuick 2.15
 Item { //devtools
     id: devtools
 
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.right: parent.right
+    width: height / 2
 
-    width: parent.width / 3
-
-    visible: settings.enableDevTools
+    visible: false
 
     Rectangle { //log_window
         id: log_window
 
-        anchors.top: parent.top
+        anchors.top: devtools.top
         anchors.bottom: button.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.left: devtools.left
+        anchors.right: devtools.right
         anchors.margins: vpx(12)
 
         color: addAlphaToHex(settings.consoleLogBackground, colors.black)
@@ -38,9 +34,10 @@ Item { //devtools
             TextEdit{ //log_text
                 id: log_text
 
+                anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.bottom: parent.bottom
+
                 readOnly: true
                 selectByMouse: true
 
@@ -50,46 +47,6 @@ Item { //devtools
                 selectedTextColor: colors.black
 
                 wrapMode: TextEdit.WordWrap
-
-                Keys.onPressed: { //Keys
-                    let key = gsk(event)
-                    if(key != undefined){
-                        switch (key){
-                            case "up":
-                            case "down":
-                            case "left":
-                            case "right":
-                            case "prev":
-                            case "next":
-                            case "first":
-                            case "last":
-                            case "cancel":
-                            case "accept":
-                                f = header
-                                f = game_layout
-                                event.accepted = true
-                                break
-                            case "details":
-                                f = panel_area
-                                panel_area.current = panel_area.info_panel
-                                panel_area.info_panel.video.safePlay()
-                                event.accepted = true
-                                break
-                            case "filter":
-                                f = sortfilt_menu
-                                event.accepted = true
-                                break
-                            default:
-                                break
-                        }
-                        s = s != null ? s : audio.toggle_down
-                        if(s != null){
-                            audio.stopAll()
-                            s.play()
-                        }
-                        s = null
-                    }
-                }
             }
         }
     }
@@ -97,8 +54,8 @@ Item { //devtools
     Rectangle { //button
         id: button
 
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        anchors.bottom: devtools.bottom
+        anchors.right: devtools.right
         anchors.margins: vpx(24)
 
         height: vpx(48)
@@ -114,11 +71,18 @@ Item { //devtools
 
         MouseArea { //button_click
             id: button_click
+
             enabled: true
-            anchors.fill: parent
+
+            anchors.fill: button
+
             hoverEnabled: true
 
             cursorShape: Qt.PointingHandCursor
+
+            onPositionChanged: {
+                screensaver.reset()
+            }
 
             onEntered: {
                 button.hovered = true
@@ -132,7 +96,7 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
-                log(video.duration)
+                log(f)
             }
 
             onDoubleClicked: {
@@ -148,15 +112,14 @@ Item { //devtools
         id: clear_mem
 
         anchors.verticalCenter: button.verticalCenter
-        anchors.left: parent.left
+        anchors.left: devtools.left
         anchors.margins: vpx(24)
 
         height: clear_mem_text.height + vpx(12)
         width: clear_mem_text.width + vpx(12)
 
-        radius: vpx(6)
-
         color: hovered ? colors.launch_button : colors.launch_hover
+        radius: vpx(6)
 
         visible: true
 
@@ -164,19 +127,25 @@ Item { //devtools
 
         Text { //clear_mem_text
             id: clear_mem_text
-            anchors.centerIn: parent
             text: "clear memory"
+
+            anchors.centerIn: clear_mem
 
             color: clear_mem.hovered ? colors.white : colors.black
         }
 
         MouseArea { //clear_mem_click
             id: clear_mem_click
-            enabled: true
-            anchors.fill: parent
+            
+            anchors.fill: clear_mem
+
             hoverEnabled: true
 
             cursorShape: Qt.PointingHandCursor
+
+            onPositionChanged: {
+                screensaver.reset()
+            }
 
             onEntered: {
                 clear_mem.hovered = true
@@ -206,16 +175,16 @@ Item { //devtools
     Rectangle { //clear_log
         id: clear_log
 
-        anchors.verticalCenter: button.verticalCenter
         anchors.left: clear_mem.right
         anchors.margins: vpx(24)
+        anchors.verticalCenter: button.verticalCenter
 
         height: clear_log_text.height + vpx(12)
         width: clear_log_text.width + vpx(12)
 
-        radius: vpx(6)
 
         color: hovered ? colors.launch_button : colors.launch_hover
+        radius: vpx(6)
 
         visible: true
 
@@ -223,19 +192,25 @@ Item { //devtools
 
         Text { //clear_log_text
             id: clear_log_text
-            anchors.centerIn: parent
             text: "clear log"
+            
+            anchors.centerIn: parent
 
             color: clear_log.hovered ? colors.white : colors.black
         }
 
         MouseArea { //clear_log_click
             id: clear_log_click
-            enabled: true
+
             anchors.fill: parent
+            
             hoverEnabled: true
 
             cursorShape: Qt.PointingHandCursor
+
+            onPositionChanged: {
+                screensaver.reset()
+            }
 
             onEntered: {
                 clear_log.hovered = true

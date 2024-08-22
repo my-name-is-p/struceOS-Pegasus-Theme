@@ -90,19 +90,26 @@ Item { //header
         anchors.left: collection.right
         anchors.right: search_button.left
 
-        selected: f === header && header.current === this
+        selected: (f === header || (osk.visible && osk.last_focus === this)) && header.current === this
 
         //--Functions
             onClicked: function(){
                 resetFocus(header)
                 header.current = search_bar
+                if(settings.osk){
+                    osk.open(search_term, search_bar)
+                }
                 audio.stopAll()
                 audio.toggle_down.play()
             }
 
             function onAccept(){
-                games.currentIndex = 0
-                resetFocus()
+                if(settings.osk && !osk.visible){
+                    osk.open(search_term, search_bar)
+                }else{
+                    games.currentIndex = 0
+                    resetFocus()
+                }
             }
 
             function onLeft(){
@@ -142,6 +149,9 @@ Item { //header
             function onAccept(){
                 header.current = search_bar
                 resetFocus(header)
+                if(settings.osk){
+                    osk.open(search_term, search_bar)
+                }
             }
             onClicked: onAccept
 
@@ -279,14 +289,14 @@ Item { //header
         //--
     }
 
-    Keys.onPressed: { //Keys
+    Keys.onPressed: { 
+        if(event.key === 1048576 && event.isAutoRepeat)
+            return
         s = s != null ? s : audio.toggle_down
     }
 
+    property SearchBar search_bar: search_bar
     property TextInput search_term: search_bar.search_term
     property Item search_button: search_button
     property Item collection: collection
 }
-
-
-

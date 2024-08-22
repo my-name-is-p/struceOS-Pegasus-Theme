@@ -4,7 +4,6 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
-
 Component {
     id: color_option_component
 
@@ -36,7 +35,12 @@ Component {
         }
 
         function onAccept(){
-            value.forceActiveFocus()
+            if(settings.osk){
+                osk.validate_hex = true
+                osk.open(value, panel_area)
+            }else{
+                value.forceActiveFocus()
+            }
         }
 
 
@@ -89,28 +93,40 @@ Component {
                     color: colors.text_invert
 
                     onEditingFinished: {
-                        while(!validateHex(text))
-                            undo()
-                        if(text.indexOf("#") < 0){
-                            text = "#" + text
+                        if(!settings.osk){
+                            while(!validateHex(text))
+                                undo()
+                            if(text.indexOf("#") < 0){
+                                text = "#" + text
+                            }
                         }
                         settings.theme[color_name] = text
                         colors[color_name] = text
                         api.memory.set("struceOS_theme_colors", settings.theme)
                         swatch.color = text
+                        colors_loader.sourceComponent = undefined
+                        colors_loader.sourceComponent = colors_component
                     }
 
                     Keys.onPressed: {
+                        if(event.key === 1048576 && event.isAutoRepeat)
+                            return
+                        s = audio.toggle_down
                         let key = isNaN(parseInt(event.text)) ? gsk(event) : "number"
                         if(isNaN(key)){
                             if(key != undefined){
                                 switch(key){
                                     case "up":
-                                        cursorPosition = 0
-                                        event.accepted = true
+                                        if(event. key!= Qt.Key_W){
+                                            cursorPosition = 0
+                                            event.accepted = true
+                                        }
                                         break
                                     case "down":
-                                        event.accepted = true
+                                        if(event.key != Qt.Key_S){
+                                            cursorPosition = length
+                                            event.accepted = true
+                                        }
                                         break
                                     case "accept":
                                         focus = false
@@ -128,7 +144,6 @@ Component {
                                     default:
                                         break
                                 }
-                                s = s != null ? s : audio.toggle_down
                             }
                         }else{
                         }
@@ -165,6 +180,10 @@ Component {
 
             hoverEnabled: true
 
+            onPositionChanged: {
+                screensaver.reset()
+            }
+
             onEntered: {
                 parent.hovered = true
             }
@@ -174,7 +193,12 @@ Component {
             }
 
             onClicked: {
-                value.forceActiveFocus()
+                if(settings.osk){
+                    osk.validate_hex = true
+                    osk.open(value, panel_area)
+                }else{
+                    value.forceActiveFocus()
+                }
                 audio.stopAll()
                 audio.select.play()
             }

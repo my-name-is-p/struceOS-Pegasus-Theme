@@ -71,6 +71,10 @@ Item { //clock_container
 
         hoverEnabled: true
 
+        onPositionChanged: {
+            screensaver.reset()
+        }
+
         onClicked: {
             clock_container.onClicked()
             audio.stopAll()

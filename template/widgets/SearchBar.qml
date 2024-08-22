@@ -51,6 +51,8 @@ Item {  //search_bar
             clip: true
 
             Keys.onPressed: {
+                if(event.key === 1048576 && event.isAutoRepeat)
+                    return
                 s = audio.select
                 audio.stopAll()
                 s.play()

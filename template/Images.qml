@@ -53,6 +53,18 @@ Item {
 
     //--General UI
         Image {
+            id: arrow_l_filled
+            source: "../assets/img/ui-icons/general/arrow_l_filled.svg"
+        }
+        property string arrow_l_filled: arrow_l_filled.source
+
+        Image {
+            id: arrow_r_filled
+            source: "../assets/img/ui-icons/general/arrow_r_filled.svg"
+        }
+        property string arrow_r_filled: arrow_r_filled.source
+
+        Image {
             id: cross
             source: "../assets/img/ui-icons/general/cross.svg"
         }    
@@ -275,6 +287,12 @@ Item {
             source: "../assets/img/ui-icons/controller/RB.svg"
         }    
         property string rightBumper: rightBumper.source
+
+        Image {
+            id: start
+            source: "../assets/img/ui-icons/controller/start.svg"
+        }    
+        property string start: start.source
     //--
 
     //--Keyboard UI
@@ -343,7 +361,5 @@ Item {
             source: "../assets/img/ui-icons/keyboard/key_enter.svg"
         }    
         property string key_enter: key_enter.source
-        
     //--
-
 }

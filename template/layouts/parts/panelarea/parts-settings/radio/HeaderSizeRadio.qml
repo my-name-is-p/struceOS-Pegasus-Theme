@@ -2,7 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
-import "../../../../widgets"
+import "../../../../../widgets"
 
 Item { //header_settings_size_radio
     id: header_settings_size_radio

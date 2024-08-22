@@ -19,6 +19,11 @@
 // for easy to read code
 
 // Changelogs
+// #1.5.3
+//      1. Code cleanup and refactoring
+//      2. Added screensaver
+//      3. Added onscreen keyboard
+
 // #1.5.2
 //      1. Code cleanup and refactoring
 
@@ -99,9 +104,12 @@
 import QtQuick 2.15
 import QtMultimedia 5.9
 
+
 import "template"
 import "template/layouts"
 import "template/widgets"
+
+import "template/layouts/parts/collections"
 
 import "utils.js" as U
 
@@ -124,10 +132,8 @@ FocusScope {
     }
     property GridView games: game_layout.games
     property var currentGame: search.currentGame(games.currentIndex)
-    // property bool allGames: settings.allGames
 
     property string bg: getAssets(currentGame.assets).bg
-    property string bgOverlay: images.overlay_0002    
     property var s: null
 
     property Item f: game_layout
@@ -159,29 +165,41 @@ FocusScope {
         property var clearMemory: U.clearMemory
         //checkSettings
         property var checkSettings: U.checkSettings
+        //logKeys
+        property var logKeys: U.logKeys
     //--
 
    	FontLoader { id: regular; source: settings.fontFamilyRegular }
    	FontLoader { id: bold; source: settings.fontFamilyBold }
 
-    Search { //clean
+    MouseArea {
+        id: mouse_track
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
+    }
+
+    Search {
         id: search
     }
 
-    Audio { //clean
+    Audio {
         id: audio
     }
 
-    Images { //clean
+    Images {
         id: images
     }
 
-    Background { //clean
+    Background {
         id: background
         fade_time: 200
     }
     
-    Header { //clean
+    Header {
         id: header
 
         anchors.top: parent.top
@@ -192,27 +210,27 @@ FocusScope {
     }
     property TextInput search_term: header.search_term
 
-    Rectangle{ //dropdown //clean
+    Rectangle{ //dropdown
         id: dropdown
 
         anchors.top: header.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-        color: colors.accent
+        color: addAlphaToHex(0.95, colors.accent)
 
         clip: true
 
         height: {
             for(const [key, child] of Object.entries(children)){
-                if(f === child)
+                if(f === child || (osk.visible && osk.last_focus === child))
                     return child.height
             }
             return 0
         }
         Behavior on height {NumberAnimation {duration: settings.hover_speed}}
 
-        PanelArea { //clean
+        PanelArea {
             id: panel_area
 
             anchors.bottom: parent.bottom
@@ -220,11 +238,11 @@ FocusScope {
             anchors.left: parent.left
 
             focus: f === this
-            visible: f === this
+            visible: (f === this || (osk.visible && osk.last_focus === this))
         }
         property Video video: panel_area.video
 
-        CollectionMenu { //clean
+        CollectionMenu {
             id: collection_menu
 
             anchors.top: parent.top
@@ -251,7 +269,7 @@ FocusScope {
         focus: f === this
     }
 
-    SortFilterToolbar{ //clean
+    SortFilterToolbar{
         id: sortfilt_toolbar
 
         anchors.top: dropdown.bottom
@@ -273,11 +291,11 @@ FocusScope {
         focus: f === this
     }
 
-    ButtonHints { //clean
+    ButtonHints {
         id: button_hints
 
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: settings.buttonHints ? 0 : -(parent.height - parent.height * 0.95)
+        anchors.bottomMargin: settings.buttonHints ? 0 : -height
         Behavior on anchors.bottomMargin {NumberAnimation{duration: 125}}
         
         anchors.left: sortfilt_menu.right
@@ -287,31 +305,57 @@ FocusScope {
         Behavior on opacity {NumberAnimation{duration: 125}}
     }
 
-    LaunchWindow { //clean
+    LaunchWindow {
         id:launch_window
 
         anchors.fill: parent
-
-        visible: false
     }
+
+    OnscreenKeyboard{
+        id: osk
+
+        anchors.fill: parent
+
+        focus: f === this
+    }
+
+    ScreenSaver {
+        id: screensaver
+
+        anchors.fill: parent
+
+        timeout: 30
+    }
+
 
     DevTools{
         id: devtools
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+
+        visible: settings.enableDevTools
     }
 
     Component.onCompleted: {
         currentCollectionIndex = api.memory.get("collectionIndex") || 0
         games.currentIndex = api.memory.get("gameIndex") || 0
+
         if(currentCollectionIndex < 0 && !settings.allGames){
             currentCollectionIndex = 0
             games.currentIndex = 0
         }
+
         bg = getAssets(currentGame.assets).bg
 
         if(settings.enableDevTools)
             log(settings.details)
 
+        games.positionViewAtIndex(games.currentIndex, GridView.End)
         resetFocus(game_layout)
+        screensaver.reset()
+
         audio.stopAll()
         audio.home.play()
     }
@@ -339,6 +383,7 @@ FocusScope {
     property Item colors: colors_loader.item
 
     Keys.onPressed: { //Keys
+        screensaver.reset()
         let key = gsk(event)
         if(isNaN(key)){
             if(key != undefined){
@@ -360,16 +405,20 @@ FocusScope {
                             f.onRight()
                         break
                     case "prev":
-                        if(f.onPrevious)
+                        if(f.onPrevious){
                             f.onPrevious()
-                        else
+                        }else{
+                            s = audio.toggle_down
                             collectionPrevious()
+                        }
                         break
                     case "next":
-                        if(f.onNext)
+                        if(f.onNext){
                             f.onNext()
-                        else
+                        }else{
+                            s = audio.toggle_down
                             collectionNext()
+                        }
                         break
                     case "first":
                         if(f.onFirst)
@@ -392,10 +441,14 @@ FocusScope {
                         break
                     case "sort":
                         s = audio.toggle_down
-                        if(f != sortfilt_menu)
-                            resetFocus(sortfilt_menu)
-                        else
-                            resetFocus()
+                        if(f.onSort){
+                            f.onSort()
+                        }else{
+                            if(f != sortfilt_menu)
+                                resetFocus(sortfilt_menu)
+                            else
+                                resetFocus()
+                        }
                         break
                     case "cancel":
                         if(f.onCancel){
@@ -404,10 +457,16 @@ FocusScope {
                         }
                         break
                     case "accept":
-                        if(f.onAccept)
-                            f.onAccept()
-                        else
-                            launchGame()
+                        if(f.onAccept){
+                            if(f === osk)
+                                f.onAccept()
+                            else
+                                if(!event.isAutoRepeat)
+                                    f.onAccept()
+                        }else{
+                            if(!event.isAutoRepeat)
+                                launchGame()
+                        }
                         break
                     default:
                         break

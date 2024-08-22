@@ -2,8 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
-import "parts/buttonhints-displays"
+import "parts/buttonhints"
 
 Rectangle {
     id: button_hints
@@ -36,8 +35,8 @@ Rectangle {
 
         PrevNext {
             id: prevnext
-            text: f.current === panel_area.info_panel ? "- game +" : 
-                        f.current === panel_area.settings_panel ? 
+            text: f === panel_area && panel_area.current === panel_area.info_panel ? "- game +" : 
+                        f === panel_area && panel_area.current === panel_area.settings_panel ? 
                             "- page +" : "- collection +"
 
             anchors.left: accept.right
@@ -46,7 +45,7 @@ Rectangle {
 
         SortFilt {
             id: sortfilt
-            text: f.current === panel_area.info_panel ? 
+            text: f === panel_area && f.current === panel_area.info_panel ? 
                         currentGame.favorite ?
                             "unfavorite" : "favorite":
                     f === sortfilt_menu ? "close sort / filter" : "sort / filter"
@@ -57,7 +56,7 @@ Rectangle {
 
         Details {
             id: details
-            text: f.current === panel_area.info_panel ? "close details" : "details"
+            text: f === panel_area && panel_area.current === panel_area.info_panel ? "close details" : "details"
 
             anchors.left: sortfilt.right
             anchors.leftMargin: hints.margins

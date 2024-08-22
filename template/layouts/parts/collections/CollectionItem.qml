@@ -87,11 +87,18 @@ Component { //collectionView_list_item
 
             MouseArea {
                 id: collectionTitle_click
+
                 anchors.fill: parent
+
                 hoverEnabled: true
+
                 cursorShape: f != collection_menu ? Qt.ArrowCursor : Qt.PointingHandCursor
 
                 enabled: collection_menu.focus
+
+                onPositionChanged: {
+                    screensaver.reset()
+                }
 
                 onEntered: {
                     parent.hover = true

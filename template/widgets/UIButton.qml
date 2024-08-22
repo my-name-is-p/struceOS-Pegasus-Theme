@@ -100,8 +100,14 @@ Item { //button_wrapper
         id: click
 
         anchors.fill: button_wrapper
+
         cursorShape: Qt.PointingHandCursor
+        
         hoverEnabled: true
+         
+        onPositionChanged: {
+            screensaver.reset()
+        }
          
         onEntered: {
             button_wrapper.onEntered()

@@ -61,8 +61,8 @@ Rectangle { //background
         }
     }
 
-    Image { //background_overlay
-        id: background_overlay
+    Image { //bg_overlay
+        id: bg_overlay
         source: settings.bgOverlay
 
         anchors.fill: parent

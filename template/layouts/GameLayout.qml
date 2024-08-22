@@ -2,7 +2,7 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
-import "parts"
+import "parts/gamelayout"
 
 Item {
     id: game_layout
@@ -41,7 +41,7 @@ Item {
     Item { //games
         id: games
 
-        anchors.fill: parent
+        anchors.fill: game_layout
         anchors.rightMargin: vpx(24)
         anchors.leftMargin: vpx(24)
 
@@ -53,7 +53,7 @@ Item {
             delegate: Thumbnail{}
             model: search.model
 
-            anchors.fill: parent
+            anchors.fill: games
 
             keyNavigationWraps: false
 
@@ -73,7 +73,9 @@ Item {
         }
     }
 
-    Keys.onPressed: { 
+    Keys.onPressed: {
+        if(event.key === 1048576 && event.isAutoRepeat)
+            return
         s = s != null ? s : audio.select
     }
 

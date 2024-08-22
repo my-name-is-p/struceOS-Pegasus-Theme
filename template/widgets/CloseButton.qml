@@ -99,7 +99,12 @@ Item { //button_wrapper
         anchors.fill: button_wrapper
 
         cursorShape: Qt.PointingHandCursor
+
         hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
 
         onEntered: {
             button_wrapper.onEntered()

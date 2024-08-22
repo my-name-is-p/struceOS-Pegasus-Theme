@@ -3,7 +3,7 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
-import "../../widgets"
+import "../../../widgets"
 
 Component {
     Item {
@@ -23,34 +23,35 @@ Component {
         property string name: title
 
 
-        Item {
+        Item { //thumb_padding
             id: thumb_padding
-            anchors.fill: parent
+
+            anchors.fill: thumb
             anchors.margins: vpx(12)
 
             scale: thumb.active ? 1.05 : 1
-
             Behavior on scale {NumberAnimation {duration: thumb.transition_speed}}
 
             Rectangle { //thumb_border
                 id: thumb_border
-                anchors.fill: parent
+
+                anchors.fill: thumb_padding
                 anchors.margins: thumb.active ? vpx(-8) : vpx(0)
+                Behavior on anchors.margins {NumberAnimation {duration: thumb.transition_speed}}
 
                 color: addAlphaToHex(0.4, colors.black)
 
                 radius: vpx(10)
                 border.color: colors.border
                 border.width: thumb.active ? vpx(10) : 0
-
                 Behavior on border.width {NumberAnimation {duration: thumb.transition_speed}}
-                Behavior on anchors.margins {NumberAnimation {duration: thumb.transition_speed}}
             }
-
 
             Rectangle { //mask
                 id: mask
-                anchors.fill: parent
+
+                anchors.fill: thumb_padding
+                
                 radius: vpx(6)
 
                 visible: false
@@ -58,18 +59,19 @@ Component {
 
             Item { //to_mask
                 id: to_mask
-                anchors.fill: parent
+                anchors.fill: thumb_padding
                 visible: false
 
                 Image { //thumb_bg
                     id: thumb_bg
-                    anchors.fill: parent
                     source: {
                         if(!settings.showThumbs)
                             return ""
                         else
                             return getAssets(assets).bg != "default" ? getAssets(assets).bg : images.noImage
                     }
+                    
+                    anchors.fill: to_mask
 
                     asynchronous: true
                     smooth: true
@@ -77,73 +79,74 @@ Component {
                     fillMode: Image.PreserveAspectCrop
 
                     scale: thumb.hovered || thumb.active ? 1 : 1.3
-
                     Behavior on scale {NumberAnimation {duration: thumb.transition_speed * 1.25}}
-
                 }
 
                 GaussianBlur { //thumb_blur
                     id: thumb_blur
-
+                    
                     anchors.fill: thumb_bg
                     source: thumb_bg
 
                     opacity: thumb.hovered || thumb.active ? 0 : 1
+                    Behavior on opacity {NumberAnimation {duration: thumb.transition_speed * 1.25}}
 
                     radius: 8
                     samples: 16
                     scale: thumb.hovered || thumb.active ? 1 : 1.3
-
-                    Behavior on opacity {NumberAnimation {duration: thumb.transition_speed * 1.25}}
                     Behavior on scale {NumberAnimation {duration: thumb.transition_speed * 1.25}}
                 }
 
-                Item { //FAVORITE ICON
+                Item { //favorite_icon
                     id: favorite_icon
 
-                    anchors.right: parent.right
-                    anchors.top: parent.top
+                    anchors.top: thumb_bg.top
+                    anchors.right: thumb_bg.right
                     anchors.margins: vpx(6)
 
                     height: vpx(16)
                     width: vpx(16)
 
-
-                    Image {
+                    Image { //icon
                         id: icon
                         source: images.favorite_icon_filled
-                        anchors.fill: parent
+
+                        anchors.fill: favorite_icon
+
                         fillMode: Image.PreserveAspectFit
                         
                         visible: false
                     }
 
-                    DropShadow {
-                        anchors.fill: parent
+                    DropShadow { //icon_shadow
+                        id: icon_shadow
+                        anchors.fill: favorite_icon
+                        source: icon
+
+                        color: addAlphaToHex(0.4, colors.black)
                         horizontalOffset: 0
                         verticalOffset: 0
                         radius: 8.0
                         samples: 17
-                        color: addAlphaToHex(0.4, colors.black)
-                        source: icon
 
                         visible: favorite
                     }
-
                 }
 
                 Item { //logo_wrapper
                     id: logo_wrapper
 
-                    anchors.fill: parent
+                    anchors.fill: to_mask
                     anchors.margins: vpx(6)
 
                     Image { //logo
                         id: logo
-                        anchors.centerIn: parent
-                        width: parent.width
-                        height: parent.height/1.25
                         source: getAssets(assets).logo != "default" ? getAssets(assets).logo : ""
+
+                        anchors.centerIn: logo_wrapper
+
+                        width: logo_wrapper.width
+                        height: logo_wrapper.height/1.25
 
                         asynchronous: true
                         smooth: true
@@ -153,46 +156,53 @@ Component {
                         visible: false
                     }
 
-                    Rectangle {
-                        width: parent.width
+                    Rectangle { //logo_text_backup
+                        id: logo_text_backup
+                        anchors.centerIn: logo_wrapper
+
+                        width: logo_wrapper.width
                         height: logo_text.height
+
                         color: colors.black
 
                         visible: logo.source == ""
 
-                        anchors.centerIn: parent
-
-                        Text {
+                        Text { //logo_text_backup
                             id: logo_text
                             text: title
                             color: colors.white
 
                             font.family: bold.name
                             font.bold: true
-                            anchors.centerIn: parent
+                            anchors.centerIn: logo_text_backup
                         }
                     }
 
                     DropShadow { //logo_shadow
                         id: logo_shadow
+                        source: logo
 
                         anchors.fill: logo
+
+                        color: colors.black
                         horizontalOffset: 3
                         verticalOffset: 3
                         radius: 8
                         samples: 16
-                        color: colors.black
-                        source: logo
 
                         scale: thumb.hovered || thumb.active ? 1.0 : 0.8
-
                         Behavior on scale {NumberAnimation {duration: thumb.transition_speed * 2}}
                     }
                 }
             }
 
-            OpacityMask {
-                anchors.fill: parent
+            OpacityMask { //thumb_out
+                id: thumb_out
+                anchors.fill: thumb_padding
+
+                source: to_mask
+                maskSource: mask
+
                 opacity: {
                     if(settings.showThumbs){
                         if(logo.source != "")
@@ -204,59 +214,40 @@ Component {
                             return logo.status === Image.Ready ? 1 : 0
                     }
                 }
-                source: to_mask
-                maskSource: mask
-
                 Behavior on opacity {NumberAnimation {duration: f_speed}}
             }
 
-            Rectangle { //last_played
-                id: last_played
+            Rectangle { //sort_info
+                id: sort_info
 
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
+                anchors.bottom: thumb_padding.bottom
+                anchors.right: thumb_padding.right
                 anchors.margins: vpx(6)
 
-                width: last_played_text.width + vpx(6)
-                height: last_played_text.height + vpx(6)
-                color: addAlphaToHex(0.8, colors.black)
+                width: sort_info_text.width + vpx(6)
+                height: sort_info_text.height + vpx(6)
 
+                color: addAlphaToHex(0.8, colors.black)
                 radius: vpx(6)
 
-                visible: sortfilt_menu.last_played.enabled
+                visible: sortfilt_menu.last_played.enabled || sortfilt_menu.play_time.enabled
 
-                Text {
-                    id: last_played_text
-                    text: "last played: " + (lastPlayed.toLocaleDateString(Locale.LongFormat) != "" ? lastPlayed.toLocaleDateString(Locale.LongFormat) : "never")
+                Text { //sort_info_text
+                    id: sort_info_text
+                    text: {
+                        if(sortfilt_menu.last_played.enabled)
+                            return "last played: " + 
+                                (lastPlayed.toLocaleDateString(Locale.LongFormat) != "" ? 
+                                    lastPlayed.toLocaleDateString(Locale.LongFormat) : "never")
+                        if(sortfilt_menu.play_time.enabled)
+                            return "play time: " + getTime(playTime)
+                    }
+
+                    anchors.centerIn: sort_info
+
+                    color: colors.white
                     font.family: regular.name
                     font.pixelSize: vpx(12)
-                    color: colors.white
-                    anchors.centerIn: parent
-                }
-            }
-
-            Rectangle { //play_time
-                id: play_time
-
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                anchors.margins: vpx(6)
-
-                width: play_time_text.width + vpx(6)
-                height: play_time_text.height + vpx(6)
-                color: addAlphaToHex(0.8, colors.black)
-
-                radius: vpx(6)
-
-                visible: sortfilt_menu.play_time.enabled
-
-                Text {
-                    id: play_time_text
-                    text: "play time: " + getTime(playTime)
-                    font.family: regular.name
-                    font.pixelSize: vpx(12)
-                    color: colors.white
-                    anchors.centerIn: parent
 
                     function getTime(t){
                         let h = Math.floor((t / (60 * 60)) % 24)
@@ -270,14 +261,20 @@ Component {
                         return t
                     }
                 }
-
             }
 
             MouseArea { //thumb_mouse
                 id: thumb_mouse
-                anchors.fill: parent
+
+                anchors.fill: thumb_padding
+
                 hoverEnabled: true
+
                 cursorShape: Qt.PointingHandCursor
+
+                onPositionChanged: {
+                    screensaver.reset()
+                }
 
                 onEntered: {
                     thumb.hovered = true
@@ -296,21 +293,17 @@ Component {
                 }
 
                 onDoubleClicked: {
+                    launchGame()
                     audio.stopAll()
                     audio.toggle_down.play()
-                    launch_window.visible = true
-                    if(settings.lastPlayed){
-                        api.memory.set("collectionIndex", currentCollectionIndex)
-                        api.memory.set("gameIndex", games.currentIndex)
-                    }
-                    currentGame.launch()
                     mouse.event = accept
                 }
             }
         }
 
-        LoadingGraphic {
-            anchors.centerIn: parent
+        LoadingGraphic { //thumb_load
+            id: thumb_load
+            anchors.centerIn: thumb
             opacity: {
                 if(settings.showThumbs){
                     if(logo.source != "")

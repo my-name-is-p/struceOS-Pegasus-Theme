@@ -72,7 +72,11 @@ Item {
         anchors.fill: parent
 
         hoverEnabled: true
-
+        
+        onPositionChanged: {
+            screensaver.reset()
+        }
+        
         onEntered: {
             donation_button.hovered = true
         }

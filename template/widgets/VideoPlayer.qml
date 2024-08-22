@@ -175,59 +175,6 @@ Item { //viewer
             }
         }
 
-        UIButton { //loop
-            id: loop
-            icon: video.loops != MediaPlayer.Infinite ? images.no_loop : images.loop
-
-            anchors.bottom: video_controls.bottom
-            anchors.right: mute.left
-            anchors.margins: vpx(12)
-            anchors.rightMargin: vpx(6)
-
-            selected: viewer.current === this
-
-            onClicked: function(){
-                if(video.loops != MediaPlayer.Infinite)
-                        video.loops = MediaPlayer.Infinite
-                else
-                    video.loops = 1
-            }
-            property var onAccept: onClicked
-
-            function onLeft(){
-                viewer.current = scrub_bar
-            }
-
-            function onRight(){
-                viewer.current = mute
-            }
-        }
-
-        UIButton { //mute
-            id: mute
-            icon: video.muted ? images.mute : images.sound
-
-            anchors.bottom: video_controls.bottom
-            anchors.right: video_controls.right
-            anchors.margins: vpx(12)
-
-            selected: viewer.current === this
-
-            onClicked: function(){
-                video.muted = !video.muted
-                settings.videoMute = video.muted
-            }
-            property var onAccept: onClicked
-
-            function onLeft(){
-                viewer.current = loop
-            }
-
-            function onUp(){
-                viewer.current = volume_scrub
-            }
-        }
-
         Item { //scrub_bar
             id: scrub_bar
 
@@ -402,13 +349,66 @@ Item { //viewer
                 drag.minimumX: 0
                 drag.maximumX: scrub_bar.width - scrub_handle.width
 
-                onClicked: {
+                onPressed: {
                     video.seek(mouseX/scrub_background.width * video.duration)
                 }
 
                 onPositionChanged: {
                     video.seek(scrub_handle.x/scrub_background.width * video.duration)
                 }
+            }
+        }
+
+        UIButton { //loop
+            id: loop
+            icon: video.loops != MediaPlayer.Infinite ? images.no_loop : images.loop
+
+            anchors.bottom: video_controls.bottom
+            anchors.right: mute.left
+            anchors.margins: vpx(12)
+            anchors.rightMargin: vpx(6)
+
+            selected: viewer.current === this
+
+            onClicked: function(){
+                if(video.loops != MediaPlayer.Infinite)
+                        video.loops = MediaPlayer.Infinite
+                else
+                    video.loops = 1
+            }
+            property var onAccept: onClicked
+
+            function onLeft(){
+                viewer.current = scrub_bar
+            }
+
+            function onRight(){
+                viewer.current = mute
+            }
+        }
+
+        UIButton { //mute
+            id: mute
+            icon: video.muted ? images.mute : images.sound
+
+            anchors.bottom: video_controls.bottom
+            anchors.right: video_controls.right
+            anchors.margins: vpx(12)
+
+            selected: viewer.current === this
+
+            onClicked: function(){
+                video.muted = !video.muted
+                settings.videoMute = video.muted
+            }
+            property var onAccept: onClicked
+
+            function onLeft(){
+                viewer.current = loop
+            }
+
+            function onUp(){
+                viewer.current = volume_scrub
             }
         }
 
@@ -641,7 +641,7 @@ Item { //viewer
                 drag.minimumY: 0
                 drag.maximumY: volume_scrub.height - volume_handle.height
 
-                onClicked: {
+                onPressed: {
                     let v = Math.round((1 - (mouseY / volume_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
                     video.volume = settings.videoVolume = v

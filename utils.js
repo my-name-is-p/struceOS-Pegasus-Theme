@@ -3,13 +3,11 @@
 
 //launchGame
 function launchGame(){
-    log(currentGame)
     launch_window.visible = true
     if(settings.lastPlayed){
         api.memory.set("collectionIndex", currentCollectionIndex)
         api.memory.set("gameIndex", games.currentIndex)
     }
-    s = audio.toggle_down
     currentGame.launch()
 }
 
@@ -39,16 +37,19 @@ function gsk(event) {
             return "sort"
         if(api.keys.isDetails(event))
             return "details"
-        if((api.keys.isAccept(event) || key == Qt.Key_Space) && !event.isAutoRepeat)
+        if((api.keys.isAccept(event) || key == Qt.Key_Space))
             return "accept"
         if(api.keys.isCancel(event))
             return "cancel"
+        if(key == Qt.Key_F5)
+            return "f5"
     }else{
         return parseInt(event.text)
     }
     return undefined
 }
 
+//childrenSize
 function childrenSize(element, size = "", margin = "", start = 0, i = 0, max = false){
     let r = vpx(start)
     if(
@@ -87,7 +88,7 @@ function getAssets(assets){
                     assets.banner : 
                         assets.boxFront != "" ? 
                         assets.boxFront : 
-                    "default"
+                            "default"
 
     // Banner
     gotAssets.banner = 
@@ -140,8 +141,6 @@ function addAlphaToHex(alpha, hex) {
     if(!validateHex(hex))
         return
 
-    const alphaHex = alphaDecToHex(alpha)
-
     return `#${alphaDecToHex(alpha)}${hex}`
 }
 
@@ -188,8 +187,10 @@ function collectionPrevious(){
     background.refresh()
 }
 
+//resetFocus
 function resetFocus(c = game_layout){
-    video.reset()
+    if(games.currentIndex != -1)
+        video.reset()
     f = background
     f = c
 }
@@ -211,11 +212,10 @@ function logVideoStates(){
     log("StoppedState: " + MediaPlayer.StoppedState)
 }
 
-
 //logFocus
 function logFocus(){
     log("root: " + root.focus)
-    // log("settings: " + settings.focus)
+    log("settings: " + settings.focus)
     log("search: " + search.focus)
     log("audio: " + audio.focus)
     log("images: " + images.focus)
@@ -249,6 +249,7 @@ function clearMemory(){
     api.memory.unset("struceOS_dev_enableDevTools")
     api.memory.unset("struceOS_dev_log_opacity")
     api.memory.unset("struceOS_ui_buttonHints")
+    api.memory.unset("struceOS_ui_osk")
     api.memory.set("struceOS_background_overlaySource", images.overlay_0002)
     api.memory.set("struceOS_theme_colors", settings.default_theme)
     f = game_layout

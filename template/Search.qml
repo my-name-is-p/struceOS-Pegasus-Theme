@@ -6,6 +6,7 @@ import SortFilterProxyModel 0.2
 
 Item { //search
     id: search
+    
     property alias model: gamesFiltered
     property string firstWordIgnoreList
 
@@ -36,25 +37,11 @@ Item { //search
             }
         ]
 
-        sorters: [
+        sorters: 
             RoleSorter { 
-                roleName: "sortBy" 
-                sortOrder: sortfilt_menu.title.asc ? Qt.AscendingOrder : Qt.DescendingOrder
-                enabled: sortfilt_menu.title.enabled
-            },
-            RoleSorter { 
-                roleName: "lastPlayed" 
-                sortOrder: sortfilt_menu.last_played.asc ? Qt.DescendingOrder : Qt.AscendingOrder
-                enabled: sortfilt_menu.last_played.enabled
-            },
-
-            RoleSorter { 
-                roleName: "playTime" 
-                sortOrder: sortfilt_menu.play_time.asc ? Qt.AscendingOrder : Qt.DescendingOrder
-                enabled: sortfilt_menu.play_time.enabled
+                roleName: sortfilt_menu.active_sort.role
+                sortOrder: sortfilt_menu.active_sort.order
+                enabled: sortfilt_menu.active_sort.enabled
             }
-        ]
     }
 }
-
-

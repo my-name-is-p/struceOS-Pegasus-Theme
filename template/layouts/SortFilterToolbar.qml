@@ -181,6 +181,10 @@ Item { //sortfilt_toolbar_wrapper
 
             hoverEnabled: true
 
+            onPositionChanged: {
+                screensaver.reset()
+            }
+
             onEntered: {
                 parent.hovered = true;
             }
@@ -264,6 +268,8 @@ Item { //sortfilt_toolbar_wrapper
     }
 
     Keys.onPressed: {
+        if(event.key === 1048576 && event.isAutoRepeat)
+            return
         s = s != null ? s : audio.toggle_down
     }
 }

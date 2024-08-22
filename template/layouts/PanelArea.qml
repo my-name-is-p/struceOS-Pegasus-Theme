@@ -3,13 +3,10 @@
 
 import QtQuick 2.15
 import QtMultimedia 5.9
-import "panels"
+import "parts/panelarea"
 
-Rectangle { //panel_area
+Item { //panel_area
     id: panel_area
-
-    color: addAlphaToHex(0.95, colors.accent)
-    clip: true
 
     height: { //height
         let h = parent.parent.height - (header.height)
@@ -19,6 +16,8 @@ Rectangle { //panel_area
 
     property Item current: panel_area
     property string current_s: "info"
+
+    clip: true
 
     //Functions--
         property var onUp: current.onUp
@@ -35,23 +34,24 @@ Rectangle { //panel_area
         property var onAccept: current.onAccept
     
         function open(panel = "info"){
-            info_panel.closePanel()
-            resetFocus(panel_area)
             switch(panel){
                 case "settings":
                     current_s = "settings"
                     current = settings_panel
+                    resetFocus(panel_area)
                     break
                 default:
-                    current_s = "info"
-                    current = info_panel
-                    video.reset()
+                    if(games.currentIndex != -1){
+                        current_s = "info"
+                        current = info_panel
+                        resetFocus(panel_area)
+                    }
                     break
             }
         }
     //--
 
-    InfoPanel { //clean
+    InfoPanel {
         id: info_panel
         visible: panel_area.current === this
     }
@@ -61,9 +61,13 @@ Rectangle { //panel_area
         visible: panel_area.current === this
     }
 
-    Keys.onPressed: { //Keys
+    Keys.onPressed: {
+        if(event.key === 1048576 && event.isAutoRepeat)
+            return
         s = s != null ? s : audio.toggle_down
     }
 
     property Video video: info_panel.video
+    property InfoPanel info_panel: info_panel
+    property SettingsPanel settings_panel: settings_panel
 }

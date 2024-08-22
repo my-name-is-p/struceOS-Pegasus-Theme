@@ -5,13 +5,12 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.15
 import "parts/collections"
 
-Rectangle {
+Item {
     id: collection_menu
-    height: vpx(120)
-    color: addAlphaToHex(0.85, colors.accent)
-    property bool opened: focus
 
-    Behavior on height {NumberAnimation {duration: 75}}
+    height: vpx(120)
+
+    property bool opened: focus
 
     property ListView list: collections_list
     property ListModel model: collections_list.model
@@ -103,6 +102,8 @@ Rectangle {
     }
     
     Keys.onPressed: {
+        if(event.key === 1048576 && event.isAutoRepeat)
+            return
         s = s != null ? s : audio.toggle_down
     }
 }

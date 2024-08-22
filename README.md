@@ -24,11 +24,20 @@
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
 
+- customizable settings
+- info panel with video player
+- search
+- onscreen keyboard
+- sort and filter
+- screensaver
+
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
 <a id="current-version"></a>
-# Version 1.5.2 Updates
+# Version 1.5.3 Updates
 1. Code cleanup and refactoring
+2. Added screensaver
+3. Added onscreen keyboard
 
 <a id="to-come"></a>
 # To come in future updates
@@ -235,6 +244,14 @@ Download struceOS-Pegasus-Theme-1.5.2.zip from [last releases](https://github.co
 <a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
+
+## 1.5.3
+
+```
+1. Code cleanup and refactoring
+2. Added screensaver
+3. Added onscreen keyboard
+```
 
 ## 1.5.2
 
