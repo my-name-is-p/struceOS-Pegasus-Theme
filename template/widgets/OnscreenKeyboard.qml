@@ -86,8 +86,6 @@ Item {
 
         hoverEnabled: true
 
-        preventStealing: false
-
         onPositionChanged: {
             screensaver.reset()
         }
@@ -100,7 +98,14 @@ Item {
 
     MouseArea {
         id: osk_color_block
+        
         anchors.fill: osk_color
+
+        hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
     }
 
     Rectangle{ //osk_color
