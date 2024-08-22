@@ -155,269 +155,280 @@ Item {
             }
         }
 
-        ListView { //numbers
-            id: numbers
+        Item {
+            id: keyboard_wrapper
 
             anchors.top: osk_text_wrapper.bottom
             anchors.topMargin: vpx(24)
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-            currentIndex: count - 1 
-            
-            height: vpx(48)
-            width: {
-                let l = model.keys.length
-                let w = 0
-                for(var i = 0; i < l; i++){
-                    switch(model.keys[i].size){
-                        case "space":
-                            w = w + s_space
-                            break
-                        case "double":
-                            w = w + s_double
-                            break
-                        default:
-                            w = w + s_single
-                            break
+            height: childrenSize(this, "height", "topMargin", 0, 1) + vpx(12)
+
+            ListView { //numbers
+                id: numbers
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                currentIndex: count - 1 
+                
+                height: vpx(48)
+                width: {
+                    let l = model.keys.length
+                    let w = 0
+                    for(var i = 0; i < l; i++){
+                        switch(model.keys[i].size){
+                            case "space":
+                                w += s_space
+                                break
+                            case "double":
+                                w += s_double
+                                break
+                            default:
+                                w += s_single
+                                break
+                        }
                     }
+                    return w + (spacing * (l - 1))
                 }
-                return vpx(w + (spacing * (l - 1)))
+
+                model: OSKnumbers{}
+                delegate: OSKKey{}
+                orientation: ListView.Horizontal
+
+                spacing: vpx(24)
+
+                highlightFollowsCurrentItem: false
+                highlightMoveDuration: 1
+
+                keyNavigationWraps: true
+
+                //Functions--
+                    function onDown(){
+                        if(currentIndex !=0)
+                            qwerty.currentIndex = currentIndex - 1 >= qwerty.count ? qwerty.count - 1 : currentIndex - 1
+                        else
+                            qwerty.currentIndex = 0
+                        osk.current = qwerty
+                    }
+                //--
             }
 
-            model: OSKnumbers{}
-            delegate: OSKKey{}
-            orientation: ListView.Horizontal
+            ListView { //qwerty
+                id: qwerty
 
-            spacing: vpx(24)
-
-            highlightFollowsCurrentItem: false
-            highlightMoveDuration: 1
-
-            keyNavigationWraps: true
-
-            //Functions--
-                function onDown(){
-                    if(currentIndex !=0)
-                        qwerty.currentIndex = currentIndex - 1 >= qwerty.count ? qwerty.count - 1 : currentIndex - 1
-                    else
-                        qwerty.currentIndex = 0
-                    osk.current = qwerty
-                }
-            //--
-        }
-
-        ListView { //qwerty
-            id: qwerty
-
-            anchors.top: numbers.bottom
-            anchors.topMargin: vpx(24)
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            height: vpx(48)
-            width: {
-                let l = model.keys.length
-                let w = 0
-                for(var i = 0; i < l; i++){
-                    switch(model.keys[i].size){
-                        case "space":
-                            w = w + s_space
-                            break
-                        case "double":
-                            w = w + s_double
-                            break
-                        default:
-                            w = w + s_single
-                            break
+                anchors.top: numbers.bottom
+                anchors.topMargin: vpx(24)
+                anchors.horizontalCenter: parent.horizontalCenter
+                
+                height: vpx(48)
+                width: {
+                    let l = model.keys.length
+                    let w = 0
+                    for(var i = 0; i < l; i++){
+                        switch(model.keys[i].size){
+                            case "space":
+                                w += s_space
+                                break
+                            case "double":
+                                w += s_double
+                                break
+                            default:
+                                w += s_single
+                                break
+                        }
                     }
+                    return w + (spacing * (l - 1))
                 }
-                return vpx(w + (spacing * (l - 1)))
+
+                model: OSKqwerty{}
+                delegate: OSKKey{}
+                orientation: ListView.Horizontal
+
+                spacing: vpx(24)
+
+                highlightFollowsCurrentItem: false
+                highlightMoveDuration: 1
+
+                keyNavigationWraps: true
+
+                //Functions--
+                    function onUp(){
+                        numbers.currentIndex = currentIndex + 1
+                        osk.current = numbers
+                    }
+
+                    function onDown(){
+                        asdfgh.currentIndex = currentIndex >= asdfgh.count ? asdfgh.count - 1 : currentIndex
+                        osk.current = asdfgh
+                    }
+                //--
             }
 
-            model: OSKqwerty{}
-            delegate: OSKKey{}
-            orientation: ListView.Horizontal
+            ListView { //asdfgh
+                id: asdfgh
 
-            spacing: vpx(24)
-
-            highlightFollowsCurrentItem: false
-            highlightMoveDuration: 1
-
-            keyNavigationWraps: true
-
-            //Functions--
-                function onUp(){
-                    numbers.currentIndex = currentIndex + 1
-                    osk.current = numbers
-                }
-
-                function onDown(){
-                    asdfgh.currentIndex = currentIndex >= asdfgh.count ? asdfgh.count - 1 : currentIndex
-                    osk.current = asdfgh
-                }
-            //--
-        }
-
-        ListView { //asdfgh
-            id: asdfgh
-
-            anchors.top: qwerty.bottom
-            anchors.topMargin: vpx(24)
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            height: vpx(48)
-            width: {
-                let l = model.keys.length
-                let w = 0
-                for(var i = 0; i < l; i++){
-                    switch(model.keys[i].size){
-                        case "space":
-                            w = w + s_space
-                            break
-                        case "double":
-                            w = w + s_double
-                            break
-                        default:
-                            w = w + s_single
-                            break
+                anchors.top: qwerty.bottom
+                anchors.topMargin: vpx(24)
+                anchors.horizontalCenter: parent.horizontalCenter
+                
+                height: vpx(48)
+                width: {
+                    let l = model.keys.length
+                    let w = 0
+                    for(var i = 0; i < l; i++){
+                        switch(model.keys[i].size){
+                            case "space":
+                                w += s_space
+                                break
+                            case "double":
+                                w += s_double
+                                break
+                            default:
+                                w += s_single
+                                break
+                        }
                     }
+                    return w + (spacing * (l - 1))
                 }
-                return vpx(w + (spacing * (l - 1)))
+
+                model: OSKasdfgh{}
+                delegate: OSKKey{}
+                orientation: ListView.Horizontal
+
+                spacing: vpx(24)
+
+                highlightFollowsCurrentItem: false
+                highlightMoveDuration: 1
+
+                keyNavigationWraps: true
+
+                //Functions--
+                    function onUp(){
+                        qwerty.currentIndex = currentIndex
+                        osk.current = qwerty
+                    }
+                
+                    function onDown(){
+                        if(currentIndex !=0)
+                            zxcvbn.currentIndex = currentIndex - 1 >= zxcvbn.count ? zxcvbn.count - 1 : currentIndex - 1
+                        else
+                            zxcvbn.currentIndex = 0
+                        osk.current = zxcvbn
+                    }
+                //--
             }
 
-            model: OSKasdfgh{}
-            delegate: OSKKey{}
-            orientation: ListView.Horizontal
+            ListView { //zxcvbn
+                id: zxcvbn
 
-            spacing: vpx(24)
-
-            highlightFollowsCurrentItem: false
-            highlightMoveDuration: 1
-
-            keyNavigationWraps: true
-
-            //Functions--
-                function onUp(){
-                    qwerty.currentIndex = currentIndex
-                    osk.current = qwerty
-                }
-            
-                function onDown(){
-                    if(currentIndex !=0)
-                        zxcvbn.currentIndex = currentIndex - 1 >= zxcvbn.count ? zxcvbn.count - 1 : currentIndex - 1
-                    else
-                        zxcvbn.currentIndex = 0
-                    osk.current = zxcvbn
-                }
-            //--
-        }
-        ListView { //zxcvbn
-            id: zxcvbn
-
-            anchors.top: asdfgh.bottom
-            anchors.topMargin: vpx(24)
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            height: vpx(48)
-            width: {
-                let l = model.keys.length
-                let w = 0
-                for(var i = 0; i < l; i++){
-                    switch(model.keys[i].size){
-                        case "space":
-                            w = w + s_space
-                            break
-                        case "double":
-                            w = w + s_double
-                            break
-                        default:
-                            w = w + s_single
-                            break
+                anchors.top: asdfgh.bottom
+                anchors.topMargin: vpx(24)
+                anchors.horizontalCenter: parent.horizontalCenter
+                
+                height: vpx(48)
+                width: {
+                    let l = model.keys.length
+                    let w = 0
+                    for(var i = 0; i < l; i++){
+                        switch(model.keys[i].size){
+                            case "space":
+                                w += s_space
+                                break
+                            case "double":
+                                w += s_double
+                                break
+                            default:
+                                w += s_single
+                                break
+                        }
                     }
+                    return w + (spacing * (l - 1))
                 }
-                return vpx(w + (spacing * (l - 1)))
+
+                model: OSKzxcvbn{}
+                delegate: OSKKey{}
+                orientation: ListView.Horizontal
+
+                spacing: vpx(24)
+
+                highlightFollowsCurrentItem: false
+                highlightMoveDuration: 1
+
+                keyNavigationWraps: true
+
+                //Functions--
+                    function onUp(){
+                        asdfgh.currentIndex = currentIndex + 1
+                        osk.current = asdfgh
+                    }
+                
+                    function onDown(){
+                        space.currentIndex = 1
+                        osk.current = space
+                    }
+                //--
             }
 
-            model: OSKzxcvbn{}
-            delegate: OSKKey{}
-            orientation: ListView.Horizontal
+            ListView { //space
+                id: space
 
-            spacing: vpx(24)
-
-            highlightFollowsCurrentItem: false
-            highlightMoveDuration: 1
-
-            keyNavigationWraps: true
-
-            //Functions--
-                function onUp(){
-                    asdfgh.currentIndex = currentIndex + 1
-                    osk.current = asdfgh
-                }
-            
-                function onDown(){
-                    space.currentIndex = 1
-                    osk.current = space
-                }
-            //--
-        }
-
-        ListView { //space
-            id: space
-
-            anchors.top: zxcvbn.bottom
-            anchors.topMargin: vpx(24)
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            height: vpx(48)
-            width: {
-                let l = model.keys.length
-                let w = 0
-                for(var i = 0; i < l; i++){
-                    switch(model.keys[i].size){
-                        case "space":
-                            w = w + s_space
-                            break
-                        case "double":
-                            w = w + s_double
-                            break
-                        default:
-                            w = w + s_single
-                            break
+                anchors.top: zxcvbn.bottom
+                anchors.topMargin: vpx(24)
+                anchors.horizontalCenter: parent.horizontalCenter
+                
+                height: vpx(48)
+                width: {
+                    let l = model.keys.length
+                    let w = 0
+                    for(var i = 0; i < l; i++){
+                        switch(model.keys[i].size){
+                            case "space":
+                                w += s_space
+                                break
+                            case "double":
+                                w += s_double
+                                break
+                            default:
+                                w += s_single
+                                break
+                        }
                     }
+                    return w + (spacing * (l - 1))
                 }
-                return vpx(w + (spacing * (l - 1)))
+
+                model: OSKspace{}
+                delegate: OSKKey{}
+                orientation: ListView.Horizontal
+
+                spacing: vpx(24)
+
+                highlightFollowsCurrentItem: false
+                highlightMoveDuration: 1
+
+                keyNavigationWraps: true
+
+                //Functions--
+                    function onUp(){
+                        if(currentIndex === 1)
+                            zxcvbn.currentIndex = (zxcvbn.count - 1) / 2
+                        else if(currentIndex > 1)
+                            zxcvbn.currentIndex = zxcvbn.count - 1
+                        else
+                            zxcvbn.currentIndex = 0
+                        osk.current = zxcvbn
+                    }
+                //--
             }
-
-            model: OSKspace{}
-            delegate: OSKKey{}
-            orientation: ListView.Horizontal
-
-            spacing: vpx(24)
-
-            highlightFollowsCurrentItem: false
-            highlightMoveDuration: 1
-
-            keyNavigationWraps: true
-
-            //Functions--
-                function onUp(){
-                    if(currentIndex === 1)
-                        zxcvbn.currentIndex = (zxcvbn.count - 1) / 2
-                    else if(currentIndex > 1)
-                        zxcvbn.currentIndex = zxcvbn.count - 1
-                    else
-                        zxcvbn.currentIndex = 0
-                    osk.current = zxcvbn
-                }
-            //--
         }
+
 
         Item {
             id: buttons
 
-            anchors.top: space.bottom
+            anchors.top: keyboard_wrapper.bottom
             anchors.topMargin: vpx(24)
-            anchors.right: space.right
+            anchors.right: keyboard_wrapper.right
 
             height: childrenSize(this, "height", "", 0, 0, true)
             width: childrenSize(this, "width", "leftMargin")

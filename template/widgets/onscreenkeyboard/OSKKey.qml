@@ -10,7 +10,7 @@ Component{
     Item {
         id: key_wrapper
 
-        property Item osk: parent.parent.parent.parent
+        property Item osk: parent.parent.parent.parent.parent
         property Item list_view: parent.parent
 
         height: vpx(48)
