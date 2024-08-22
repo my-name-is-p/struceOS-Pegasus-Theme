@@ -98,6 +98,11 @@ Item {
         }
     }
 
+    MouseArea {
+        id: osk_color_block
+        anchors.fill: osk_color
+    }
+
     Rectangle{ //osk_color
         id: osk_color
 
