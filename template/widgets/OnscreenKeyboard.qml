@@ -427,8 +427,8 @@ Item {
             id: buttons
 
             anchors.top: keyboard_wrapper.bottom
-            anchors.topMargin: vpx(24)
             anchors.right: keyboard_wrapper.right
+            anchors.margins: vpx(24)
 
             height: childrenSize(this, "height", "", 0, 0, true)
             width: childrenSize(this, "width", "leftMargin")
