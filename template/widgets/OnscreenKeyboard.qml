@@ -163,7 +163,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            height: childrenSize(this, "height", "topMargin", 0, 1) + vpx(12)
+            height: childrenSize(this, "height", "topMargin")
 
             ListView { //numbers
                 id: numbers
