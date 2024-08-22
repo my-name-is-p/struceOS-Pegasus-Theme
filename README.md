@@ -13,12 +13,7 @@
 - [Download](#download)
 - [Changelog](#changelog)
 
-![screenshot_1](.meta/screenshot_1.jpg)
-![screenshot_2](.meta/screenshot_2.jpg)
-![screenshot_3](.meta/screenshot_3.jpg)
-![screenshot_4](.meta/screenshot_4.jpg)
-![screenshot_5](.meta/screenshot_5.jpg)
-![screenshot_6](.meta/screenshot_6.jpg)
+![screenshots](.meta/screenshots.jpg)
 
 <a id="description"></a>
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
