@@ -49,6 +49,8 @@ Item {
             linked = null
             last_focus = null
             visible = false
+            current = numbers
+            numbers.currentIndex =numbers.count - 1
             s = audio.toggle_down
         }
 
