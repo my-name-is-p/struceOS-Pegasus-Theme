@@ -17,6 +17,8 @@ Rectangle {
     property int fadeTime: 5
     property int changeTime: 24
 
+    property bool active: false
+
     Item {
         id: image_wrapper
         anchors.fill: parent
@@ -125,7 +127,7 @@ Rectangle {
             running: true
             triggeredOnStart: true
             onTriggered: {
-                if(image_wrapper.opacity === 1)
+                if(screensaver.active)
                     image_wrapper.changeImage()
             }
         }
@@ -140,8 +142,11 @@ Rectangle {
         id: timeout
         interval: 1000 * screensaver.timeout
         onTriggered: {
-            if(video.playbackState != MediaPlayer.PlayingState)
+            if(video.playbackState != MediaPlayer.PlayingState){
+                image.resetOffset()
+                screensaver.active = true
                 screensaver.opacity = 1
+            }
             else
                 restart()
         }

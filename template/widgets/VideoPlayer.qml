@@ -11,7 +11,7 @@ Item { //viewer
     width: parent.width
     height: width / 1.778
 
-    property bool hovered: hover.hovered || selected ? true : false
+    property bool hovered: false
     property bool selected: false
     property Item current: viewer
 
@@ -128,6 +128,20 @@ Item { //viewer
 
         enabled: video.status != MediaPlayer.NoMedia
 
+        hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
+
+        onEntered: {
+            viewer.hovered = true
+        }
+
+        onExited: {
+            viewer.hovered = false
+        }
+
         onClicked: {
             if(video.playbackState != MediaPlayer.PlayingState)
                 video.play()
@@ -172,6 +186,14 @@ Item { //viewer
 
             function onRight(){
                 viewer.current = scrub_bar
+            }
+
+            onEntered: function(){
+                viewer.hovered = true
+            }
+
+            onExited: function(){
+                viewer.hovered = false
             }
         }
 
@@ -385,6 +407,14 @@ Item { //viewer
             function onRight(){
                 viewer.current = mute
             }
+
+            onEntered: function(){
+                viewer.hovered = true
+            }
+
+            onExited: function(){
+                viewer.hovered = false
+            }
         }
 
         UIButton { //mute
@@ -409,6 +439,14 @@ Item { //viewer
 
             function onUp(){
                 viewer.current = volume_scrub
+            }
+
+            onEntered: function(){
+                viewer.hovered = true
+            }
+
+            onExited: function(){
+                viewer.hovered = false
             }
         }
 

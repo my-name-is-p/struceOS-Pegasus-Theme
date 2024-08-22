@@ -12,7 +12,7 @@ Item {
 
     property bool enabled: false
     property bool selected: false
-    property bool hovered: hover.hovered
+    property bool hovered: false
 
     property var sound: audio.toggle_down
     property string text: "text"
@@ -98,6 +98,20 @@ Item {
         anchors.fill: radio_button
 
         cursorShape: Qt.PointingHandCursor
+
+        hoverEnabled: true
+
+        onPositionChanged: {
+            screensaver.reset()
+        }
+
+        onEntered: {
+            radio_button.hovered = true
+        }
+
+        onExited: {
+            radio_button.hovered = false
+        }
         
         onClicked: {
             radio_button.resetItems()
@@ -105,10 +119,6 @@ Item {
             audio.stopAll()
             radio_button.sound.play()
         }
-    }
-
-    HoverHandler { //hover
-        id: hover
     }
 
     function resetItems(){
