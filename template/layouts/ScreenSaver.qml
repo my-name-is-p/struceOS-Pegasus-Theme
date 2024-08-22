@@ -14,25 +14,65 @@ Rectangle {
     Behavior on opacity {NumberAnimation {duration: screensaver.fadeTime * 1000}}
 
     property int timeout: 3
-    property int fadeTime: 3
+    property int fadeTime: 5
+    property int changeTime: 24
 
-    Image {
-        id: image
-        source: getAssets(currentGame.assets).bg
-
+    Item {
+        id: image_wrapper
         anchors.fill: parent
 
         opacity: 1
         Behavior on opacity {NumberAnimation {duration: 1000}}
 
-        fillMode: Image.PreserveAspectCrop
+        Image {
+            id: image
+            source: getAssets(currentGame.assets).bg
+
+            height: parent.height + offset_amount
+            width: parent.width + offset_amount
+
+            fillMode: Image.PreserveAspectCrop
+
+            smooth: true
+            antialiasing: true
+
+            property int offset_duration: changeTime * 1000
+            property real offset_amount: vpx(124)
+
+            Behavior on anchors.topMargin {NumberAnimation {duration: image.offset_duration}}
+            Behavior on anchors.bottomMargin {NumberAnimation {duration: image.offset_duration}}
+            Behavior on anchors.leftMargin {NumberAnimation {duration: image.offset_duration}}
+            Behavior on anchors.rightMargin {NumberAnimation {duration: image.offset_duration}}
+
+            function resetOffset(){
+                anchors.top = undefined
+                anchors.bottom = undefined
+                anchors.left = undefined
+                anchors.right = undefined
+
+                let verticalMargin = Math.random() < 0.5 ? "top" : "bottom"
+                let horizontalMargin = Math.random() < 0.5 ? "left" : "right"
+                let r = (Math.random() * 0.6 + 0.2).toFixed(2)
+
+                offset_duration = 0
+
+                anchors[verticalMargin] = parent[verticalMargin]
+                anchors[horizontalMargin] = parent[horizontalMargin]
+                anchors[verticalMargin + "Margin"] = r >= 0.5 ? -offset_amount : -offset_amount * (2 * r)
+                anchors[horizontalMargin + "Margin"] = (1 - r) >= 0.5 ? -offset_amount : -offset_amount * (2 * (1 - r))
+
+                offset_duration = changeTime * 1000
+
+                anchors[verticalMargin + "Margin"] = anchors[horizontalMargin + "Margin"] = 0
+            }
+        }
 
         Image {
             id: logo
             source: getAssets(currentGame.assets).logo
 
-            anchors.top: image.top
-            anchors.left: image.left
+            anchors.top: image_wrapper.top
+            anchors.left: image_wrapper.left
 
             anchors.margins: vpx(48)
             height: vpx(200)
@@ -42,6 +82,9 @@ Rectangle {
 
             horizontalAlignment: Image.AlignLeft
             verticalAlignment: Image.AlignTop
+
+            smooth: true
+            antialiasing: true
 
             visible: false
         }
@@ -65,18 +108,26 @@ Rectangle {
             onTriggered: {
                 let r = Math.floor(Math.random() * api.allGames.count)
                 image.source = getAssets(api.allGames.get(r).assets).bg
+                while(image.source === "default"){
+                    r = Math.floor(Math.random() * api.allGames.count)
+                    image.source = getAssets(api.allGames.get(r).assets).bg
+                }
                 logo.source = getAssets(api.allGames.get(r).assets).logo
-                image.opacity = 1
+                image_wrapper.opacity = 1
+                image.resetOffset()
             }
         }
 
         Timer {
             id: image_change
-            interval: 30000
+            interval: changeTime * 1000
             repeat: true
             running: true
             triggeredOnStart: true
-            onTriggered: image.changeImage()
+            onTriggered: {
+                if(image_wrapper.opacity === 1)
+                    image_wrapper.changeImage()
+            }
         }
 
         function changeImage(){

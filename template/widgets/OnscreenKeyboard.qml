@@ -42,16 +42,23 @@ Item {
                 if(linked.text[0] != "#")
                     linked.text = "#"+ linked.text
             }
+
             linked.onEditingFinished()
-            if(last_focus === header.search_bar)
+
+            if(last_focus === header.search_bar){
+                games.currentIndex = 0
                 last_focus = game_layout
+            }
             resetFocus(last_focus)
+
             linked = null
             last_focus = null
+            shift = false
             validate_hex = false
             visible = false
             current = numbers
             numbers.currentIndex =numbers.count - 1
+            
             s = audio.toggle_down
         }
 
@@ -59,7 +66,11 @@ Item {
 
         property var onRight: current.incrementCurrentIndex
 
-        property var onDetails: function(){linked.remove(text.cursorPosition - 1, text.cursorPosition)}
+        property var onDetails: function(){
+                let pos = text.cursorPosition != 0 ? text.cursorPosition - 1 : 0
+                linked.remove(osk.text.cursorPosition - 1, text.cursorPosition)
+                text.cursorPosition = pos
+            }
         
         property var onSort: function(){shift = !shift}
 

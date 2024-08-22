@@ -19,6 +19,10 @@
 // for easy to read code
 
 // Changelogs
+// #1.5.4
+//      1. OSK bugfixes
+//      2. Screensaver improvements
+
 // #1.5.3
 //      1. Code cleanup and refactoring
 //      2. Added screensaver
@@ -98,7 +102,6 @@
 
 // TO DO --------------------------------------------------------------------------------------
 // 1. Add genre filters
-// 2. Add onscreen keyboard
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15

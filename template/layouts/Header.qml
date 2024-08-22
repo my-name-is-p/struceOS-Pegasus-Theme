@@ -123,6 +123,7 @@ Item { //header
             }
 
             function onDown(){
+                games.currentIndex = 0
                 resetFocus()
             }
             property var onCancel: onDown

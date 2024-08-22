@@ -34,10 +34,9 @@ A simple theme for easy navigation.
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
 
 <a id="current-version"></a>
-# Version 1.5.3 Updates
-1. Code cleanup and refactoring
-2. Added screensaver
-3. Added onscreen keyboard
+# Version 1.5.4 Updates
+1. OSK bugfixes
+2. Screensaver improvements
 
 <a id="to-come"></a>
 # To come in future updates
@@ -116,7 +115,7 @@ A full set of assets for manual setup would be (multiples listed in order of pri
     - Open Info Panel: I
     - Open Sort and Filters: F
     - Select: Enter / Space
-    - Pegasus Menu: Esc
+    - Pegasus Menu: Esc / F1
 
 <a id="controls-gamepad"></a>
 - Gamepad
@@ -248,6 +247,13 @@ Download struceOS-Pegasus-Theme-1.5.2.zip from [last releases](https://github.co
 <a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
+
+## 1.5.4
+
+```
+1. OSK bugfixes
+2. Screensaver improvements
+```
 
 ## 1.5.3
 
