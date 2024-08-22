@@ -48,6 +48,7 @@ Item {
             resetFocus(last_focus)
             linked = null
             last_focus = null
+            validate_hex = false
             visible = false
             current = numbers
             numbers.currentIndex =numbers.count - 1
