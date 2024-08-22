@@ -151,6 +151,10 @@ The most useful settings are now in a settings panel within the theme. The rest 
     property bool buttonHints:
         api.memory.get("struceOS_ui_buttonHints") != undefined ?
             api.memory.get("struceOS_ui_buttonHints") : true
+
+    property bool osk:
+        api.memory.get("struceOS_ui_osk") != undefined ?
+            api.memory.get("struceOS_ui_osk") : false
             
     //audio
         //video
@@ -198,10 +202,9 @@ The most useful settings are now in a settings panel within the theme. The rest 
         api.memory.get("struceOS_dev_enableDevTools") != undefined ?
             api.memory.get("struceOS_dev_enableDevTools") : false
 
-
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.5.2"
+    property string version: "1.5.3"
     property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
@@ -221,6 +224,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
             "launch_button": "#1E824C",
             "launch_hover": "#FFFFFF",
             "launch_text": "#FFFFFF",
+            "onscreen_keyboard": "#01070E",
             "slider": "#FE3734",
             "slider_base": "#F1C8C7",
             "t": "transparent",
