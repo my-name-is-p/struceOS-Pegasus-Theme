@@ -240,7 +240,7 @@ Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [Pl
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.5.2.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.5.3.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
