@@ -119,7 +119,7 @@ A full set of assets for manual setup would be (multiples listed in order of pri
     - Open Info Panel: X (Xbox) / ▢ (PS)
     - Open Sort and Filters: Y (Xbox) / △ (PS)
     - Select: A (Xbox) / X (PS)
-    - Pegasus Menu: B (Xbox) / ⭘
+    - Pegasus Menu: B (Xbox) / ⭘ (PS)
 
 # Settings
 The most useful settings are now in a settings panel within the theme. The rest can be found in template/Settings.qml. The default settings are below for reference:
@@ -235,7 +235,7 @@ Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [Pl
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.5.3.zip from [last releases](https://github.com/my_name_is_p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.5.3.zip from [latest release](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 

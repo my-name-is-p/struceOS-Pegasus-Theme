@@ -135,9 +135,34 @@ Item {
                 }
 
                 function onDown(){
-                    page.current = devtools_settings_opacity_slider
+                    page.current = general_tools_settings_button_hints
                 }
             //--
+        }
+
+        ToggleBox { //game_layout_settings_button_hints
+            id: general_tools_settings_button_hints
+            text: "button hints"
+
+            anchors.top: general_tools_settings_osk.bottom
+            anchors.topMargin: vpx(12)
+
+            selected: page.selected && page.current === this
+            value: settings.buttonHints
+
+            onClicked: function(){
+                settings.buttonHints = !value
+                api.memory.set("struceOS_ui_buttonHints", settings.buttonHints)
+            }
+            property var onAccept: onClicked
+
+            function onUp(){
+                page.current = general_tools_settings_osk
+            }
+
+            function onDown(){
+                page.current = devtools_settings_opacity_slider
+            }
         }
     }
 
@@ -205,7 +230,7 @@ Item {
                         if(current.onUp)
                             current.onUp()
                         else
-                            page.current = general_tools_settings_osk
+                            page.current = general_tools_settings_button_hints
                     }
 
                     function onDown(){

@@ -18,10 +18,12 @@ Item { //clock_container
         id: clock_color
         anchors.fill: clock
         anchors.margins: vpx(-6)
+        anchors.leftMargin: vpx(-12)
+        anchors.rightMargin: vpx(-12)
 
         color: addAlphaToHex(0.3, colors.black)
 
-        radius: vpx(6)
+        radius: vpx(100)
 
 
         Rectangle { //hover
@@ -29,7 +31,7 @@ Item { //clock_container
             anchors.fill: parent
             color: colors.black
             opacity: clock_container.hover || clock_container.selected ? 1 : 0
-            radius: vpx(6)
+            radius: vpx(100)
 
             Behavior on opacity {NumberAnimation {duration: settings.hover_speed}}
         }

@@ -22,6 +22,7 @@
 // #1.5.4
 //      1. OSK bugfixes
 //      2. Screensaver improvements
+//      3. Moved button hints setting to Settings > Tools > General
 
 // #1.5.3
 //      1. Code cleanup and refactoring

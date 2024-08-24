@@ -96,13 +96,10 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.AscendingOrder : Qt.DescendingOrder
 
             function onAccept(){
+                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_title)
             }
             onClicked: onAccept
-
-            onEntered: function(){
-                sortfilt_menu.current = this
-            }
 
             function onUp(){
                 f = header
@@ -127,13 +124,10 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.DescendingOrder : Qt.AscendingOrder
 
             function onAccept(){
+                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_last_played)
             }
             onClicked: onAccept
-
-            onEntered: function(){
-                sortfilt_menu.current = this
-            }
 
             function onUp(){
                 sortfilt_menu.current = sort_item_title
@@ -161,13 +155,10 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.AscendingOrder : Qt.DescendingOrder
 
             function onAccept(){
+                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_play_time)
             }
             onClicked: onAccept
-
-            onEntered: function(){
-                sortfilt_menu.current = this
-            }
 
             function onUp(){
                 sortfilt_menu.current = sort_item_last_played
@@ -227,15 +218,13 @@ Rectangle { //sortfilt_menu
             }
             
             onClicked: function(){
+                sortfilt_menu.current = this
                 enabled = !enabled
                 games.currentIndex = -1
                 games.currentIndex = 0
             }
             property var onAccept: onClicked
 
-            onEntered: function(){
-                sortfilt_menu.current = this
-            }
         }
     }
 

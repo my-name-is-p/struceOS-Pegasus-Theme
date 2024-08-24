@@ -56,7 +56,10 @@ Component {
                 height: parent.height
                 width: childrenSize(this, "width", "leftMargin", 6)
 
+                color: colors.white
+
                 radius: vpx(24)
+
 
                 Rectangle { //swatch
                     id: swatch

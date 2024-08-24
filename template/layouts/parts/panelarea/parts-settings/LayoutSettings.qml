@@ -193,31 +193,6 @@ Item { //page
             }
 
             function onDown(){
-                page.current = game_layout_settings_button_hints
-            }
-        }
-
-        ToggleBox { //game_layout_settings_button_hints
-            id: game_layout_settings_button_hints
-            text: "show button hints"
-
-            anchors.top: game_layout_settings_thumbnails.bottom
-            anchors.topMargin: vpx(12)
-
-            selected: page.selected && page.current === this
-            value: settings.buttonHints
-
-            onClicked: function(){
-                settings.buttonHints = !value
-                api.memory.set("struceOS_ui_buttonHints", settings.buttonHints)
-            }
-            property var onAccept: onClicked
-
-            function onUp(){
-                page.current = game_layout_settings_thumbnails
-            }
-
-            function onDown(){
                 page.current = game_layout_settings_last_played
             }
         }
@@ -226,7 +201,7 @@ Item { //page
             id: game_layout_settings_last_played
             text: "open to last played"
 
-            anchors.top: game_layout_settings_button_hints.bottom
+            anchors.top: game_layout_settings_thumbnails.bottom
             anchors.topMargin: vpx(12)
 
             selected: page.selected && page.current === this
@@ -239,7 +214,7 @@ Item { //page
             property var onAccept: onClicked
 
             function onUp(){
-                page.current = game_layout_settings_button_hints
+                page.current = game_layout_settings_thumbnails
             }
 
             function onDown(){
