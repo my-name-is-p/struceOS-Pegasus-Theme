@@ -2,7 +2,6 @@
 // Copyright (C) 2024 my_name_is_p
 
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
 
 Component {
     id: genre_component
