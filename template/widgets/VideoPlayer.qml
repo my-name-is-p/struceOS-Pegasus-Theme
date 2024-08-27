@@ -159,8 +159,7 @@ Item { //viewer
             false :
             (
                 viewer.hovered || 
-                video.selected || 
-                video.playbackState != MediaPlayer.PlayingState
+                viewer.selected 
             ) 
                 ?
                     true : 
