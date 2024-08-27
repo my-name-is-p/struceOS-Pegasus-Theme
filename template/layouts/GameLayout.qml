@@ -13,6 +13,7 @@ Item {
                 game_grid_view.moveCurrentIndexUp()
             else {
                 if(game_grid_view.currentIndex < settings.columns / 2){
+                    sortfilt_toolbar.current = sortfilt_toolbar.label
                     resetFocus(sortfilt_toolbar)
                     s = audio.toggle_down
                 }else{

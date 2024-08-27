@@ -113,6 +113,11 @@ Component { //collectionView_list_item
                     currentCollectionIndex = settings.allGames ? index - 1 : index
                     collection_menu.positionViewAtCurrentIndex()
                     background.refresh()
+
+                    genreFilter = []
+                    sortfilt_menu.genre_list.model.populateModel()
+                    sortfilt_menu.genre_list.resetActive()
+                    sortfilt_toolbar.genres_model.populateModel()
                     audio.stopAll()
                     audio.toggle_down.play()
                 }

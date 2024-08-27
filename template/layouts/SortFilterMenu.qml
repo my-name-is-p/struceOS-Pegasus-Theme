@@ -3,6 +3,7 @@
 
 import QtQuick 2.15
 import "parts/sortfilter"
+import "parts/sortfilter/genres"
 
 Rectangle { //sortfilt_menu
     id: sortfilt_menu
@@ -18,6 +19,8 @@ Rectangle { //sortfilt_menu
 
     //Functions--
         function onCancel(){
+            current = sort_item_title
+            genre_list.currentIndex = 0
             resetFocus()
         }
         property var onRight: onCancel
@@ -96,7 +99,6 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.AscendingOrder : Qt.DescendingOrder
 
             function onAccept(){
-                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_title)
             }
             onClicked: onAccept
@@ -124,7 +126,6 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.DescendingOrder : Qt.AscendingOrder
 
             function onAccept(){
-                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_last_played)
             }
             onClicked: onAccept
@@ -155,7 +156,6 @@ Rectangle { //sortfilt_menu
             order: asc ? Qt.AscendingOrder : Qt.DescendingOrder
 
             function onAccept(){
-                sortfilt_menu.current = this
                 sort_section.resetSort(sort_item_play_time)
             }
             onClicked: onAccept
@@ -174,7 +174,8 @@ Rectangle { //sortfilt_menu
         id: filter_section
 
         anchors.top: sort_section.bottom
-        anchors.topMargin: vpx(12)
+        anchors.bottom: parent.bottom
+        anchors.margins: vpx(24)
 
         height: childrenSize(this, "height", "topMargin")
         width: sortfilt_menu.width
@@ -216,9 +217,13 @@ Rectangle { //sortfilt_menu
             function onUp(){
                 sortfilt_menu.current = sort_item_play_time
             }
+
+            function onDown(){
+                genre_list.currentIndex = 0
+                sortfilt_menu.current = genre_filter
+            }
             
             onClicked: function(){
-                sortfilt_menu.current = this
                 enabled = !enabled
                 games.currentIndex = -1
                 games.currentIndex = 0
@@ -226,6 +231,95 @@ Rectangle { //sortfilt_menu
             property var onAccept: onClicked
 
         }
+
+        Item {
+            id: genre_filter
+
+            anchors.top: filter_item_favorite.bottom
+            anchors.topMargin: vpx(6)
+            anchors.left: parent.left
+            anchors.leftMargin: vpx(24)
+            anchors.right: parent.right
+            anchors.rightMargin: vpx(12)
+            anchors.bottom: parent.bottom
+
+            property bool selected: sortfilt_menu.current === this
+
+            function onUp(){
+                if(genre_list.currentIndex != 0)
+                    genre_list.decrementCurrentIndex()
+                else
+                    sortfilt_menu.current = filter_item_favorite
+            }
+
+            function onDown(){
+                genre_list.incrementCurrentIndex()
+            }
+
+            function onAccept(){
+                let genre = genre_list.currentItem.text
+                let genre_item = genre_list.currentItem.item
+                if(genreFilter.indexOf(genre) < 0){
+                    genreFilter.push(genre)
+                    genre_item.active = genreFilter.indexOf(genre) >= 0
+                }else{
+                    genreFilter = genreFilter.filter(e => e !== genre)
+                    genre_item.active = genreFilter.indexOf(genre) >= 0
+                }
+                genreFilter.sort()
+                search.populateModel()
+                sortfilt_toolbar.genres_model.populateModel()
+                games.currentIndex = -1
+                games.currentIndex = 0
+            }
+            
+            Text {
+                id: genre_label
+                text: "genres:"
+
+
+                color: colors.white
+                font.family: regular.name
+                font.pixelSize: vpx(18)
+            }
+
+            Rectangle {
+                id: genre_background
+
+                anchors.top: genre_label.bottom
+                anchors.topMargin: vpx(12)
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+
+                color: colors.accent_light
+                radius: vpx(6)
+
+                ListView {
+                    id: genre_list
+                    anchors.fill: parent
+
+                    model: GenresModel {}
+                    delegate: GenreGridItem {}
+
+                    highlightMoveDuration: 1
+
+                    property bool selected: genre_filter.selected
+
+                    clip: true
+
+                    function resetActive(){
+                        for(let i = 0; i < count; i++){
+                            currentIndex = i
+                            currentItem.active = genreFilter.indexOf(currentItem.text) >= 0
+                        }
+                        currentIndex = 0
+                    }
+                }
+            }
+        }
+
     }
 
     Keys.onPressed: {
@@ -234,7 +328,7 @@ Rectangle { //sortfilt_menu
         s = s != null ? s : audio.toggle_down
     }
 
-
+    property ListView genre_list: genre_list
     property FilterItem favorite: filter_item_favorite
     property SortItem title: sort_item_title
     property SortItem last_played: sort_item_last_played

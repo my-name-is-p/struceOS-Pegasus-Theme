@@ -4,6 +4,8 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
+import "parts/sortfilter/genres"
+
 Item { //sortfilt_toolbar_wrapper
     id: toolbar_wrapper
 
@@ -12,9 +14,26 @@ Item { //sortfilt_toolbar_wrapper
     property bool selected: focus
     property Item current: label
 
+
     //Functions--
-        property var onUp: current.onUp
-        property var onDown: current.onDown
+        function onUp(){
+            if(current.onUp){
+                current.onUp()
+            }else{
+                genre_list.currentIndex = 0
+                current = label
+                header.current = header.collection
+                resetFocus(header)
+            }
+        }
+        
+        function onDown(){
+            genre_list.currentIndex = 0
+            games.currentIndex = 0
+            current = label
+            resetFocus()
+        }
+
         property var onLeft: current.onLeft
         property var onRight: current.onRight
         property var onPrevious: current.onPrevious
@@ -49,21 +68,21 @@ Item { //sortfilt_toolbar_wrapper
             property bool selected: sortfilt_toolbar_wrapper.current === this
 
             //Functions--
-                function onDown(){
-                    games.currentIndex = 0
-                    resetFocus()
-                }
-
-                function onUp(){
-                    header.current = header.collection
-                    resetFocus(header)
-                }
 
                 function onLeft(){
                     s = audio.toggle_down
                     f = sortfilt_menu
                 }
                 property var onAccept: onLeft
+
+                function onRight(){
+                    toolbar_wrapper.current = 
+                        sortfilt_menu.favorite.enabled ? 
+                            favorite_filter : 
+                                genre_list.count > 0 ? 
+                                    genre_list :
+                                    label
+                }
             //--
 
             Item { //icon_mask
@@ -204,23 +223,38 @@ Item { //sortfilt_toolbar_wrapper
         }
     }
 
-    Item { //active_filters
-        id: active_filters
+    Item { //favorite_filter
+        id: favorite_filter
 
         anchors.top: toolbar_wrapper.top
         anchors.bottom: toolbar_wrapper.bottom
         anchors.left: label_wrapper.right
         anchors.leftMargin: vpx(12)
-        anchors.right: toolbar_wrapper.right
+        anchors.right: favorite_item.right
 
-        clip: true
+        width: sortfilt_menu.favorite.enabled ? favorite_item.width : 0
+
+        property bool selected: toolbar_wrapper.current === this
+    
+        function onLeft(){
+            toolbar_wrapper.current = label
+        }
+
+        function onRight(){
+            toolbar_wrapper.current = genre_list.count > 0 ? genre_list : favorite_filter
+        }
+
+        function onAccept(){
+            sortfilt_menu.favorite.enabled = false
+            toolbar_wrapper.current = label
+        }
 
         Rectangle { //filter_item
-            id: filter_item
+            id: favorite_item
 
-            anchors.verticalCenter: active_filters.verticalCenter
+            anchors.verticalCenter: favorite_filter.verticalCenter
 
-            height: filter_item_text.height + vpx(12)
+            height: favorite_item_text.height + vpx(12)
             width: childrenSize(this, "width",  "leftMargin", 12)
 
             color: colors.accent
@@ -229,12 +263,12 @@ Item { //sortfilt_toolbar_wrapper
             visible: sortfilt_menu.favorite.enabled
 
             Item { //filter_item_remove
-                id: filter_item_remove
-                height: filter_item.height
-                width: filter_item.height
+                id: favorite_item_remove
+                height: favorite_item.height
+                width: favorite_item.height
 
                 Text {
-                    anchors.centerIn: filter_item_remove
+                    anchors.centerIn: favorite_item_remove
                     text: "🗙"
                     color: colors.text
                     font.pixelSize: vpx(12)
@@ -242,19 +276,19 @@ Item { //sortfilt_toolbar_wrapper
             }
             
             Text { //filter_item_text
-                id: filter_item_text
+                id: favorite_item_text
                 text: "favorite"
                 color: colors.text
                 font.pixelSize: vpx(11)
-                anchors.verticalCenter: filter_item.verticalCenter
-                anchors.left: filter_item_remove.right
+                anchors.verticalCenter: favorite_item.verticalCenter
+                anchors.left: favorite_item_remove.right
             }
         }
 
         MouseArea { //favorite_remove
             id: favorite_remove
 
-            anchors.fill: filter_item
+            anchors.fill: favorite_item
             cursorShape: sortfilt_menu.favorite.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
 
             enabled: sortfilt_menu.favorite.enabled
@@ -262,7 +296,91 @@ Item { //sortfilt_toolbar_wrapper
             onClicked: {
                 sortfilt_menu.favorite.enabled = false
                 audio.stopAll()
-                audio.select.play()
+                audio.toggle_down.play()
+            }
+        }
+
+        Rectangle {
+            id: favorite_item_selected
+
+            anchors.fill: favorite_item
+            anchors.margins: vpx(-6)
+
+            color: colors.t
+            border.color: colors.border
+            border.width: favorite_filter.selected ? vpx(6) : 0
+            radius: vpx(6)
+        }
+    }
+
+    ListModel {
+        id: genres_model
+
+        function populateModel() {
+            clear()
+            genreFilter.forEach(function(genre){
+                append({genre: genre})
+            })
+        }
+
+        Component.onCompleted: {
+            populateModel()
+        }
+    }
+
+    ListView {
+        id: genre_list
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: favorite_filter.right
+        anchors.leftMargin: sortfilt_menu.favorite.enabled ? vpx(12) : 0
+        anchors.right: parent.right
+
+        model: genres_model
+        delegate: GenreListItem {}
+
+        highlightMoveDuration: 1
+
+        leftMargin: vpx(12)
+        rightMargin: vpx(12)
+
+        spacing: vpx(12)
+        orientation: ListView.Horizontal
+
+        property bool selected: toolbar_wrapper.current === this
+
+        clip: true
+
+        function onUp(){
+            let w = favorite_filter.width + label_wrapper.width
+            if(currentItem.x + w > toolbar_wrapper.width / 2)
+                root.header.current = root.header.search_button
+            else
+                root.header.current = root.header.collection
+            resetFocus(root.header)
+            toolbar_wrapper.current = label
+            genre_list.currentIndex = 0
+        }
+
+        function onLeft(){
+            if(currentIndex > 0){
+                decrementCurrentIndex()
+            }else{
+                toolbar_wrapper.current = 
+                    sortfilt_menu.favorite.enabled ? 
+                        favorite_filter : label
+            }
+        }
+
+        function onRight(){
+            incrementCurrentIndex()
+        }
+
+        function onAccept(){
+            currentItem.onAccept()
+            if(genreFilter.length < 1){
+                toolbar_wrapper.current = label
             }
         }
     }
@@ -272,4 +390,8 @@ Item { //sortfilt_toolbar_wrapper
             return
         s = s != null ? s : audio.toggle_down
     }
+
+    property Item label: label
+    property ListModel genres_model: genres_model
+    property ListView genre_list: genre_list
 }

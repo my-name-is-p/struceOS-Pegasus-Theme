@@ -26,16 +26,19 @@ A simple theme for easy navigation.
 - sort and filter
 - screensaver
 
-If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/Pa92b2Q2pa)
+If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
 
 <a id="current-version"></a>
-# Version 1.5.4 Updates
+# Version 1.6.0 Updates
 1. OSK bugfixes
 2. Screensaver improvements
+3. Added genre filters
+4. Moved button hints setting to Settings > Tools > General
+
 
 <a id="to-come"></a>
 # To come in future updates
-1. Add genre filters
+No features planned currently. Suggestions can be made through the [discord](https://discord.gg/CNXzbcpKX6)
 
 <a id="meta-data"></a>
 # Metadata Generation and Asset Scraping
@@ -243,11 +246,13 @@ Download struceOS-Pegasus-Theme-1.5.3.zip from [latest release](https://github.c
 <details>
     <summary>Changelogs</summary>
 
-## 1.5.4
+## 1.6.0
 
 ```
 1. OSK bugfixes
 2. Screensaver improvements
+3. Added genre filters
+4. Moved button hints setting to Settings > Tools > General
 ```
 
 ## 1.5.3

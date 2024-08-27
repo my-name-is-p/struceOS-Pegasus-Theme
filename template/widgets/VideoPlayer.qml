@@ -70,7 +70,7 @@ Item { //viewer
         
         Video { //video
             id: video
-            source: currentGame.assets.video
+            source: search.currentGame().assets.video
             anchors.fill: player
 
             fillMode: VideoOutput.PreserveAspectFit
@@ -88,7 +88,7 @@ Item { //viewer
                 function reset(){
                     stop()
                     source = ""
-                    source = currentGame.assets.video
+                    source = search.currentGame().assets.video
                     muted = settings.videoMute = 
                         api.memory.get("struceOS_video_videoMute") != undefined ? 
                             api.memory.get("struceOS_video_videoMute") : true
@@ -101,7 +101,7 @@ Item { //viewer
             id: frame
             anchors.fill: player
 
-            source: getAssets(currentGame.assets).bg != "default" ? getAssets(currentGame.assets).bg : images.noImage
+            source: getAssets(search.currentGame().assets).bg != "default" ? getAssets(search.currentGame().assets).bg : images.noImage
 
             fillMode: Image.PreserveAspectCrop
 

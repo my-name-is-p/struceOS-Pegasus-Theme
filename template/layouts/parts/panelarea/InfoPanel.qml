@@ -105,7 +105,7 @@ Item {
         }
 
         function onSort(){
-            currentGame.favorite = !currentGame.favorite
+            search.currentGame().favorite = !search.currentGame().favorite
             search.model.clear()
         }
 
@@ -148,13 +148,13 @@ Item {
             id: favorite
             anchors.right: parent.right
 
-            icon: currentGame.favorite ? images.favorite_icon_filled : images.favorite_icon_empty
+            icon: search.currentGame().favorite ? images.favorite_icon_filled : images.favorite_icon_empty
             sound: audio.toggle_down
             
             selected: panel.current === this
 
             onClicked: function(){
-                currentGame.favorite = !currentGame.favorite
+                search.currentGame().favorite = !search.currentGame().favorite
                 search.model.clear()
             }
 
@@ -297,7 +297,7 @@ Item {
 
             Image { //logo
                 id: logo
-                source: getAssets(currentGame.assets).logo
+                source: getAssets(search.currentGame().assets).logo
 
                 anchors.top: right_panel.top
                 anchors.left: right_panel.left
@@ -308,7 +308,7 @@ Item {
                 fillMode: Image.PreserveAspectFit
 
                 Text {  //game title backup
-                    text: currentGame.title
+                    text: search.currentGame().title
 
                     anchors.centerIn: logo
 
@@ -347,10 +347,10 @@ Item {
 
             Text { //summary
                 id: summary
-                text: currentGame.summary != "" ? 
-                        currentGame.summary : 
-                        currentGame.description != "" ? 
-                            currentGame.description : 
+                text: search.currentGame().summary != "" ? 
+                        search.currentGame().summary : 
+                        search.currentGame().description != "" ? 
+                            search.currentGame().description : 
                             "No description..."
 
                 anchors.top: developer_publisher.bottom

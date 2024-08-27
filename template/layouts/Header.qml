@@ -25,7 +25,17 @@ Item { //header
 
     //Functions--
         property var onUp: current.onUp
-        property var onDown: current.onDown
+        function onDown(){
+            if(current.onDown){
+                current.onDown()
+            }else{
+                if(games.count > settings.columns - 1)
+                    games.currentIndex = settings.columns - 1
+                else
+                    games.currentIndex = games.count - 1
+                resetFocus()
+            }
+        }
         property var onLeft: current.onLeft
         property var onRight: current.onRight
         property var onPrevious: current.onPrevious
@@ -165,7 +175,10 @@ Item { //header
             }
 
             function onDown(){
-                games.currentIndex = settings.columns - 1
+                if(games.count > settings.columns - 1)
+                    games.currentIndex = settings.columns - 1
+                else
+                    games.currentIndex = games.count - 1
                 resetFocus()
             }
         //--
@@ -207,11 +220,6 @@ Item { //header
             function onRight(){
                 header.current = info_button
             }
-
-            function onDown(){
-                games.currentIndex = settings.columns - 1
-                resetFocus()
-            }
         //--
     }
 
@@ -251,11 +259,6 @@ Item { //header
             function onRight(){
                 header.current = clock
             }
-
-            function onDown(){
-                games.currentIndex = settings.columns - 1
-                resetFocus()
-            }
         //--
     }
 
@@ -281,11 +284,6 @@ Item { //header
 
             function onRight(){
                 header.current = collection
-            }
-
-            function onDown(){
-                games.currentIndex = settings.columns - 1
-                resetFocus()
             }
         //--
     }

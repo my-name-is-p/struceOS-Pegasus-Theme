@@ -108,7 +108,7 @@ Rectangle { //launch
                 api.memory.set("collectionIndex", currentCollectionIndex)
                 api.memory.set("gameIndex", games.currentIndex)
             }
-            currentGame.launch()
+            search.currentGame().launch()
             mouse.event = accept
         }
     }

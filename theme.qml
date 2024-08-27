@@ -19,10 +19,11 @@
 // for easy to read code
 
 // Changelogs
-// #1.5.4
+// #1.6.0
 //      1. OSK bugfixes
 //      2. Screensaver improvements
-//      3. Moved button hints setting to Settings > Tools > General
+//      3. Added genre filters
+//      4. Moved button hints setting to Settings > Tools > General
 
 // #1.5.3
 //      1. Code cleanup and refactoring
@@ -102,7 +103,7 @@
 //      1. Initial release
 
 // TO DO --------------------------------------------------------------------------------------
-// 1. Add genre filters
+// 1. 
 // --------------------------------------------------------------------------------------------
 
 import QtQuick 2.15
@@ -135,9 +136,10 @@ FocusScope {
         }
     }
     property GridView games: game_layout.games
-    property var currentGame: search.currentGame(games.currentIndex)
 
-    property string bg: getAssets(currentGame.assets).bg
+    property var genreFilter: []
+
+    property string bg: getAssets(search.currentGame().assets).bg
     property var s: null
 
     property Item f: game_layout
@@ -213,6 +215,7 @@ FocusScope {
         focus: f === this
     }
     property TextInput search_term: header.search_term
+    property Header header: header
 
     Rectangle{ //dropdown
         id: dropdown
@@ -345,13 +348,11 @@ FocusScope {
     Component.onCompleted: {
         currentCollectionIndex = api.memory.get("collectionIndex") || 0
         games.currentIndex = api.memory.get("gameIndex") || 0
-
         if(currentCollectionIndex < 0 && !settings.allGames){
             currentCollectionIndex = 0
             games.currentIndex = 0
         }
-
-        bg = getAssets(currentGame.assets).bg
+        bg = getAssets(search.currentGame().assets).bg
 
         if(settings.enableDevTools)
             log(settings.details)
@@ -362,6 +363,7 @@ FocusScope {
 
         audio.stopAll()
         audio.home.play()
+
     }
 
     Loader { //settings_loader
@@ -489,6 +491,10 @@ FocusScope {
                 }
                 collection_menu.positionViewAtCurrentIndex()
                 s = audio.toggle_down
+                genreFilter = []
+                sortfilt_menu.genre_list.model.populateModel()
+                sortfilt_menu.genre_list.resetActive()
+                sortfilt_toolbar.genres_model.populateModel()
             }
         }
         if(s != null){

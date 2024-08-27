@@ -96,6 +96,7 @@ Item { //devtools
                 audio.stopAll()
                 audio.select.play()
                 log("DEV-BUTTON", true)
+                log(search.currentGame().title)
             }
 
             onDoubleClicked: {

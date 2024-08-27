@@ -52,7 +52,7 @@ Rectangle { //background
             interval: background.fade_time
             repeat: false
             onTriggered: {
-                bg = getAssets(currentGame.assets).bg
+                bg = getAssets(search.currentGame().assets).bg
                 if(bg_image.status === Image.Ready)
                     repeat = false
                 if(!repeat)

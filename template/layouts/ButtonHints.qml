@@ -46,7 +46,7 @@ Rectangle {
         SortFilt {
             id: sortfilt
             text: f === panel_area && f.current === panel_area.info_panel ? 
-                        currentGame.favorite ?
+                        search.currentGame().favorite ?
                             "unfavorite" : "favorite":
                     f === sortfilt_menu ? "close sort / filter" : "sort / filter"
 

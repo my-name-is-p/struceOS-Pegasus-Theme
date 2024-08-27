@@ -10,8 +10,8 @@ Item { //search
     property alias model: gamesFiltered
     property string firstWordIgnoreList
 
-    function currentGame(index) { 
-        return currentCollection.games.get(gamesFiltered.mapToSource(index)) 
+    function currentGame() { 
+        return currentCollection.games.get(gamesFiltered.mapToSource(games.currentIndex)) 
     }
 
     function populateModel(){
@@ -24,16 +24,33 @@ Item { //search
 
         filters: [
             RegExpFilter { 
-                roleName: "title"; 
+                roleName: "title"
                 pattern: search_term.text 
                 caseSensitivity: Qt.CaseInsensitive;
                 enabled: search_term.text != ""
             },
 
             ValueFilter { 
-                roleName: "favorite"; 
-                value: true;
+                roleName: "favorite"
+                value: true
                 enabled: sortfilt_menu.favorite.enabled
+            },
+
+            ExpressionFilter { 
+                expression: {
+                    if(genreFilter.length > 0){
+                        if(genre != ""){
+                            for(let i = 0; i < genreFilter.length; i++){
+                                if(genre.includes(genreFilter[i]))
+                                    return true
+                            }
+                            return false
+                        }
+                        return false
+                    }
+                    return true
+                }
+                enabled: true
             }
         ]
 
@@ -44,4 +61,5 @@ Item { //search
                 enabled: sortfilt_menu.active_sort.enabled
             }
     }
+
 }

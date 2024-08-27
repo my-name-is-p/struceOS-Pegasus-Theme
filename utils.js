@@ -8,7 +8,7 @@ function launchGame(){
         api.memory.set("collectionIndex", currentCollectionIndex)
         api.memory.set("gameIndex", games.currentIndex)
     }
-    currentGame.launch()
+    search.currentGame().launch()
 }
 
 // GetSimpleKeys
@@ -164,6 +164,10 @@ function collectionNext(){
         else
             currentCollectionIndex = 0
     }
+    genreFilter = []
+    sortfilt_menu.genre_list.model.populateModel()
+    sortfilt_menu.genre_list.resetActive()
+    sortfilt_toolbar.genres_model.populateModel()
     collection_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
@@ -183,13 +187,17 @@ function collectionPrevious(){
     }else{
         currentCollectionIndex = api.collections.count - 1
     }
+    genreFilter = []
+    sortfilt_menu.genre_list.model.populateModel()
+    sortfilt_menu.genre_list.resetActive()
+    sortfilt_toolbar.genres_model.populateModel()
     collection_menu.positionViewAtCurrentIndex()
     background.refresh()
 }
 
 //resetFocus
 function resetFocus(c = game_layout){
-    if(games.currentIndex != -1)
+    if(games.currentIndex != -1 && games.count != 0)
         video.reset()
     f = background
     f = c

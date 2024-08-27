@@ -14,12 +14,12 @@ Item { //details
 
         anchors.verticalCenter: details.verticalCenter
 
-        visible: currentGame.releaseYear != 0
+        visible: search.currentGame().releaseYear != 0
         width: visible ? release_label.contentWidth : 0
 
         Text { //release_label
             id: release_label
-            text: "released: " + currentGame.releaseYear
+            text: "released: " + search.currentGame().releaseYear
 
             anchors.verticalCenter: parent.verticalCenter
 
@@ -40,7 +40,7 @@ Item { //details
 
         width: childrenSize(this, "width", "leftMargin")
 
-        visible: currentGame.players > 0
+        visible: search.currentGame().players > 0
 
         Text { //players_label
             id: players_label
@@ -61,7 +61,7 @@ Item { //details
             anchors.leftMargin: vpx(6)
             anchors.verticalCenter: parent.verticalCenter
 
-            width: vpx(16) * Math.min(currentGame.players, 5)
+            width: vpx(16) * Math.min(search.currentGame().players, 5)
             height: vpx(16)
 
             Image { //players_icon
@@ -102,12 +102,12 @@ Item { //details
         anchors.leftMargin: vpx(12)
         anchors.verticalCenter: parent.verticalCenter
 
-        visible: currentGame.genre != ""
+        visible: search.currentGame().genre != ""
         width: visible ? genres_label.contentWidth : 0
 
         Text {
             id: genres_label
-            text: "genres: " + currentGame.genre
+            text: "genres: " + search.currentGame().genre
 
             anchors.verticalCenter: parent.verticalCenter
 
