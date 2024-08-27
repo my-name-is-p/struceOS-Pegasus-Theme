@@ -29,11 +29,8 @@ A simple theme for easy navigation.
 If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
 
 <a id="current-version"></a>
-# Version 1.6.0 Updates
-1. OSK bugfixes
-2. Screensaver improvements
-3. Added genre filters
-4. Moved button hints setting to Settings > Tools > General
+# Version 1.6.1 Updates
+1. VideoPlayer hotfix
 
 
 <a id="to-come"></a>
@@ -245,6 +242,12 @@ Download struceOS-Pegasus-Theme-1.5.3.zip from [latest release](https://github.c
 <a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
+
+## 1.6.1
+
+```
+1. VideoPlayer hotfix
+```
 
 ## 1.6.0
 

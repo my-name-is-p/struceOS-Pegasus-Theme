@@ -19,6 +19,9 @@
 // for easy to read code
 
 // Changelogs
+// #1.6.1
+//      1. VideoPlayer hotfix
+
 // #1.6.0
 //      1. OSK bugfixes
 //      2. Screensaver improvements
