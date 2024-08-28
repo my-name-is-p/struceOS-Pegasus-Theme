@@ -140,7 +140,7 @@ Item {
             //--
         }
 
-        ToggleBox { //game_layout_settings_button_hints
+        ToggleBox { //general_tools_settings_button_hints
             id: general_tools_settings_button_hints
             text: "button hints"
 
@@ -161,7 +161,60 @@ Item {
             }
 
             function onDown(){
-                page.current = devtools_settings_opacity_slider
+                page.current = general_tools_settings_screensaver_timeout_slider
+            }
+        }
+
+        Item { //general_tools_settings_screensaver_timeout
+            id: general_tools_settings_screensaver_timeout
+
+            anchors.top: general_tools_settings_button_hints.bottom
+            anchors.topMargin: vpx(12)
+            anchors.left: general_tools_settings.left
+            anchors.right: general_tools_settings.right
+
+            height: childrenSize(this, "height", "", 0, 0, true)
+
+            Text { //devtools_settings_opacity_text
+                id: general_tools_settings_screensaver_timeout_text
+                text: "screensaver timeout (in seconds)"
+
+                color: colors.text
+
+                font.family: regular.name
+                font.pixelSize: vpx(16)
+            }
+
+            SliderBar { //general_tools_settings_screensaver_timeout_slider
+                id: general_tools_settings_screensaver_timeout_slider
+
+                anchors.left: general_tools_settings_screensaver_timeout_text.right
+                anchors.leftMargin: vpx(12)
+                anchors.right: general_tools_settings_screensaver_timeout.right
+
+                min: 1
+                max: 600
+
+                value: (settings.screensaverTimeout)
+                memory: "struceOS_screensaver_timeout"
+
+                selected: page.selected && page.current === this
+
+                //Functions--
+                    function onUp(){
+                        if(current.onUp)
+                            current.onUp()
+                        else
+                            page.current = general_tools_settings_button_hints
+                    }
+
+                    function onDown(){
+                        if(current.onDown)
+                            current.onDown()
+                        else
+                            page.current = devtools_settings_opacity_slider
+                    }
+                //--
             }
         }
     }
@@ -230,7 +283,7 @@ Item {
                         if(current.onUp)
                             current.onUp()
                         else
-                            page.current = general_tools_settings_button_hints
+                            page.current = general_tools_settings_screensaver_timeout_slider
                     }
 
                     function onDown(){

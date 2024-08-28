@@ -23,6 +23,12 @@ Item { //search
         sourceModel: currentCollection.games
 
         filters: [
+            ValueFilter { 
+                roleName: "screensaverhide"
+                value: true
+                enabled: screensaver.opacity === 1
+            },
+            
             RegExpFilter { 
                 roleName: "title"
                 pattern: search_term.text 

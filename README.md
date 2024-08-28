@@ -26,7 +26,7 @@ A simple theme for easy navigation.
 - sort and filter
 - screensaver
 
-If you have any issues, please open a ticket or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
+If you have any issues, please open a [ticket](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/issues) or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
 
 <a id="current-version"></a>
 # Version 1.6.1 Updates

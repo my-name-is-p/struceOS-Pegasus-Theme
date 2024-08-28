@@ -25,6 +25,8 @@ Item {
         api.memory.get("struceOS_ui_buttonHints") != undefined ?
             api.memory.get("struceOS_ui_buttonHints") : true
 
+    property int screensaverTimeout: api.memory.get("struceOS_screensaver_timeout") || 30
+
     property bool osk:
         api.memory.get("struceOS_ui_osk") != undefined ?
             api.memory.get("struceOS_ui_osk") : false

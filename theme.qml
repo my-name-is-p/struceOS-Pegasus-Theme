@@ -21,6 +21,8 @@
 // Changelogs
 // #1.6.1
 //      1. VideoPlayer hotfix
+//      2. Added screensaver timeout to settings
+//      3. Screensaver now clears the game layout to save on memory
 
 // #1.6.0
 //      1. OSK bugfixes
@@ -334,7 +336,7 @@ FocusScope {
 
         anchors.fill: parent
 
-        timeout: 30
+        timeout: settings.screensaverTimeout
     }
 
 
@@ -357,12 +359,13 @@ FocusScope {
         }
         bg = getAssets(search.currentGame().assets).bg
 
-        if(settings.enableDevTools)
-            log(settings.details)
 
         games.positionViewAtIndex(games.currentIndex, GridView.End)
         resetFocus(game_layout)
         screensaver.reset()
+
+        if(settings.enableDevTools)
+            log(settings.details)
 
         audio.stopAll()
         audio.home.play()

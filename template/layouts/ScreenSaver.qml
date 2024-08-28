@@ -96,11 +96,13 @@ Rectangle {
                 anchors.left = undefined
                 anchors.right = undefined
 
-                let verticalMargin = Math.random() < 0.5 ? "top" : "bottom"
-                let horizontalMargin = Math.random() < 0.5 ? "left" : "right"
+                let vAlignment = Math.random() < 0.5 ? "top" : "bottom"
+                let hAlignment = Math.random() < 0.5 ? "left" : "right"
 
-                anchors[verticalMargin] = parent[verticalMargin]
-                anchors[horizontalMargin] = parent[horizontalMargin]
+                anchors[vAlignment] = parent[vAlignment]
+                anchors[hAlignment] = parent[hAlignment]
+                verticalAlignment: Image["Align" + vAlignment.charAt(0).toUpperCase() + vAlignment.slice(1)]
+                horizontalAlignment: Image["Align" + hAlignment.charAt(0).toUpperCase() + hAlignment.slice(1)]
             }
         }
 
