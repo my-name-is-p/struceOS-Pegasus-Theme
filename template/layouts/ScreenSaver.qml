@@ -15,9 +15,11 @@ Rectangle {
 
     property int timeout: 3
     property int fadeTime: 5
-    property int changeTime: 24
+    property int changeTime: 12
 
     property bool active: false
+
+    property int gameIndex: games.currentIndex
 
     Item {
         id: image_wrapper
@@ -101,8 +103,8 @@ Rectangle {
 
                 anchors[vAlignment] = parent[vAlignment]
                 anchors[hAlignment] = parent[hAlignment]
-                verticalAlignment: Image["Align" + vAlignment.charAt(0).toUpperCase() + vAlignment.slice(1)]
-                horizontalAlignment: Image["Align" + hAlignment.charAt(0).toUpperCase() + hAlignment.slice(1)]
+                verticalAlignment = Image["Align" + vAlignment.charAt(0).toUpperCase() + vAlignment.slice(1)]
+                horizontalAlignment = Image["Align" + hAlignment.charAt(0).toUpperCase() + hAlignment.slice(1)]
             }
         }
 
@@ -163,6 +165,7 @@ Rectangle {
         interval: 1000 * screensaver.timeout
         onTriggered: {
             if(video.playbackState != MediaPlayer.PlayingState){
+                gameIndex = games.currentIndex
                 image.resetOffset()
                 screensaver.active = true
                 screensaver.opacity = 1
@@ -174,9 +177,14 @@ Rectangle {
 
     function reset(){
         let f = fadeTime
+        let o = opacity
         timeout.restart()
         fadeTime = 0
         opacity = 0
+        if(o === 1){
+            games.currentIndex = gameIndex
+            games.positionViewAtIndex(games.currentIndex, GridView.Start)
+        }
         fadeTime = f
     }
 }

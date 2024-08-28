@@ -1,0 +1,8 @@
+
+Pull data:
+
+skyscraper -p {platform} -s {source} -i {path/to/roms} --region {us, eu, jp, wor} --refresh
+
+Output metadata.pegasus.txt:
+
+skyscraper -p {platform} -f pegasus -a {path/to/struceos-artwork.xml} -e "{path/to/emulator} {file.path}" -i {path/to/roms} -g {output/path/metadata.pegasus.txt} -o {output/path/assets}

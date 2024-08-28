@@ -22,7 +22,8 @@
 // #1.6.1
 //      1. VideoPlayer hotfix
 //      2. Added screensaver timeout to settings
-//      3. Screensaver now clears the game layout to save on memory
+//      3. Sped up screensaver transition
+//      4. Screensaver now clears the game layout to save on memory
 
 // #1.6.0
 //      1. OSK bugfixes

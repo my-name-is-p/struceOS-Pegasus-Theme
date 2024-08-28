@@ -31,6 +31,10 @@ If you have any issues, please open a [ticket](https://github.com/my-name-is-p/s
 <a id="current-version"></a>
 # Version 1.6.1 Updates
 1. VideoPlayer hotfix
+2. Added screensaver timeout to settings
+3. Sped up screensaver transition
+4. Screensaver now clears the game layout to save on memory
+
 
 
 <a id="to-come"></a>
@@ -247,6 +251,10 @@ Download struceOS-Pegasus-Theme-1.6.0.zip from [latest release](https://github.c
 
 ```
 1. VideoPlayer hotfix
+2. Added screensaver timeout to settings
+3. Sped up screensaver transition
+4. Screensaver now clears the game layout to save on memory
+
 ```
 
 ## 1.6.0

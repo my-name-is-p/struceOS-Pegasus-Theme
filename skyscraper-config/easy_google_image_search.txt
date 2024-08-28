@@ -1,2 +1,2 @@
-background: https://www.google.com/search?as_st=y&as_q=GAME NAME fanart&imgsz=2mp&imgar=w&imgtype=jpg,jpeg,png&udm=2
+background: https://www.google.com/search?as_st=y&as_q=GAME NAME wallpaper&imgsz=2mp&imgar=w&imgtype=jpg,jpeg,png&udm=2
 logo: https://www.google.com/search?as_st=y&as_q=GAME NAME logo&imgc=trans&imgtype=png&as_filetype=png&udm=2
