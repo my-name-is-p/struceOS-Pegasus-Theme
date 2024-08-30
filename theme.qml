@@ -246,7 +246,7 @@ FocusScope {
         PanelArea {
             id: panel_area
 
-            anchors.bottom: parent.bottom
+            anchors.top: parent.top
             anchors.right: parent.right
             anchors.left: parent.left
 
@@ -309,13 +309,13 @@ FocusScope {
 
         anchors.bottom: parent.bottom
         anchors.bottomMargin: settings.buttonHints ? 0 : -height
-        Behavior on anchors.bottomMargin {NumberAnimation{duration: 125}}
+        Behavior on anchors.bottomMargin {NumberAnimation{duration: 100}}
         
         anchors.left: sortfilt_menu.right
         anchors.right: parent.right
 
         opacity: settings.buttonHints ? 1 : 0
-        Behavior on opacity {NumberAnimation{duration: 125}}
+        Behavior on opacity {NumberAnimation{duration: 100}}
     }
 
     LaunchWindow {

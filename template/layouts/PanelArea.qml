@@ -12,7 +12,6 @@ Item { //panel_area
         let h = parent.parent.height - (header.height)
         return settings.buttonHints ? h - vpx(72) : h * 0.95
     }
-    Behavior on height {NumberAnimation {duration: 125}}
 
     property Item current: panel_area
     property string current_s: "info"

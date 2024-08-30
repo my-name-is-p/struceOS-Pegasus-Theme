@@ -254,7 +254,7 @@ Item {
 
             Text { //devtools_settings_opacity_text
                 id: devtools_settings_opacity_text
-                text: "opacity"
+                text: "log opacity"
 
                 color: colors.text
 
