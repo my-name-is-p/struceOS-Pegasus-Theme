@@ -71,6 +71,7 @@ Item { //header
             }
 
             onClicked: function(){
+                screensaver.reset()
                 toggle()
                 s.play()
                 s = null
@@ -104,6 +105,7 @@ Item { //header
 
         //--Functions
             onClicked: function(){
+                screensaver.reset()
                 resetFocus(header)
                 header.current = search_bar
                 if(settings.osk){

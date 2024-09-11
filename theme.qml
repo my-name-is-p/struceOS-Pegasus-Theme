@@ -112,9 +112,8 @@
 // 1. 
 // --------------------------------------------------------------------------------------------
 
-import QtQuick 2.15
+import QtQuick 2.8
 import QtMultimedia 5.9
-
 
 import "template"
 import "template/layouts"
@@ -339,7 +338,6 @@ FocusScope {
 
         timeout: settings.screensaverTimeout
     }
-
 
     DevTools{
         id: devtools
