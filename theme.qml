@@ -19,6 +19,9 @@
 // for easy to read code
 
 // Changelogs
+// #1.6.2
+//      1. Android and Linux fixes
+
 // #1.6.1
 //      1. VideoPlayer hotfix
 //      2. Added screensaver timeout to settings
