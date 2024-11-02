@@ -93,6 +93,8 @@ Item { //viewer
                         api.memory.get("struceOS_video_videoMute") != undefined ? 
                             api.memory.get("struceOS_video_videoMute") : true
                     volume = settings.videoVolume = api.memory.get("struceOS_video_volume") || 0.40
+                    volume_handle.y = volume_background.height - (volume_background.height * volume)
+
                 }
             //--
         }
@@ -365,17 +367,12 @@ Item { //viewer
 
                 cursorShape: Qt.PointingHandCursor
 
-                drag.target: scrub_handle
-                drag.axis: Drag.XAxis
-                drag.minimumX: 0
-                drag.maximumX: scrub_bar.width - scrub_handle.width
-
                 onPressed: {
                     video.seek(mouseX/scrub_background.width * video.duration)
                 }
 
                 onPositionChanged: {
-                    video.seek(scrub_handle.x/scrub_background.width * video.duration)
+                    video.seek(mouseX/scrub_background.width * video.duration)
                 }
             }
         }
@@ -506,6 +503,41 @@ Item { //viewer
             property bool selected: viewer.current === this
 
             //Functions--
+            function updateX(position, mute = false){ //updateX
+                if(0 >= position)
+                    position = 0
+
+                let current_stop = slider.stop
+                let i = slider.min
+                if(current_stop / 2 > position){
+                    position = 0
+                }else{
+                    while(current_stop < position){
+                        current_stop += slider.stop
+                        i++
+                    }
+                    if(current_stop - (slider.stop / 2) > position){
+                        position = current_stop - slider.stop
+                    }else{
+                        position = current_stop
+                        i++
+                    }
+                }
+
+                slider.value = Math.min(i, slider.max)
+
+                if(position > base.width)
+                    position = base.width
+
+                position = Math.round(position - handle.width / 2)
+
+                if(position != handle.x && !mute){
+                    audio.stopAll()
+                    audio.select.play()
+                }
+                return position
+            }
+            
                 function onDown(){
                     viewer.current = mute
                 }
@@ -610,7 +642,7 @@ Item { //viewer
                 color: colors.slider
                 radius: vpx(12)
 
-                y: volume_background.height * (1 - settings.videoVolume)
+                y: volume_background.height - (volume_background.height * video.volume)
 
                 property bool selected: viewer.current === this
 
@@ -618,17 +650,20 @@ Item { //viewer
                     function onUp(){
                         let v = (settings.videoVolume * 100) + 1
                         video.volume = settings.videoVolume = v < 100 ? v / 100 : 1
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
 
                     function onDown(){
                         let v = (settings.videoVolume * 100) - 1
                         video.volume = video.volume = settings.videoVolume = v > 0 ? v / 100 : 0
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
 
                     function onNext(){
                         let v = Math.round((settings.videoVolume * 100) % 5)
                         v = (settings.videoVolume * 100) - v + 5
                         video.volume = settings.videoVolume = v < 100 ? v / 100 : 1
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
                     property var onRight: onNext
 
@@ -636,15 +671,18 @@ Item { //viewer
                         let v = Math.round((settings.videoVolume * 100) % 5)
                         v = v > 0 ? (settings.videoVolume * 100) - v : (settings.videoVolume * 100) - 5
                         video.volume = settings.videoVolume = v > 0 ? v / 100 : 0
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
                     property var onLeft: onPrevious
 
                     function onFirst(){
                         video.volume = settings.videoVolume = 0
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
 
                     function onLast(){
                         video.volume = settings.videoVolume = 1
+                        y = volume_background.height - (volume_background.height * video.volume)
                     }
 
                     function onAccept(){
@@ -673,18 +711,28 @@ Item { //viewer
 
                 cursorShape: Qt.PointingHandCursor
 
-                drag.target: volume_handle
-                drag.axis: Drag.YAxis
-                drag.minimumY: 0
-                drag.maximumY: volume_scrub.height - volume_handle.height
 
                 onPressed: {
+                    if(mouseY < 0){
+                        volume_handle.y = 0
+                    }else if(mouseY > volume_background.height){
+                        volume_handle.y = volume_background.height
+                    }else{
+                        volume_handle.y = mouseY
+                    }
                     let v = Math.round((1 - (mouseY / volume_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
                     video.volume = settings.videoVolume = v
                 }
 
                 onPositionChanged: {
+                    if(mouseY < 0){
+                        volume_handle.y = 0
+                    }else if(mouseY > volume_background.height){
+                        volume_handle.y = volume_background.height
+                    }else{
+                        volume_handle.y = mouseY
+                    }
                     let v = Math.round((1 - (volume_handle.y / volume_background.height)) * 100) / 100
                     v = v < 0 ? 0 : v
                     video.volume = settings.videoVolume = v

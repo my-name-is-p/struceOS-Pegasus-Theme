@@ -29,13 +29,8 @@ A simple theme for easy navigation.
 If you have any issues, please open a [ticket](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/issues) or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
 
 <a id="current-version"></a>
-# Version 1.6.1 Updates
-1. VideoPlayer hotfix
-2. Added screensaver timeout to settings
-3. Sped up screensaver transition
-4. Screensaver now clears the game layout to save on memory
-
-
+# Version 1.6.2 Updates
+1. Fixes for Android and Linux
 
 <a id="to-come"></a>
 # To come in future updates
@@ -239,13 +234,19 @@ Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [Pl
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.6.1.zip from [latest release](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.6.2.zip from [latest release](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
 <a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
+
+## 1.6.2 
+
+```
+1. Fixes for Android and Linux
+```
 
 ## 1.6.1
 
