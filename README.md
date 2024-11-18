@@ -1,5 +1,6 @@
 # struceOS-Pegasus-Theme
 
+- [Preamble](#preamble)
 - [Description](#description)
 - [Version Updates](#current-version)
 - [To come in future updates](#to-come)
@@ -14,6 +15,9 @@
 - [Changelog](#changelog)
 
 ![screenshots](.meta/screenshots.jpg)
+<a id="preamble"></a>
+# Preamble
+I made this theme for myself to use on a Windows desktop (Windows 10/11). It should work on Linux (tested on Ubuntu 22.04.5) and Android 14 (tested on a Galaxy Tab A8). I am mostly a self taught coder/designer, so any feedback is greatly appreciated.
 
 <a id="description"></a>
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
