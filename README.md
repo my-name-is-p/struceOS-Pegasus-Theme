@@ -19,6 +19,10 @@
 # Preamble
 I made this theme for myself to use on a Windows desktop (Windows 10/11). It should work on Linux (tested on Ubuntu 22.04.5) and Android 14 (tested on a Galaxy Tab A8). I am mostly a self taught coder/designer, so any feedback is greatly appreciated.
 
+I generally found other themes to be copying too much from streaming services. Things like "featured" and "recommended" I found to be useless for games I already own. I built the theme around easy navigation while still keeping features such as video and an in-depth description.
+
+If there are features you would like to see added, please let me know. But, the theme is in dormant state currently as it has all of the features I was looking for.
+
 <a id="description"></a>
 # struceOS theme for [Pegasus Frontend](http://pegasus-frontend.org/)
 A simple theme for easy navigation.
