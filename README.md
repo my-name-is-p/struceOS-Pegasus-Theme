@@ -203,7 +203,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
 
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.5.3"
+    property string version: "1.6.2"
     property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
