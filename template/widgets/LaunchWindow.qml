@@ -21,14 +21,14 @@ Rectangle {
 
         Image {
             id: launch_image
-            source: getAssets(search.currentGame().assets).logo
+            source: search.currentGame() ? getAssets(search.currentGame().assets).logo : ""
             width: vpx(200)
             fillMode: Image.PreserveAspectFit
         }
 
         Text {
             id: launch_text
-            text: "Launching: " + search.currentGame().title
+            text: search.currentGame() ? "Launching: " + search.currentGame().title : ""
 
             anchors.left: launch_image.right
             anchors.verticalCenter: launch_image.verticalCenter

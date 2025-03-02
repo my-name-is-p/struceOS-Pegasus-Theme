@@ -61,7 +61,9 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //ui_audio_settings_volume_text
                 id: ui_audio_settings_volume_text
@@ -153,7 +155,9 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //video_audio_settings_volume_text
                 id: video_audio_settings_volume_text

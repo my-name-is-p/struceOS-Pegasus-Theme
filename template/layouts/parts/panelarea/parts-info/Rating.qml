@@ -7,9 +7,15 @@ import QtGraphicalEffects 1.15
 Item { //raiting
     id: rating
 
-    height: search.currentGame().rating > 0.0 ? vpx(24) : 0
+    height: {
+        var h = 0
+        if(search.currentGame()){
+                h = search.currentGame().rating > 0.0 ? vpx(24) : 0
+        }
+        return h
+    }
 
-    visible: search.currentGame().rating > 0.0
+    visible: search.currentGame() ? search.currentGame().rating > 0.0 : false
 
     Item { //stars
         id: stars
@@ -35,7 +41,7 @@ Item { //raiting
             source: images.stars_filled
 
             anchors.fill: empty
-            anchors.rightMargin: stars.width - (stars.width * search.currentGame().rating)
+            anchors.rightMargin: search.currentGame() ? stars.width - (stars.width * search.currentGame().rating) : stars.width
 
             fillMode: Image.PreserveAspectCrop
             horizontalAlignment: Image.AlignLeft

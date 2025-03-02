@@ -57,7 +57,7 @@ Item { //clock_container
 
         Timer { //clock_timer
             id: clock_timer
-            interval: 60000 - (seconds * 1000) // Run the timer every minute
+            interval: 60000 - (clock.seconds * 1000) // Run the timer every minute
             repeat: true
             running: true
             triggeredOnStart: true

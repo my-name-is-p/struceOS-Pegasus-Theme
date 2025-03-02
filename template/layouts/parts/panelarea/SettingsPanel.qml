@@ -39,10 +39,10 @@ Item {
         property var onPrevious: current != panel && current.onPrevious ? current.onPrevious : page_selection.onPrevious
         property var onNext: current != panel && current.onNext ? current.onNext : page_selection.onNext
 
-        property var onFirst: current.onFirst
-        property var onLast: current.onLast
-        property var onDetails: current.onDetails
-        property var onSort: current.onSort
+        property var onFirst: current != panel ? current.onFirst : activate
+        property var onLast: current != panel ? current.onLast : activate
+        property var onDetails: current != panel ? current.onDetails : activate
+        property var onSort: current != panel ? current.onSort : activate
         property var onCancel: current != panel && current.onCancel ? current.onCancel : closePanel
         
         function onAccept(){

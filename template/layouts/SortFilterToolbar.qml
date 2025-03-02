@@ -65,7 +65,7 @@ Item { //sortfilt_toolbar_wrapper
             height: childrenSize(this, "height", "", 0, 0, true)
             width: childrenSize(this, "width", "leftMargin")
 
-            property bool selected: sortfilt_toolbar_wrapper.current === this
+            property bool selected: toolbar_wrapper.current === this
 
             //Functions--
 
@@ -230,7 +230,7 @@ Item { //sortfilt_toolbar_wrapper
         anchors.bottom: toolbar_wrapper.bottom
         anchors.left: label_wrapper.right
         anchors.leftMargin: vpx(12)
-        anchors.right: favorite_item.right
+        // anchors.right: favorite_item.right
 
         width: sortfilt_menu.favorite.enabled ? favorite_item.width : 0
 

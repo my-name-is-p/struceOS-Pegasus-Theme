@@ -18,7 +18,7 @@ Item {
 
     property var onClicked: function(){}
 
-    height: childrenSize(this, "height", "", 0, 0, true)
+    height: vpx(24)/*childrenSize(this, "height", "", 0, 0, true)*/
 
     Rectangle {
         id: toggle_select

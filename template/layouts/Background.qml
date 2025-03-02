@@ -52,11 +52,13 @@ Rectangle { //background
             interval: background.fade_time
             repeat: false
             onTriggered: {
-                bg = getAssets(search.currentGame().assets).bg
-                if(bg_image.status === Image.Ready)
-                    repeat = false
-                if(!repeat)
-                    bg_image.opacity_level = 1
+                if(search.currentGame()){
+                    bg = getAssets(search.currentGame().assets).bg
+                    if(bg_image.status === Image.Ready)
+                        repeat = false
+                    if(!repeat)
+                        bg_image.opacity_level = 1
+                }
             }
         }
     }

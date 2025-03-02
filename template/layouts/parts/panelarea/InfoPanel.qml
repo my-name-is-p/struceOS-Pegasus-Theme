@@ -111,7 +111,7 @@ Item {
 
         property var onCancel: current != panel && current.onCancel ? current.onCancel : closePanel
         property var onDetails: closePanel
-        property var onAccept: current.onAccept ? current.onAccept : launchGame
+        property var onAccept: current != panel && current.onAccept ? current.onAccept : launchGame
     //--
 
     Item {  //header_buttons
@@ -148,7 +148,13 @@ Item {
             id: favorite
             anchors.right: parent.right
 
-            icon: search.currentGame().favorite ? images.favorite_icon_filled : images.favorite_icon_empty
+            icon: {
+                    var favorite = images.favorite_icon_empty
+                    if(search.currentGame()){
+                        favorite = search.currentGame().favorite ? images.favorite_icon_filled : images.favorite_icon_empty
+                    }
+                    return favorite
+                }
             sound: audio.toggle_down
             
             selected: panel.current === this
@@ -200,14 +206,18 @@ Item {
                     id: video_player
 
                     width: gallery.width
-                    height: { //height
-                        if(gallery.height > left_panel.height){
+                    height: gallery.width / 1.778
+                    /* causing binding loop error 
+                    { //height
+                        if(left_panel.height > 0 && gallery.height > left_panel.height){
                             let r = left_panel.height - launch.height - launch.anchors.topMargin
+                            log(r)
                             return r
                         }else{
-                            return width / 1.778
+                            return gallery.width / 1.778
                         }
                     }
+                    */
 
                     selected: panel.current === this
 
@@ -297,7 +307,7 @@ Item {
 
             Image { //logo
                 id: logo
-                source: getAssets(search.currentGame().assets).logo
+                source: search.currentGame() ? getAssets(search.currentGame().assets).logo : ""
 
                 anchors.top: right_panel.top
                 anchors.left: right_panel.left
@@ -308,7 +318,7 @@ Item {
                 fillMode: Image.PreserveAspectFit
 
                 Text {  //game title backup
-                    text: search.currentGame().title
+                    text: search.currentGame() ? search.currentGame().title : ""
 
                     anchors.centerIn: logo
 
@@ -347,11 +357,17 @@ Item {
 
             Text { //summary
                 id: summary
-                text: search.currentGame().summary != "" ? 
-                        search.currentGame().summary : 
-                        search.currentGame().description != "" ? 
-                            search.currentGame().description : 
-                            "No description..."
+                text: {
+                    var summary_text = ""
+                    if(search.currentGame()){
+                        summary_text = search.currentGame().summary != "" ? 
+                                        search.currentGame().summary : 
+                                            search.currentGame().description != "" ? 
+                                                search.currentGame().description : 
+                                                "No description..."
+                    }
+                    return summary_text
+                }
 
                 anchors.top: developer_publisher.bottom
                 anchors.topMargin: vpx(12)

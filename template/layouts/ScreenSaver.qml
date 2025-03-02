@@ -30,7 +30,7 @@ Rectangle {
 
         Image { //image
             id: image
-            source: getAssets(search.currentGame().assets).bg
+            source: search.currentGame() ? getAssets(search.currentGame().assets).bg : ""
 
             height: parent.height + offset_amount
             width: parent.width + offset_amount
@@ -73,7 +73,7 @@ Rectangle {
 
         Image { //logo
             id: logo
-            source: getAssets(search.currentGame().assets).logo
+            source: search.currentGame() ? getAssets(search.currentGame().assets).logo : ""
 
             anchors.top: image_wrapper.top
             anchors.left: image_wrapper.left

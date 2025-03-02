@@ -11,13 +11,14 @@ Component { //collectionView_list_item
     Item {
         id: wrapper
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: logoLoaded ? collectionView_list_logo.horizontalCenter : collectionView_list_name.horizontalCenter
-        
         height: vpx(40)
         width: logoLoaded ? collectionView_list_logo.width : collectionView_list_name.width 
         
         property bool logoLoaded: collectionView_list_logo.status != Image.Error ? true : false
+
+        Component.onCompleted: {
+            anchors.verticalCenter = parent.verticalCenter
+        }
 
         Item { //collectionView_logo_mask
             id: collectionView_logo_mask
@@ -33,7 +34,6 @@ Component { //collectionView_list_item
                 height: parent.height
 
                 fillMode: Image.PreserveAspectFit
-                horizontalAlignment: Image.center
 
                 antialiasing: true
                 smooth: true
@@ -52,7 +52,6 @@ Component { //collectionView_list_item
                 font.family: bold.name
                 font.bold: true
                 font.pixelSize: vpx(36)
-                fontSizeMode: Text.fit
             }
         }
 

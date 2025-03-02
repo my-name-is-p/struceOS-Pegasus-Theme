@@ -12,6 +12,7 @@ Component{
 
         property Item osk: parent.parent.parent.parent.parent
         property Item list_view: parent.parent
+        property string icon: icon != undefined ? icon : ""
 
         height: vpx(48)
         width: {
@@ -93,11 +94,11 @@ Component{
                 font.bold: true
                 font.pixelSize: vpx(15)
 
-                visible: icon === undefined
+                visible: icon === ""
             }
 
             Image {
-                source: icon
+                source: icon != undefined ? icon : ""
 
                 anchors.fill: parent
                 anchors.margins: vpx(12)

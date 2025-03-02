@@ -177,10 +177,9 @@ Rectangle { //sortfilt_menu
         anchors.bottom: parent.bottom
         anchors.margins: vpx(24)
 
-        height: childrenSize(this, "height", "topMargin")
         width: sortfilt_menu.width
 
-        Item { //sort_section_title
+        Item { //filter_section_title
             id: filter_section_title
 
             width: filter_section.width
@@ -232,7 +231,7 @@ Rectangle { //sortfilt_menu
 
         }
 
-        Item {
+        Item { //genre_filer
             id: genre_filter
 
             anchors.top: filter_item_favorite.bottom

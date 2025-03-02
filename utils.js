@@ -55,8 +55,9 @@ function childrenSize(element, size = "", margin = "", start = 0, i = 0, max = f
     if(
         !(element != undefined) && 
         !(size === "width" || size === "height") 
-    )
+    ){
         return 0
+    }
     for(const [key, child] of Object.entries(element.children)){
         if(key >= i){
             if(!max){
@@ -66,6 +67,22 @@ function childrenSize(element, size = "", margin = "", start = 0, i = 0, max = f
             }else{
                 r = child[size] > r ? child[size] : r
             }
+        }
+    }
+    return r
+}
+
+function cSizeTest(element, size = "", margin = "", start = 0, i = 0, max = false){
+    let r = vpx(start)
+    if(
+        !(element != undefined) && 
+        !(size === "width" || size === "height") 
+    ){
+        return 0
+    }
+    for(const [key, child] of Object.entries(element.children)){
+        if(key >= i){
+            r = child[size] > r ? child[size] : r
         }
     }
     return r

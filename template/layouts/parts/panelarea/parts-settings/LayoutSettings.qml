@@ -129,7 +129,9 @@ Item { //page
             anchors.left: game_layout_settings.left
             anchors.right: game_layout_settings.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //game_layout_settings_columns_text
                 id: game_layout_settings_columns_text

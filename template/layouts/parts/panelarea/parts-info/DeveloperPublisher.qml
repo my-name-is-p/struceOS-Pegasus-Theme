@@ -19,7 +19,7 @@ Item { //developer_publisher
 
         color: colors.accent_light
 
-        visible: search.currentGame().developer != ""
+        visible: search.currentGame() ? search.currentGame().developer != "" : false
 
         Rectangle { //developer_color
             id: developer_color
@@ -49,7 +49,7 @@ Item { //developer_publisher
 
         Text { //developer_text
             id: developer_text
-            text: search.currentGame().developer
+            text: search.currentGame() ? search.currentGame().developer : ""
 
             anchors.verticalCenter: developer.verticalCenter
             anchors.left: developer.left
@@ -92,7 +92,7 @@ Item { //developer_publisher
 
         color: colors.accent_light
 
-        visible: search.currentGame().publisher != ""
+        visible: search.currentGame() ? search.currentGame().publisher != "" : false
 
         Rectangle { //publisher_color
             id: publisher_color
@@ -121,7 +121,7 @@ Item { //developer_publisher
         Text { //publisher_text
             id: publisher_text
 
-            text: search.currentGame().publisher
+            text: search.currentGame() ? search.currentGame().publisher : ""
 
             anchors.verticalCenter: publisher.verticalCenter
             anchors.left: publisher.left

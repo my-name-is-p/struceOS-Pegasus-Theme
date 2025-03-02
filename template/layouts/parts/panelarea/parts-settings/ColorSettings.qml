@@ -89,7 +89,9 @@ Item {
             anchors.left: background_settings.left
             anchors.right: background_settings.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //background_settings_overlay_opacity_text
                 id: background_settings_overlay_opacity_text
@@ -291,7 +293,8 @@ Item {
                     moveCurrentIndexRight()
                 }
 
-                property var onAccept: currentItem.onAccept
+                property var onAccept: currentItem != null ? currentItem.onAccept : undefined
+
             //--
         }
     }

@@ -12,8 +12,19 @@ Component {
         width: text.width + vpx(36)
 
         property bool active: genreFilter.indexOf(genre) >= 0
-        property bool selected: parent.parent.selected && parent.parent.currentIndex === index
+        property bool selected: {
+            if(parent){
+                if(parent.parent.selected && parent.parent.currentIndex === index){
+                    return true
+                }
+            }
+            return false
+        }
         property bool hovered: false
+
+        // Component.onCompleted: {
+        //     selected = parent.parent.selected && parent.parent.currentIndex === index
+        // }
 
         Rectangle {
             id: genre_color

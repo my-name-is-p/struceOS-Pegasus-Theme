@@ -9,7 +9,7 @@ Component {
     Item {
         id: thumb
 
-        property GridView games: parent.parent
+        property GridView games: undefined
 
         width: games.cellWidth
         height: games.cellHeight
@@ -22,6 +22,9 @@ Component {
 
         property string name: title
 
+        Component.onCompleted: {
+            games = parent.parent
+        }
 
         Item { //thumb_padding
             id: thumb_padding
@@ -75,6 +78,9 @@ Component {
 
                     asynchronous: true
                     smooth: true
+
+                    sourceSize.width: games.cellWidth
+                    sourceSize.height: games.cellHeight
 
                     fillMode: Image.PreserveAspectCrop
 
@@ -151,6 +157,9 @@ Component {
                         asynchronous: true
                         smooth: true
 
+                        sourceSize.width: parent.width
+                        sourceSize.height: parent.height
+
                         fillMode: Image.PreserveAspectFit
 
                         visible: false
@@ -214,7 +223,7 @@ Component {
                             return logo.status === Image.Ready ? 1 : 0
                     }
                 }
-                Behavior on opacity {NumberAnimation {duration: f_speed}}
+                Behavior on opacity {NumberAnimation {duration: 200}}
             }
 
             Rectangle { //sort_info
@@ -235,12 +244,15 @@ Component {
                 Text { //sort_info_text
                     id: sort_info_text
                     text: {
-                        if(sortfilt_menu.last_played.enabled)
+                        if(sortfilt_menu.last_played.enabled){
                             return "last played: " + 
                                 (lastPlayed.toLocaleDateString(Locale.LongFormat) != "" ? 
                                     lastPlayed.toLocaleDateString(Locale.LongFormat) : "never")
-                        if(sortfilt_menu.play_time.enabled)
+                        }if(sortfilt_menu.play_time.enabled){
                             return "play time: " + getTime(playTime)
+                        }else{
+                            return ""
+                        }
                     }
 
                     anchors.centerIn: sort_info
@@ -289,14 +301,12 @@ Component {
                     games.currentIndex = index
                     audio.stopAll()
                     audio.select.play()
-                    mouse.event = accept
                 }
 
                 onDoubleClicked: {
                     launchGame()
                     audio.stopAll()
                     audio.toggle_down.play()
-                    mouse.event = accept
                 }
             }
         }

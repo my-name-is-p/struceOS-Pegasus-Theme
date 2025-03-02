@@ -10,16 +10,20 @@ Component {
     Item { //color_option
         id: color_option
 
-        height: parent.parent.cellHeight
-        width: parent.parent.cellWidth
-
-        property GridView color_options: parent.parent
+        property GridView color_options: undefined
 
         property bool selected: false
         property bool active: color_options.selected && index === color_options.currentIndex ? true : false
         property bool hovered: false
 
         property var text: value
+
+        Component.onCompleted: {
+            height = parent.parent.cellHeight
+            width = parent.parent.cellWidth
+
+            color_options = parent.parent
+        }
 
         Rectangle { //color_option_select
             id: color_option_select
@@ -79,8 +83,6 @@ Component {
 
                 TextInput { //value
                     id: value
-
-                    anchors.verticalCenter: parent.verticalCenter
 
                     text: color_value
                     anchors.top: parent.top

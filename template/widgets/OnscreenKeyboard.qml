@@ -146,7 +146,7 @@ Item {
 
             TextInput { //osk_text
                 id: osk_text
-                text: linked.text
+                text: linked != null ? linked.text : ""
 
                 anchors.fill: parent
                 anchors.margins: vpx(12)

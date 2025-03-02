@@ -9,7 +9,7 @@ Item { //viewer
     id: viewer
     
     width: parent.width
-    height: width / 1.778
+    height: parent.width / 1.778
 
     property bool hovered: false
     property bool selected: false
@@ -18,17 +18,17 @@ Item { //viewer
     property Item enter: play_pause
 
     //Functions--
-        property var onUp: current.onUp
-        property var onDown: current.onDown
-        property var onLeft: current.onLeft
-        property var onRight: current.onRight
-        property var onPrevious: current.onPrevious
-        property var onNext: current.onNext
-        property var onFirst: current.onFirst
-        property var onLast: current.onLast
-        property var onDetails: current.onDetails
-        property var onSort: current.onSort
-        property var onCancel: current.onCancel
+        property var onUp: current != viewer ? current.onUp : undefined
+        property var onDown: current != viewer ? current.onDown : undefined
+        property var onLeft: current != viewer ? current.onLeft : undefined
+        property var onRight: current != viewer ? current.onRight : undefined
+        property var onPrevious: current != viewer ? current.onPrevious : undefined
+        property var onNext: current != viewer ? current.onNext : undefined
+        property var onFirst: current != viewer ? current.onFirst : undefined
+        property var onLast: current != viewer ? current.onLast : undefined
+        property var onDetails: current != viewer ? current.onDetails : undefined
+        property var onSort: current != viewer ? current.onSort : undefined
+        property var onCancel: current != viewer ? current.onCancel : undefined
         function onAccept(){
             if(current != viewer)
                 current.onAccept()
@@ -103,7 +103,7 @@ Item { //viewer
             id: frame
             anchors.fill: player
 
-            source: getAssets(search.currentGame().assets).bg != "default" ? getAssets(search.currentGame().assets).bg : images.noImage
+            source: search.currentGame() ? (getAssets(search.currentGame().assets).bg != "default" ? getAssets(search.currentGame().assets).bg : images.noImage) : images.noImage
 
             fillMode: Image.PreserveAspectCrop
 
@@ -276,7 +276,7 @@ Item { //viewer
                 anchors.verticalCenter: scrub_bar.verticalCenter
 
                 width: vpx(12)
-                height: width
+                height: vpx(12)
 
                 color: colors.slider
                 radius: vpx(12)
@@ -637,7 +637,7 @@ Item { //viewer
                 anchors.horizontalCenter: volume_scrub.horizontalCenter
 
                 width: vpx(12)
-                height: width
+                height: vpx(12)
 
                 color: colors.slider
                 radius: vpx(12)

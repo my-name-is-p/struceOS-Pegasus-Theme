@@ -129,7 +129,7 @@ import "utils.js" as U
 FocusScope {
     id: root
 
-    property string test: settings.enableDevTools ? "test" : undefined
+    property string test: settings.enableDevTools ? "test" : ""
 
     property int currentCollectionIndex: 0
     property var currentCollection: {
@@ -159,6 +159,7 @@ FocusScope {
         property var gsk: U.gsk
         //childrenSize
         property var childrenSize: U.childrenSize
+        property var cSizeTest: U.cSizeTest //delete
         //Log
         property var log: U.log
         //getAssets

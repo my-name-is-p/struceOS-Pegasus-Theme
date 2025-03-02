@@ -173,7 +173,9 @@ Item {
             anchors.left: general_tools_settings.left
             anchors.right: general_tools_settings.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //devtools_settings_opacity_text
                 id: general_tools_settings_screensaver_timeout_text
@@ -250,7 +252,9 @@ Item {
             anchors.left: devtools_settings.left
             anchors.right: devtools_settings.right
 
-            height: childrenSize(this, "height", "", 0, 0, true)
+            Component.onCompleted: {
+                height = childrenSize(this, "height", "", 0, 0, true)
+            }
 
             Text { //devtools_settings_opacity_text
                 id: devtools_settings_opacity_text

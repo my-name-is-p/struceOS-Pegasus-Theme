@@ -9,15 +9,18 @@ Component { //genre_item
     Rectangle { //filter_item
         id: filter_item
 
-        anchors.verticalCenter: parent.verticalCenter
-
         height: sizing.height
         width: sizing.width
 
         color: colors.accent
         radius: vpx(100)
 
-        property bool selected: parent.parent.selected && parent.parent.currentIndex === index
+        property bool selected: false
+
+        Component.onCompleted: {
+            anchors.verticalCenter = parent.verticalCenter
+            selected = parent.parent.selected && parent.parent.currentIndex === index
+        }
 
         function onAccept(){
             genreFilter = genreFilter.filter(e => e !== genre)

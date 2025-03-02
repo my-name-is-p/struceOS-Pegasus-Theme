@@ -19,18 +19,18 @@ Item { //panel_area
     clip: true
 
     //Functions--
-        property var onUp: current.onUp
-        property var onDown: current.onDown
-        property var onLeft: current.onLeft
-        property var onRight: current.onRight
-        property var onPrevious: current.onPrevious
-        property var onNext: current.onNext
-        property var onFirst: current.onFirst
-        property var onLast: current.onLast
-        property var onDetails: current.onDetails
-        property var onSort: current.onSort
-        property var onCancel: current.onCancel
-        property var onAccept: current.onAccept
+        property var onUp: current != panel_area ? current.onUp : undefined
+        property var onDown: current != panel_area ? current.onDown : undefined
+        property var onLeft: current != panel_area ? current.onLeft : undefined
+        property var onRight: current != panel_area ? current.onRight : undefined
+        property var onPrevious: current != panel_area ? current.onPrevious : undefined
+        property var onNext: current != panel_area ? current.onNext : undefined
+        property var onFirst: current != panel_area ? current.onFirst : undefined
+        property var onLast: current != panel_area ? current.onLast : undefined
+        property var onDetails: current != panel_area ? current.onDetails : undefined
+        property var onSort: current != panel_area ? current.onSort : undefined
+        property var onCancel: current != panel_area ? current.onCancel : undefined
+        property var onAccept: current != panel_area ? current.onAccept : undefined
     
         function open(panel = "info"){
             switch(panel){
