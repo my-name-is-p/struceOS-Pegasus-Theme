@@ -36,7 +36,8 @@ If you have any issues, please open a [ticket](https://github.com/my-name-is-p/s
 
 <a id="current-version"></a>
 # Version 1.6.3 Updates
-1. Fixes for Android and Linux
+1. Updates to thumbnails for better performance
+2. Fixes to minimize warnings in lastrun.log
 
 <a id="to-come"></a>
 # To come in future updates
