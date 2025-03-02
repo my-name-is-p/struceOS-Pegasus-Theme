@@ -35,7 +35,7 @@ A simple theme for easy navigation.
 If you have any issues, please open a [ticket](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/issues) or let me know on [discord](https://discord.gg/n4GYEY8ZvT)
 
 <a id="current-version"></a>
-# Version 1.6.2 Updates
+# Version 1.6.3 Updates
 1. Fixes for Android and Linux
 
 <a id="to-come"></a>
@@ -203,7 +203,7 @@ The most useful settings are now in a settings panel within the theme. The rest 
 
     property real consoleLogBackground: api.memory.get("struceOS_dev_log_opacity") || 0.6
 
-    property string version: "1.6.2"
+    property string version: "1.6.3"
     property string author: "my_name_is_p"
     property string name: "struceOS"
     property string details: "struceOS v" + version + (working ? "-working" : "")
@@ -236,17 +236,28 @@ The most useful settings are now in a settings panel within the theme. The rest 
 # Thank yous
 Thank you to [VGmove (EasyLaunch)](https://github.com/VGmove/EasyLaunch) and [PlayingKarrde (clearOS)](https://github.com/PlayingKarrde/clearOS). I used your themes to build this theme.
 
+Thank you to those who have reported issues:
+Quantumwave
+luis0henrique
+
 # Installation
 Download the theme and place it in your [Pegasus theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes/).
 
 # Download
-Download struceOS-Pegasus-Theme-1.6.2.zip from [latest release](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/releases).
+Download struceOS-Pegasus-Theme-1.6.3.zip from [latest release](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/releases).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I2ZB6VK)
 
 <a id="changelog"></a>
 <details>
     <summary>Changelogs</summary>
+
+## 1.6.3
+
+```
+1. Updates to thumbnails for better performance
+2. Fixes to minimize warnings in lastrun.log
+```
 
 ## 1.6.2 
 

@@ -19,6 +19,11 @@
 // for easy to read code
 
 // Changelogs
+
+// #1.6.3
+//      1. Updates to thumbnails for better performance
+//      2. Fixes to minimize warnings in lastrun.log
+
 // #1.6.2
 //      1. Android and Linux fixes
 
