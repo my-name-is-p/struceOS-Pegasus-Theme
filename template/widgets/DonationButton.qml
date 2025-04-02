@@ -87,8 +87,7 @@ Item {
 
         onClicked: {
             Qt.openUrlExternally(donation_button.link)
-            audio.stopAll()
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
         }
     }
 }

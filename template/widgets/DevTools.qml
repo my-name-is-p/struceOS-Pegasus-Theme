@@ -93,14 +93,12 @@ Item { //devtools
             }
 
             onClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.home.safePlay()
                 log("DEV-BUTTON", true)
             }
 
             onDoubleClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
                 log("DEV-BUTTON", true)
                 mouse.event = accepted
             }
@@ -155,8 +153,7 @@ Item { //devtools
             }
 
             onClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
                 clearMemory()
                 colors_loader.sourceComponent = undefined
                 colors_loader.sourceComponent = colors_component
@@ -164,8 +161,7 @@ Item { //devtools
             }
 
             onDoubleClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
                 mouse.event = accepted
             }
         }
@@ -220,15 +216,13 @@ Item { //devtools
             }
 
             onClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
                 log(settings.details, true, true)
                 mouse.event = accepted
             }
 
             onDoubleClicked: {
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
                 log(settings.details, true, true)
                 mouse.event = accepted
             }

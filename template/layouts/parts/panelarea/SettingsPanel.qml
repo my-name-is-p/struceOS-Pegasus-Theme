@@ -240,8 +240,7 @@ Item {
                             panel.reset()
                             page_list.current = page_list_layout
                             pages.current = layout_settings
-                            audio.stopAll()
-                            audio.toggle_down.play()
+                            audio.toggle_down.safePlay()
                         }
 
                     }
@@ -277,8 +276,7 @@ Item {
                             panel.reset()
                             page_list.current = page_list_colors
                             pages.current = color_settings
-                            audio.stopAll()
-                            audio.toggle_down.play()
+                            audio.toggle_down.safePlay()
                         }
 
                     }
@@ -314,8 +312,7 @@ Item {
                             panel.reset()
                             page_list.current = page_list_audio
                             pages.current = audio_settings
-                            audio.stopAll()
-                            audio.toggle_down.play()
+                            audio.toggle_down.safePlay()
                         }
                     }
                 }
@@ -349,8 +346,7 @@ Item {
                             panel.reset()
                             page_list.current = page_list_tools
                             pages.current = tools_settings
-                            audio.stopAll()
-                            audio.toggle_down.play()
+                            audio.toggle_down.safePlay()
                         }
                     }
                 }

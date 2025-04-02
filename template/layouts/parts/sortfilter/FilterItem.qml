@@ -97,8 +97,7 @@ Item {
 
         onClicked: {
             parent.onClicked()
-            audio.stopAll()
-            audio.select.play()
+            audio.select.safePlay()
         }
     }
 

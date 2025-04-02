@@ -101,8 +101,7 @@ Rectangle { //launch
 
         onClicked: {
             parent.onClicked()
-            audio.stopAll()
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
             launch_window.visible = true
             if(settings.lastPlayed){
                 api.memory.set("collectionIndex", currentCollectionIndex)

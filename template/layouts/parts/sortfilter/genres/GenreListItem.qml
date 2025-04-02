@@ -69,7 +69,7 @@ Component { //genre_item
 
             onClicked: {
                 filter_item.onAccept()
-                audio.toggle_down.play()
+                audio.toggle_down.safePlay()
             }
         }
 

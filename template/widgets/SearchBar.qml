@@ -54,8 +54,7 @@ Item {  //search_bar
                 if(event.key === 1048576 && event.isAutoRepeat)
                     return
                 s = audio.select
-                audio.stopAll()
-                s.play()
+                s.safePlay()
             }
 
             MouseArea { //search_click

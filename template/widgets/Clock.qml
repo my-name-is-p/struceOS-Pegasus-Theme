@@ -79,8 +79,7 @@ Item { //clock_container
 
         onClicked: {
             clock_container.onClicked()
-            audio.stopAll()
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
             settings.twelvehour = !settings.twelvehour
             clock.set()
             api.memory.set("struceOS_ui_twelvehour", settings.twelvehour)

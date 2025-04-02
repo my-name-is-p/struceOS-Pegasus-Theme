@@ -84,7 +84,7 @@ Component {
                         genre_item.active = genreFilter.indexOf(genre) >= 0
                     }
                     genreFilter.sort()
-                    audio.toggle_down.play()
+                    audio.toggle_down.safePlay()
                     search.populateModel()
                     sortfilt_toolbar.genres_model.populateModel()
                     games.currentIndex = -1

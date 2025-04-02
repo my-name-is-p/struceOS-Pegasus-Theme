@@ -37,6 +37,9 @@ Component { //collectionView_list_item
 
                 antialiasing: true
                 smooth: true
+
+                sourceSize.width: parent.width
+                sourceSize.height: parent.height
             }
 
             Text { //collectionView_list_name
@@ -117,8 +120,7 @@ Component { //collectionView_list_item
                     sortfilt_menu.genre_list.model.populateModel()
                     sortfilt_menu.genre_list.resetActive()
                     sortfilt_toolbar.genres_model.populateModel()
-                    audio.stopAll()
-                    audio.toggle_down.play()
+                    audio.toggle_down.safePlay()
                 }
             }
         }

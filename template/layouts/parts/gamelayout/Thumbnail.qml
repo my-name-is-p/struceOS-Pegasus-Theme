@@ -299,14 +299,12 @@ Component {
                 onClicked: {
                     resetFocus()
                     games.currentIndex = index
-                    audio.stopAll()
-                    audio.select.play()
+                    audio.select.safePlay()
                 }
 
                 onDoubleClicked: {
                     launchGame()
-                    audio.stopAll()
-                    audio.toggle_down.play()
+                    audio.toggle_down.safePlay()
                 }
             }
         }

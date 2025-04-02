@@ -96,8 +96,7 @@ Item {
 
         onClicked: {
             toggle.onClicked()
-            audio.stopAll()
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
         }
     }
 }

@@ -72,8 +72,7 @@ Item {
                 if(collections_list.currentIndex != 0)
                     collectionPrevious()
             }
-            audio.stopAll()
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
         }
     }
     

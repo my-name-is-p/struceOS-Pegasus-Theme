@@ -145,7 +145,7 @@ Component{
 
             onClicked: {
                 key_wrapper.onAccept()
-                audio.toggle_down.play()
+                audio.toggle_down.safePlay()
             }
         }
     }

@@ -32,6 +32,9 @@ Rectangle { //background
 
         fillMode: Image.PreserveAspectCrop
 
+        sourceSize.width: width
+        sourceSize.height: height
+
         smooth: true
         antialiasing: true
 

@@ -87,8 +87,6 @@ Item { //viewer
             //Functions--
                 function reset(){
                     stop()
-                    source = ""
-                    source = search.currentGame().assets.video
                     muted = settings.videoMute = 
                         api.memory.get("struceOS_video_videoMute") != undefined ? 
                             api.memory.get("struceOS_video_videoMute") : true
@@ -532,8 +530,7 @@ Item { //viewer
                 position = Math.round(position - handle.width / 2)
 
                 if(position != handle.x && !mute){
-                    audio.stopAll()
-                    audio.select.play()
+                    audio.select.safePlay()
                 }
                 return position
             }

@@ -103,7 +103,7 @@ Item {
 
         onClicked:{
             osk.close(true)
-            audio.toggle_down.play()
+            audio.toggle_down.safePlay()
         }
     }
 
@@ -171,7 +171,7 @@ Item {
                         event.accepted = true
                     }
                     s = s != null ? s : audio.toggle_down
-                    s.play()
+                    s.safePlay()
                 }
             }
         }

@@ -73,7 +73,7 @@ Item { //header
             onClicked: function(){
                 screensaver.reset()
                 toggle()
-                s.play()
+                s.safePlay()
                 s = null
             }
 
@@ -111,8 +111,7 @@ Item { //header
                 if(settings.osk){
                     osk.open(search_term, search_bar)
                 }
-                audio.stopAll()
-                audio.toggle_down.play()
+                audio.toggle_down.safePlay()
             }
 
             function onAccept(){

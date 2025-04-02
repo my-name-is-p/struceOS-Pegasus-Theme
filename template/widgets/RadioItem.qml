@@ -116,7 +116,6 @@ Item {
         onClicked: {
             radio_button.resetItems()
             radio_button.onClicked()
-            audio.stopAll()
             radio_button.sound.play()
         }
     }

@@ -217,8 +217,7 @@ Item { //sortfilt_toolbar_wrapper
                     resetFocus(sortfilt_menu)
                 else
                     resetFocus()
-                audio.stopAll()
-                audio.toggle_down.play()
+                audio.toggle_down.safePlay()
             }
         }
     }
@@ -295,8 +294,7 @@ Item { //sortfilt_toolbar_wrapper
 
             onClicked: {
                 sortfilt_menu.favorite.enabled = false
-                audio.stopAll()
-                audio.toggle_down.play()
+                audio.toggle_down.safePlay()
             }
         }
 

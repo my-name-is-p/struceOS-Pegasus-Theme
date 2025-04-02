@@ -153,8 +153,7 @@ Component {
                         }else{
                         }
                         if(s != null){
-                            audio.stopAll()
-                            s.play()
+                            s.safePlay()
                         }
                         s = null
                     }
@@ -204,8 +203,7 @@ Component {
                 }else{
                     value.forceActiveFocus()
                 }
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
             }
         }
     }

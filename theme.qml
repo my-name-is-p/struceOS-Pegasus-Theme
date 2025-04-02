@@ -18,7 +18,11 @@
 // and PlayingKarrde creator of clearOS <https://github.com/PlayingKarrde/clearOS>
 // for easy to read code
 
-// Changelogs
+// Changelog
+
+// # 1.6.4
+//      1. Fixes to audio on Linux [Link to Ticket](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/issues/1)
+//      2. Fixes to the video player reset function (was the source of silent issues)
 
 // #1.6.3
 //      1. Updates to thumbnails for better performance
@@ -376,7 +380,7 @@ FocusScope {
             log(settings.details)
 
         audio.stopAll()
-        audio.home.play()
+        audio.home.safePlay()
 
     }
 
@@ -513,7 +517,7 @@ FocusScope {
         }
         if(s != null){
             audio.stopAll()
-            s.play()
+            s.safePlay()
         }
         s = null
     }

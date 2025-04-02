@@ -67,7 +67,7 @@ Item {
 
             Text { //ui_audio_settings_volume_text
                 id: ui_audio_settings_volume_text
-                text: "default volume"
+                text: "volume"
 
                 color: colors.text
 

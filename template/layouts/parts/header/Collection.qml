@@ -33,6 +33,10 @@ Item { //collection
 
             fillMode: Image.PreserveAspectFit
 
+            sourceSize.width: parent.width
+            sourceSize.height: parent.height
+
+
             antialiasing: true
             smooth: true
 

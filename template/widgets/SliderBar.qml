@@ -51,8 +51,7 @@ Item { //slider
             position = Math.round(position - handle.width / 2)
 
             if(position != handle.x && !mute){
-                audio.stopAll()
-                audio.select.play()
+                audio.select.safePlay()
             }
             return position
         }
@@ -243,8 +242,7 @@ Item { //slider
 
         onPressed: {
             handle.x = slider.updateX(mouse.x - margin)
-            audio.stopAll()
-            audio.select.play()
+            audio.select.safePlay()
         }
 
         onReleased: {
