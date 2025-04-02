@@ -37,6 +37,7 @@ If you have any issues, please open a [ticket](https://github.com/my-name-is-p/s
 <a id="current-version"></a>
 # Version 1.6.4 Updates
 1. Fixes to audio on Linux [Link to Ticket](https://github.com/my-name-is-p/struceOS-Pegasus-Theme/issues/1)
+2. Fixes to the video player reset function (was the source of silent issues)
 
 <a id="to-come"></a>
 # To come in future updates
