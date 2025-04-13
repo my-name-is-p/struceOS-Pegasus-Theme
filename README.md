@@ -14,7 +14,11 @@
 - [Download](#download)
 - [Changelog](#changelog)
 
-![screenshots](.meta/screenshots.jpg)
+![screenshot_001](.meta/screenshot_001.jpg)
+![screenshot_002](.meta/screenshot_002.jpg)
+![screenshot_003](.meta/screenshot_003.jpg)
+![screenshot_004](.meta/screenshot_004.jpg)
+![screenshot_005](.meta/screenshot_005.jpg)
 <a id="preamble"></a>
 # Preamble
 I made this theme for myself to use on a Windows desktop (Windows 10/11). It should work on Linux (tested on Ubuntu 22.04.5) and Android 14 (tested on a Galaxy Tab A8). I am mostly a self taught coder/designer, so any feedback is greatly appreciated.
